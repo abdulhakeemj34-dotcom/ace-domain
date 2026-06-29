@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Ace Domain</string>
+    <string name="title_activity_main">Ace Domain</string>
+    <string name="package_name">com.acedomain.app</string>
+    <string name="custom_url_scheme">com.acedomain.app</string>
+</resources>
