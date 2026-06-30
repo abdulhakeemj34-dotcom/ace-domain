@@ -79,7 +79,9 @@ export function CommunitiesScreen() {
               <p className="text-sm text-frost/60">People, rooms, and groups tuned to your interests.</p>
             </div>
           </div>
-          <Button className="mt-4 w-full">Start Matching Worldwide</Button>
+          <Button className="mt-4 w-full" onClick={() => setSyncStatus('Choose a community below to start matching with people worldwide.')}>
+            Start Matching Worldwide
+          </Button>
           {syncStatus && <p className="mt-3 text-xs leading-5 text-frost/45">{syncStatus}</p>}
         </div>
 

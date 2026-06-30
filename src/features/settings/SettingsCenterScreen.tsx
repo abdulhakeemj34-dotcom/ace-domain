@@ -1,4 +1,4 @@
-import type { CSSProperties } from 'react';
+import { useState, type CSSProperties } from 'react';
 import {
   ArrowLeft,
   AtSign,
@@ -240,6 +240,7 @@ function ProfilePreview({ settings }: { settings: AppSettings }) {
 
 export function SettingsCenterScreen({ onBack, onChange, onOpenGlobalSafety, settings }: SettingsCenterScreenProps) {
   const selectedTheme = themePresets[settings.themePreset];
+  const [safetyStatus, setSafetyStatus] = useState('');
 
   const update = (patch: Partial<AppSettings>) => {
     onChange({ ...settings, ...patch });
@@ -468,13 +469,24 @@ export function SettingsCenterScreen({ onBack, onChange, onOpenGlobalSafety, set
             <p className="mt-2 text-sm leading-6 text-frost/55">Keep first conversations inside Ace Domain, protect private codes, and report pressure, scams, or harassment.</p>
           </div>
           <div className="grid grid-cols-1 gap-3 min-[360px]:grid-cols-2">
-            <button type="button" className="rounded-3xl border border-white/10 bg-white/[0.06] px-4 py-3 text-sm font-bold text-white" aria-label="Blocked users">
+            <button
+              type="button"
+              onClick={() => setSafetyStatus('Blocked user controls are ready in Global Safety.')}
+              className="rounded-3xl border border-white/10 bg-white/[0.06] px-4 py-3 text-sm font-bold text-white"
+              aria-label="Blocked users"
+            >
               Blocked users
             </button>
-            <button type="button" className="rounded-3xl border border-white/10 bg-white/[0.06] px-4 py-3 text-sm font-bold text-white" aria-label="Report history">
+            <button
+              type="button"
+              onClick={() => setSafetyStatus('Report history controls are ready in Global Safety.')}
+              className="rounded-3xl border border-white/10 bg-white/[0.06] px-4 py-3 text-sm font-bold text-white"
+              aria-label="Report history"
+            >
               Report history
             </button>
           </div>
+          {safetyStatus && <p className="rounded-3xl bg-white/[0.06] p-3 text-sm leading-6 text-frost/60">{safetyStatus}</p>}
           <SettingsRow label="Global safety page" description="Open the existing privacy, stranger messaging, and accessibility controls.">
             <button type="button" onClick={onOpenGlobalSafety} className="rounded-full bg-white px-3 py-2 text-xs font-black text-void">
               Open

@@ -123,12 +123,17 @@ export function AuthScreen({ onComplete }: AuthScreenProps) {
         <div className="mt-5">
           <div className="flex items-center gap-3 text-xs text-frost/35">
             <span className="h-px flex-1 bg-white/10" />
-            Social login UI
+            Social login
             <span className="h-px flex-1 bg-white/10" />
           </div>
           <div className="mt-4 grid grid-cols-3 gap-2">
             {['Google', 'Apple', 'Discord'].map((provider) => (
-              <button key={provider} type="button" className="rounded-2xl border border-white/10 bg-white/[0.06] py-3 text-xs font-bold text-frost/70">
+              <button
+                key={provider}
+                type="button"
+                onClick={() => setStatus(`${provider} sign-in is not connected yet. Use email login or demo access for now.`)}
+                className="rounded-2xl border border-white/10 bg-white/[0.06] py-3 text-xs font-bold text-frost/70"
+              >
                 {provider}
               </button>
             ))}

@@ -158,9 +158,9 @@ export function HomeScreen({ globalProfile, globalSettings, onOpenAiChat, onOpen
         eyebrow="Live network"
         title="Ace Domain"
         action={
-          <button className="grid h-11 w-11 place-items-center rounded-full bg-white text-void shadow-glow" type="button" aria-label="Open live network">
+          <div className="grid h-11 w-11 place-items-center rounded-full bg-white text-void shadow-glow" aria-hidden="true">
             <Radio size={20} />
-          </button>
+          </div>
         }
       />
       <SearchBar

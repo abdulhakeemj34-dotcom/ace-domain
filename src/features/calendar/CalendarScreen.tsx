@@ -61,7 +61,7 @@ export function CalendarScreen({ onBack }: CalendarScreenProps) {
             </div>
           </div>
           <p className="mt-4 text-sm leading-6 text-frost/65">
-            Mock events for world holidays, gaming tournaments, campus rooms, meetups, and birthdays. Calendar sync and push reminders are not connected yet.
+            Events for world holidays, gaming tournaments, campus rooms, meetups, and birthdays. Calendar sync and push reminders are prepared for a later mobile layer.
           </p>
         </div>
       </header>
