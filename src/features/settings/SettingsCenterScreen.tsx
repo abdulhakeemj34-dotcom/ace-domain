@@ -266,10 +266,10 @@ export function SettingsCenterScreen({ onBack, onChange, onOpenGlobalSafety, set
               <Sparkles size={25} />
             </div>
             <div className="min-w-0">
-              <p className="text-xs font-black uppercase tracking-[0.28em] text-[color:var(--ad-accent)]">Stage 5 Preview</p>
+              <p className="text-xs font-black uppercase tracking-[0.28em] text-[color:var(--ad-accent)]">Stage 7 Ready</p>
               <h1 className="mt-1 text-3xl font-black text-white">Settings Center</h1>
               <p className="mt-3 text-sm leading-6 text-frost/60">
-                Local controls for Ace Domain appearance, profile feel, notifications, privacy, language, and mobile comfort.
+                Local-first controls for Ace Domain appearance, profile feel, notifications, privacy, language, and mobile comfort.
               </p>
             </div>
           </div>
@@ -289,10 +289,10 @@ export function SettingsCenterScreen({ onBack, onChange, onOpenGlobalSafety, set
           icon={<UserRound size={20} />}
         >
           <SettingsRow label="Account mode" description="Supabase auth remains connected when configured; demo mode still works without forcing backend writes.">
-            <span className="rounded-full bg-white/10 px-3 py-1 text-xs font-black text-frost/70">Local</span>
+            <span className="rounded-full bg-white/10 px-3 py-1 text-xs font-black text-frost/70">Demo-safe</span>
           </SettingsRow>
-          <SettingsRow label="Settings storage" description="Preferences are saved on this device with validated local fallback.">
-            <span className="rounded-full px-3 py-1 text-xs font-black ad-accent-bg">Safe</span>
+          <SettingsRow label="Settings storage" description="Preferences save locally first, then sync to Supabase in the background when you are signed in.">
+            <span className="rounded-full px-3 py-1 text-xs font-black ad-accent-bg">Local-first</span>
           </SettingsRow>
         </SettingsSection>
 
@@ -573,7 +573,7 @@ export function SettingsCenterScreen({ onBack, onChange, onOpenGlobalSafety, set
           <SettingsRow label="App name" description="Ace Domain" />
           <SettingsRow label="Tagline" description="Meet the World" />
           <SettingsRow label="Mission" description="Ace Domain is a global social app for chatting, culture, gaming, discovery, and connection." />
-          <SettingsRow label="Version" description="Stage 5 Preview" />
+          <SettingsRow label="Version" description="Stage 7 Foundation" />
           <div>
             <p className="mb-3 text-xs font-black uppercase tracking-[0.22em] text-frost/40">Coming later</p>
             <div className="flex flex-wrap gap-2">
