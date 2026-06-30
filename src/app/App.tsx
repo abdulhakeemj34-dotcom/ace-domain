@@ -144,7 +144,7 @@ export default function App() {
       return;
     }
 
-    if (!result.usingFallback && !result.remoteExists) {
+    if (!result.usingFallback) {
       void upsertCurrentUserSettings(readAppSettings());
     }
   }, []);

@@ -1,3 +1,4 @@
+import { defaultAppSettings } from '../features/settings/defaultSettings';
 import { sanitizeAppSettings } from '../features/settings/settingsStorage';
 import type { AppSettings } from '../features/settings/settingsTypes';
 import { getStoredSession, supabaseConfig, supabaseRestRequest } from '../lib/supabase';
@@ -20,6 +21,16 @@ function toSettingsJson(settings: AppSettings) {
   return JSON.parse(JSON.stringify(sanitizeAppSettings(settings))) as Record<string, unknown>;
 }
 
+function hasUsableSettingsPayload(value: unknown) {
+  if (typeof value !== 'object' || value === null || Array.isArray(value)) {
+    return false;
+  }
+
+  const validKeys = new Set(Object.keys(defaultAppSettings));
+
+  return Object.keys(value).some((key) => validKeys.has(key));
+}
+
 export async function loadCurrentUserSettings(): Promise<SettingsSyncResult> {
   const session = getStoredSession();
 
@@ -36,6 +47,10 @@ export async function loadCurrentUserSettings(): Promise<SettingsSyncResult> {
 
     if (!row) {
       return { data: null, remoteExists: false, usingFallback: false };
+    }
+
+    if (!hasUsableSettingsPayload(row.settings)) {
+      return { data: null, remoteExists: true, usingFallback: false };
     }
 
     return {
