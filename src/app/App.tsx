@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useState, type CSSProperties } from 'r
 import { Sparkles } from 'lucide-react';
 import { StartupSplash } from '../components/logo/StartupSplash';
 import { defaultGlobalProfile, defaultGlobalSettings, focusOptions } from '../data/mockGlobalData';
+import { AiChatScreen } from '../features/ai/AiChatScreen';
 import { AuthScreen } from '../features/auth/AuthScreen';
 import { CalendarScreen } from '../features/calendar/CalendarScreen';
 import { ChatsScreen } from '../features/chats/ChatsScreen';
@@ -192,6 +193,8 @@ export default function App() {
         );
       case 'chatRoom':
         return <ChatRoomScreen key={activeChatId} chatId={activeChatId} chatSettings={appSettings} onBack={() => setScreen('chat')} />;
+      case 'aiChat':
+        return <AiChatScreen onBack={() => setScreen('home')} />;
       case 'global':
         return (
           <GlobalDiscoveryScreen
@@ -250,6 +253,7 @@ export default function App() {
           <HomeScreen
             globalProfile={globalProfile}
             globalSettings={globalSettings}
+            onOpenAiChat={() => setScreen('aiChat')}
             onOpenCommunities={() => setScreen('communities')}
             onOpenGlobal={() => setScreen('global')}
             onOpenCalendar={() => setScreen('calendar')}

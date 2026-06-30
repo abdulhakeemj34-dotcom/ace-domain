@@ -1,5 +1,6 @@
 export type AppScreen =
   | 'welcome'
+  | 'aiChat'
   | 'auth'
   | 'home'
   | 'chat'

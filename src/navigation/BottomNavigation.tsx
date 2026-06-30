@@ -23,7 +23,7 @@ export function BottomNavigation({ activeScreen, onNavigate }: BottomNavigationP
           const active =
             activeScreen === item.screen ||
             (activeScreen === 'chatRoom' && item.screen === 'chat') ||
-            ((activeScreen === 'global' || activeScreen === 'calendar') && item.screen === 'home') ||
+            ((activeScreen === 'global' || activeScreen === 'calendar' || activeScreen === 'aiChat') && item.screen === 'home') ||
             ((activeScreen === 'settings' || activeScreen === 'settingsCenter') && item.screen === 'profile');
           return (
             <button

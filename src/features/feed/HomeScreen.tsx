@@ -1,4 +1,4 @@
-import { Bookmark, Gamepad2, Heart, MessageCircle, Radio, Repeat2, Rocket, Share2, X } from 'lucide-react';
+import { Bookmark, Bot, Gamepad2, Heart, MessageCircle, Radio, Repeat2, Rocket, Share2, X } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
 import { globalMatches, miniGamePreviews, posts as mockPosts, stories, trendingConversations } from '../../app/data';
 import { Avatar } from '../../components/Avatar';
@@ -18,6 +18,7 @@ import type { GlobalOnboardingProfile, GlobalSafetySettings } from '../../types/
 type HomeScreenProps = {
   globalProfile: GlobalOnboardingProfile;
   globalSettings: GlobalSafetySettings;
+  onOpenAiChat: () => void;
   onOpenCommunities: () => void;
   onOpenCalendar: () => void;
   onOpenGlobal: () => void;
@@ -117,7 +118,7 @@ function StoryViewer({ story, onClose }: { story: Story; onClose: () => void }) 
   );
 }
 
-export function HomeScreen({ globalProfile, globalSettings, onOpenCalendar, onOpenCommunities, onOpenGlobal, onStartChat }: HomeScreenProps) {
+export function HomeScreen({ globalProfile, globalSettings, onOpenAiChat, onOpenCalendar, onOpenCommunities, onOpenGlobal, onStartChat }: HomeScreenProps) {
   const [activeStory, setActiveStory] = useState<Story | null>(null);
   const [feedPosts, setFeedPosts] = useState<Post[]>(mockPosts);
   const [postActions, setPostActions] = useState<Record<string, PostActionState>>(() => buildInitialPostActions(mockPosts));
@@ -167,6 +168,27 @@ export function HomeScreen({ globalProfile, globalSettings, onOpenCalendar, onOp
         value={searchQuery}
         onChange={setSearchQuery}
       />
+
+      <div className="mx-5 mt-5 overflow-hidden rounded-[32px] border border-white/10 bg-gradient-to-br from-white/[0.1] via-white/[0.05] to-transparent p-4">
+        <div className="flex items-center gap-3">
+          <div className="grid h-12 w-12 place-items-center rounded-2xl ad-accent-bg ad-accent-ring">
+            <Bot size={22} />
+          </div>
+          <div className="min-w-0 flex-1">
+            <p className="text-xs font-black uppercase tracking-[0.22em] text-[color:var(--ad-accent)]">New assistant</p>
+            <h2 className="truncate font-black text-white">Ace AI</h2>
+            <p className="mt-1 text-sm leading-5 text-frost/55">Ask for culture prompts, better openers, travel ideas, or community inspiration.</p>
+          </div>
+        </div>
+        <button
+          type="button"
+          onClick={onOpenAiChat}
+          className="mt-4 w-full rounded-full px-5 py-3 text-sm font-black ad-accent-bg"
+          aria-label="Open Ace Domain AI chat"
+        >
+          Open Ace AI
+        </button>
+      </div>
 
       {hasSearchQuery && (
         <div className="mx-5 mt-4 rounded-[28px] border border-white/10 bg-white/[0.06] p-4">
