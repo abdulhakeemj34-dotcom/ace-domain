@@ -21,7 +21,7 @@ export default function App() {
   const showNav = isAuthenticated && !['welcome', 'auth'].includes(screen);
 
   useEffect(() => {
-    const splashTimer = window.setTimeout(() => setShowSplash(false), 1600);
+    const splashTimer = window.setTimeout(() => setShowSplash(false), 2600);
     return () => window.clearTimeout(splashTimer);
   }, []);
 

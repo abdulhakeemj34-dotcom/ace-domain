@@ -1,5 +1,6 @@
 import { Globe2, ShieldCheck, Zap } from 'lucide-react';
 import { Button } from '../../components/Button';
+import { AceDomainIcon } from '../../components/logo/AceDomainIcon';
 import { AceDomainLogo } from '../../components/logo/AceDomainLogo';
 
 type WelcomeScreenProps = {
@@ -15,9 +16,7 @@ export function WelcomeScreen({ onStart, onExploreDemo }: WelcomeScreenProps) {
           <p className="text-xs font-semibold uppercase tracking-[0.32em] text-aurora">Ace Domain</p>
           <h1 className="mt-2 text-4xl font-black leading-tight text-white">Meet the World.</h1>
         </div>
-        <div className="grid h-12 w-12 place-items-center rounded-2xl bg-white text-void shadow-glow">
-          <Globe2 size={24} />
-        </div>
+        <AceDomainIcon size="md" withGlow={false} />
       </div>
 
       <div className="relative my-10 flex flex-1 items-center justify-center">

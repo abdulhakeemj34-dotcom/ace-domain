@@ -1,21 +1,28 @@
+import { AceDomainIcon } from './AceDomainIcon';
+
 type AceDomainLogoProps = {
   compact?: boolean;
+  showTagline?: boolean;
 };
 
-export function AceDomainLogo({ compact = false }: AceDomainLogoProps) {
+export function AceDomainLogo({ compact = false, showTagline = true }: AceDomainLogoProps) {
+  if (compact) {
+    return <AceDomainIcon size="md" withGlow={false} />;
+  }
+
   return (
-    <div className={`relative grid place-items-center ${compact ? 'h-12 w-12' : 'h-48 w-48'}`} aria-label="Ace Domain logo">
-      <div className="absolute inset-0 rounded-full bg-gradient-to-br from-slate-200 via-signal to-aurora opacity-20 blur-2xl animate-pulseGlow" />
-      <div className="absolute inset-[8%] rounded-full border border-silver/40 animate-orbit" />
-      <div className="absolute inset-[18%] rounded-full border border-aurora/30" />
-      <div className="absolute left-[18%] top-[30%] h-2 w-2 rounded-full bg-aurora shadow-glow animate-nodeSpark" />
-      <div className="absolute right-[20%] top-[45%] h-2 w-2 rounded-full bg-plasma shadow-glow animate-nodeSpark [animation-delay:700ms]" />
-      <div className="absolute bottom-[25%] left-[48%] h-2 w-2 rounded-full bg-silver shadow-glow animate-nodeSpark [animation-delay:1200ms]" />
-      <div className="relative grid h-[76%] w-[76%] place-items-center rounded-[30%] border border-white/15 bg-gradient-to-br from-[#12182f] via-[#0a0d1d] to-[#050713] shadow-glow">
-        <span className={`${compact ? 'text-2xl' : 'text-7xl'} font-black tracking-[-0.08em] text-transparent bg-clip-text bg-gradient-to-br from-white via-silver to-aurora`}>
-          A
-        </span>
-        {!compact && <span className="absolute bottom-7 text-[10px] font-bold uppercase tracking-[0.45em] text-aurora/80">Domain</span>}
+    <div className="relative flex flex-col items-center text-center" aria-label="Ace Domain logo">
+      <div className="absolute inset-x-0 top-8 mx-auto h-36 w-36 rounded-full bg-[radial-gradient(circle,rgba(232,193,96,0.18),transparent_62%)] blur-2xl" />
+      <div className="relative">
+        <div className="absolute inset-[-18px] rounded-full border border-gold/25 animate-orbit" />
+        <div className="absolute inset-[-28px] rounded-full border border-silver/15 [transform:rotateX(62deg)_rotateZ(-18deg)]" />
+        <AceDomainIcon size="xl" />
+      </div>
+      <div className="mt-7">
+        <p className="text-[11px] font-black uppercase tracking-[0.52em] text-transparent bg-clip-text bg-gradient-to-r from-silver via-gold to-frost">
+          Ace Domain
+        </p>
+        {showTagline && <p className="mt-2 text-xs font-semibold uppercase tracking-[0.34em] text-frost/45">Meet the World</p>}
       </div>
     </div>
   );
