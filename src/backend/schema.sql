@@ -157,12 +157,12 @@ using (true);
 drop policy if exists "Community memberships are readable" on public.community_members;
 create policy "Community memberships are readable"
 on public.community_members for select
-using (true);
+using (auth.uid() = user_id);
 
 drop policy if exists "Users can join communities as themselves" on public.community_members;
 create policy "Users can join communities as themselves"
 on public.community_members for insert
-with check (auth.uid() = user_id);
+with check (auth.uid() = user_id and role = 'member');
 
 drop policy if exists "Users can leave communities as themselves" on public.community_members;
 create policy "Users can leave communities as themselves"
@@ -187,14 +187,10 @@ on public.chat_thread_members for select
 using (auth.uid() = user_id);
 
 drop policy if exists "Users can join threads as themselves" on public.chat_thread_members;
-create policy "Users can join threads as themselves"
-on public.chat_thread_members for insert
-with check (auth.uid() = user_id);
-
 drop policy if exists "Users can leave threads as themselves" on public.chat_thread_members;
-create policy "Users can leave threads as themselves"
-on public.chat_thread_members for delete
-using (auth.uid() = user_id);
+
+-- Chat membership writes are intentionally reserved for trusted backend flows in a later stage.
+-- Without this, a client could self-join any known thread id and read private chat data.
 
 drop policy if exists "Members can read chat messages" on public.chat_messages;
 create policy "Members can read chat messages"

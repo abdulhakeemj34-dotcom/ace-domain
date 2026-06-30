@@ -61,7 +61,7 @@ export async function createProfileIfNeeded(profile: ProfileInput, accessToken?:
       body: toProfilePayload(profile),
       method: 'POST',
       prefer: 'resolution=merge-duplicates,return=representation',
-      query: 'on_conflict=id'
+      query: 'on_conflict=id&select=*'
     });
 
     return { data: rows[0] ? normalizeProfile(rows[0]) : null, usingFallback: false };
@@ -110,7 +110,22 @@ export async function updateCurrentProfile(profile: Omit<ProfileInput, 'id'>): P
       query: `id=eq.${encodeURIComponent(session.user.id)}&select=*`
     });
 
-    return { data: rows[0] ? normalizeProfile(rows[0]) : null, usingFallback: false };
+    if (!rows[0]) {
+      return createProfileIfNeeded(
+        {
+          avatarUrl: profile.avatarUrl,
+          bio: profile.bio,
+          country: profile.country,
+          displayName: profile.displayName,
+          id: session.user.id,
+          interests: profile.interests,
+          username: profile.username
+        },
+        session.access_token
+      );
+    }
+
+    return { data: normalizeProfile(rows[0]), usingFallback: false };
   } catch (error) {
     return { data: null, error: error instanceof Error ? error.message : 'Profile update failed.', usingFallback: true };
   }

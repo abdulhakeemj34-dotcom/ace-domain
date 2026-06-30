@@ -2,11 +2,31 @@ const SUPABASE_SESSION_KEY = 'ace-domain.supabase.session';
 
 const envUrl = import.meta.env.VITE_SUPABASE_URL?.trim() ?? '';
 const envAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY?.trim() ?? '';
+const placeholderValues = new Set(['', 'https://your-project-ref.supabase.co', 'your-public-anon-key']);
+
+function isPlaceholder(value: string) {
+  return placeholderValues.has(value);
+}
+
+function normalizeUrl(value: string) {
+  if (isPlaceholder(value)) {
+    return '';
+  }
+
+  try {
+    return new URL(value).origin.replace(/\/$/, '');
+  } catch {
+    return '';
+  }
+}
+
+const normalizedUrl = normalizeUrl(envUrl);
+const hasUsableAnonKey = Boolean(envAnonKey && !isPlaceholder(envAnonKey));
 
 export const supabaseConfig = {
   anonKey: envAnonKey,
-  isConfigured: Boolean(envUrl && envAnonKey),
-  url: envUrl.replace(/\/$/, '')
+  isConfigured: Boolean(normalizedUrl && hasUsableAnonKey),
+  url: normalizedUrl
 };
 
 export const supabaseSetupMessage = 'Supabase is not configured yet. Add VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY to .env to enable the live backend.';
@@ -59,7 +79,11 @@ type SupabaseRestOptions = SupabaseRequestOptions & {
 };
 
 function hasStorage() {
-  return typeof window !== 'undefined' && Boolean(window.localStorage);
+  try {
+    return typeof window !== 'undefined' && Boolean(window.localStorage);
+  } catch {
+    return false;
+  }
 }
 
 export function isRecord(value: unknown): value is Record<string, unknown> {
@@ -91,7 +115,13 @@ export function getStoredSession(): SupabaseSession | null {
 
   try {
     const parsed: unknown = JSON.parse(stored);
-    return normalizeSession(parsed);
+    const session = normalizeSession(parsed);
+
+    if (!session) {
+      window.localStorage.removeItem(SUPABASE_SESSION_KEY);
+    }
+
+    return session;
   } catch {
     window.localStorage.removeItem(SUPABASE_SESSION_KEY);
     return null;
@@ -108,7 +138,11 @@ export function storeSession(session: SupabaseSession | null) {
     return;
   }
 
-  window.localStorage.setItem(SUPABASE_SESSION_KEY, JSON.stringify(session));
+  try {
+    window.localStorage.setItem(SUPABASE_SESSION_KEY, JSON.stringify(session));
+  } catch {
+    // Storage can be unavailable on some locked-down webviews; auth will fall back safely.
+  }
 }
 
 export function clearStoredSession() {

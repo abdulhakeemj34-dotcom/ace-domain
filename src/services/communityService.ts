@@ -90,7 +90,8 @@ export async function joinCommunity(communityId: string) {
     await supabaseRestRequest('community_members', {
       body: { community_id: communityId, user_id: session.user.id },
       method: 'POST',
-      prefer: 'resolution=ignore-duplicates'
+      prefer: 'resolution=ignore-duplicates',
+      query: 'on_conflict=community_id,user_id'
     });
     return { ok: true, usingFallback: false };
   } catch (error) {
