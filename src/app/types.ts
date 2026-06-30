@@ -9,7 +9,8 @@ export type AppScreen =
   | 'profile'
   | 'global'
   | 'calendar'
-  | 'settings';
+  | 'settings'
+  | 'settingsCenter';
 
 export type Story = {
   id: string;

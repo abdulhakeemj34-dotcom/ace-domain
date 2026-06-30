@@ -24,15 +24,16 @@ export function BottomNavigation({ activeScreen, onNavigate }: BottomNavigationP
             activeScreen === item.screen ||
             (activeScreen === 'chatRoom' && item.screen === 'chat') ||
             ((activeScreen === 'global' || activeScreen === 'calendar') && item.screen === 'home') ||
-            (activeScreen === 'settings' && item.screen === 'profile');
+            ((activeScreen === 'settings' || activeScreen === 'settingsCenter') && item.screen === 'profile');
           return (
             <button
               key={item.screen}
               type="button"
               onClick={() => onNavigate(item.screen)}
               className={`flex min-h-14 flex-col items-center justify-center gap-1 rounded-3xl text-[10px] transition duration-300 ${
-                active ? 'bg-white text-void shadow-glow' : 'text-frost/60 hover:bg-white/10 hover:text-white'
+                active ? 'shadow-glow' : 'text-frost/60 hover:bg-white/10 hover:text-white'
               }`}
+              style={active ? { background: 'linear-gradient(135deg, var(--ad-accent), var(--ad-accent-strong))', color: 'var(--ad-accent-contrast)', boxShadow: '0 0 26px var(--ad-glow)' } : undefined}
               aria-label={`Open ${item.label}`}
             >
               <Icon size={20} strokeWidth={active ? 2.7 : 2.1} />

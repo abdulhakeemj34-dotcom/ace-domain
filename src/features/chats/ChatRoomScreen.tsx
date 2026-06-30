@@ -1,13 +1,16 @@
-import { useState, type FormEvent } from 'react';
+import { useState, type CSSProperties, type FormEvent } from 'react';
 import { ArrowLeft, Gamepad2, Mic, Send, UsersRound } from 'lucide-react';
 import { chats as mockChats } from '../../app/data';
 import type { Chat } from '../../app/types';
 import { Avatar } from '../../components/Avatar';
 import { TranslationToggle } from '../../components/language/TranslationToggle';
+import { defaultAppSettings } from '../settings/defaultSettings';
+import type { ChatPersonalizationSettings, ReceivedBubbleStyle, SentBubbleTone } from '../settings/settingsTypes';
 import { useChatMessages } from './useChatMessages';
 import { useChatThreads } from './useChatThreads';
 
 type ChatRoomScreenProps = {
+  chatSettings?: ChatPersonalizationSettings;
   chatId: string;
   onBack: () => void;
 };
@@ -25,7 +28,46 @@ function fallbackChat(chatId: string): Chat {
   };
 }
 
-export function ChatRoomScreen({ chatId, onBack }: ChatRoomScreenProps) {
+const chatPersonalizationDefaults: ChatPersonalizationSettings = {
+  chatBubbleShape: defaultAppSettings.chatBubbleShape,
+  chatWallpaper: defaultAppSettings.chatWallpaper,
+  messageDensity: defaultAppSettings.messageDensity,
+  receivedBubbleStyle: defaultAppSettings.receivedBubbleStyle,
+  sentBubbleTone: defaultAppSettings.sentBubbleTone,
+  showTimestamps: defaultAppSettings.showTimestamps,
+  showTypingIndicator: defaultAppSettings.showTypingIndicator
+};
+
+const bubbleShapeClasses = {
+  rounded: 'rounded-[24px]',
+  sharp: 'rounded-lg',
+  soft: 'rounded-2xl'
+} satisfies Record<ChatPersonalizationSettings['chatBubbleShape'], string>;
+
+const densityClasses = {
+  comfortable: 'px-4 py-3 text-sm leading-6',
+  compact: 'px-3 py-2 text-[13px] leading-5'
+} satisfies Record<ChatPersonalizationSettings['messageDensity'], string>;
+
+const receivedBubbleClasses = {
+  glass: 'border border-white/10 bg-white/[0.08] text-frost/80',
+  outlined: 'border bg-white/[0.025] text-frost/85',
+  solid: 'border border-white/10 bg-[#12182D] text-frost/85'
+} satisfies Record<ReceivedBubbleStyle, string>;
+
+const sentBubbleStyles: Record<SentBubbleTone, CSSProperties> = {
+  blue: { background: 'linear-gradient(135deg, #9FD0FF, #5DA9FF)', boxShadow: '0 16px 36px rgba(93, 169, 255, 0.24)', color: '#06101E' },
+  gold: { background: 'linear-gradient(135deg, #FFD978, #F4C95D)', boxShadow: '0 16px 36px rgba(244, 201, 93, 0.24)', color: '#070A16' },
+  silver: { background: 'linear-gradient(135deg, #FFFFFF, #DDE7FF)', boxShadow: '0 16px 36px rgba(221, 231, 255, 0.2)', color: '#070A16' },
+  theme: { background: 'linear-gradient(135deg, var(--ad-accent-strong), var(--ad-accent))', boxShadow: '0 16px 36px var(--ad-glow)', color: 'var(--ad-accent-contrast)' },
+  violet: { background: 'linear-gradient(135deg, #D8B4FE, #A78BFA)', boxShadow: '0 16px 36px rgba(167, 139, 250, 0.24)', color: '#080513' }
+};
+
+function getChatPersonalization(settings?: ChatPersonalizationSettings): ChatPersonalizationSettings {
+  return { ...chatPersonalizationDefaults, ...settings };
+}
+
+export function ChatRoomScreen({ chatId, chatSettings, onBack }: ChatRoomScreenProps) {
   const { threads, usingFallback: threadsUsingFallback } = useChatThreads();
   const { error, isLoading, messages, realtimeStatus, refresh, sendMessage: sendChatMessage, usingFallback: messagesUsingFallback } = useChatMessages(chatId);
   const chat = threads.find((item) => item.id === chatId) ?? mockChats.find((item) => item.id === chatId) ?? fallbackChat(chatId);
@@ -64,9 +106,16 @@ export function ChatRoomScreen({ chatId, onBack }: ChatRoomScreenProps) {
         : realtimeStatus === 'error'
           ? 'Realtime needs attention'
           : 'Realtime ready';
+  const personalization = getChatPersonalization(chatSettings);
+  const bubbleShapeClass = bubbleShapeClasses[personalization.chatBubbleShape];
+  const densityClass = densityClasses[personalization.messageDensity];
+  const messageStackClass = personalization.messageDensity === 'compact' ? 'space-y-2 px-4 py-4' : 'space-y-3 px-5 py-5';
+  const sentCornerClass = personalization.chatBubbleShape === 'sharp' ? 'rounded-br-sm' : 'rounded-br-md';
+  const receivedCornerClass = personalization.chatBubbleShape === 'sharp' ? 'rounded-bl-sm' : 'rounded-bl-md';
+  const wallpaperClass = `chat-wallpaper-${personalization.chatWallpaper}`;
 
   return (
-    <section className="flex min-h-screen flex-col">
+    <section className={`flex min-h-screen flex-col ${wallpaperClass}`}>
       <header className="sticky top-0 z-20 border-b border-white/10 bg-void/90 px-5 pb-4 pt-8 backdrop-blur-2xl">
         <div className="flex items-center gap-3">
           <button type="button" onClick={onBack} className="grid h-11 w-11 place-items-center rounded-full bg-white/10 text-white" aria-label="Back to chats">
@@ -100,7 +149,7 @@ export function ChatRoomScreen({ chatId, onBack }: ChatRoomScreenProps) {
         )}
       </header>
 
-      <div className="flex-1 space-y-3 px-5 py-5 pb-40">
+      <div className={`flex-1 ${messageStackClass} pb-40`}>
         {error && (
           <div className="rounded-[24px] border border-plasma/20 bg-plasma/10 p-4 text-sm text-plasma">
             <p>{error}</p>
@@ -125,16 +174,20 @@ export function ChatRoomScreen({ chatId, onBack }: ChatRoomScreenProps) {
 
         {messages.map((message) => {
           const mine = message.author === 'me';
+          const statusLabel = message.status === 'sending' ? 'sending' : message.status === 'failed' ? 'failed' : '';
+          const showMessageMeta = personalization.showTimestamps || Boolean(statusLabel);
+
           return (
             <div key={message.id} className={`flex ${mine ? 'justify-end' : 'justify-start'}`}>
               <div className={`max-w-[78%] ${mine ? 'text-right' : 'text-left'}`}>
                 {!mine && isGroup && <p className="mb-1 ml-2 text-[10px] font-bold uppercase tracking-[0.18em] text-aurora/80">{message.authorName}</p>}
                 <div
-                  className={`rounded-[24px] px-4 py-3 text-sm leading-6 shadow-glow ${
+                  className={`${bubbleShapeClass} ${densityClass} shadow-glow ${
                     mine
-                      ? 'rounded-br-md bg-white text-void'
-                      : 'rounded-bl-md border border-white/10 bg-white/[0.08] text-frost/80'
+                      ? sentCornerClass
+                      : `${receivedCornerClass} ${receivedBubbleClasses[personalization.receivedBubbleStyle]}`
                   }`}
+                  style={mine ? sentBubbleStyles[personalization.sentBubbleTone] : personalization.receivedBubbleStyle === 'outlined' ? { borderColor: 'var(--ad-accent-soft)' } : undefined}
                 >
                   <TranslationToggle
                     compact
@@ -142,17 +195,20 @@ export function ChatRoomScreen({ chatId, onBack }: ChatRoomScreenProps) {
                     tone={mine ? 'light' : 'dark'}
                     translatedText={`Translation preview: ${message.text}`}
                   />
-                  <p className={`mt-1 text-[10px] ${mine ? 'text-void/50' : 'text-frost/40'}`}>
-                    {message.time}
-                    {message.status === 'sending' && ' / sending'}
-                    {message.status === 'failed' && ' / failed'}
-                  </p>
+                  {showMessageMeta && (
+                    <p className={`mt-1 text-[10px] ${mine ? 'text-void/50' : 'text-frost/40'}`}>
+                      {personalization.showTimestamps && message.time}
+                      {personalization.showTimestamps && statusLabel && ' / '}
+                      {statusLabel}
+                    </p>
+                  )}
                 </div>
               </div>
             </div>
           );
         })}
 
+        {personalization.showTypingIndicator && (
         <div className="flex justify-start">
           <div className="rounded-[24px] rounded-bl-md border border-white/10 bg-white/[0.08] px-4 py-3">
             <div className="flex items-center gap-1">
@@ -165,6 +221,7 @@ export function ChatRoomScreen({ chatId, onBack }: ChatRoomScreenProps) {
             </p>
           </div>
         </div>
+        )}
 
         {roomNotice && (
           <p className="mx-auto w-fit rounded-full border border-white/10 bg-white/[0.07] px-4 py-2 text-xs font-bold text-frost/65" role="status">
@@ -179,7 +236,8 @@ export function ChatRoomScreen({ chatId, onBack }: ChatRoomScreenProps) {
       >
         <button
           type="button"
-          className="grid h-11 w-11 place-items-center rounded-full bg-aurora/15 text-aurora"
+          className="grid h-11 w-11 place-items-center rounded-full"
+          style={{ backgroundColor: 'var(--ad-accent-soft)', color: 'var(--ad-accent)' }}
           aria-label="Open game options"
           onClick={() => setRoomNotice('Mini-game room tools are ready for the next mobile layer.')}
         >
@@ -201,7 +259,13 @@ export function ChatRoomScreen({ chatId, onBack }: ChatRoomScreenProps) {
           value={draft}
           onChange={(event) => setDraft(event.target.value)}
         />
-        <button type="submit" className="grid h-11 w-11 place-items-center rounded-full bg-white text-void disabled:opacity-50" aria-label="Send message" disabled={isSending}>
+        <button
+          type="submit"
+          className="grid h-11 w-11 place-items-center rounded-full disabled:opacity-50"
+          style={{ background: 'linear-gradient(135deg, var(--ad-accent-strong), var(--ad-accent))', color: 'var(--ad-accent-contrast)' }}
+          aria-label="Send message"
+          disabled={isSending}
+        >
           <Send size={18} />
         </button>
       </form>

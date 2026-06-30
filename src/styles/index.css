@@ -5,6 +5,11 @@
 :root {
   color: #dde7ff;
   background: #050713;
+  --ad-accent: #f4c95d;
+  --ad-accent-contrast: #070a16;
+  --ad-accent-soft: rgba(244, 201, 93, 0.18);
+  --ad-accent-strong: #ffd978;
+  --ad-glow: rgba(244, 201, 93, 0.34);
   font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -38,11 +43,61 @@ button {
 }
 
 @layer utilities {
+  .ad-accent-bg {
+    background: linear-gradient(135deg, var(--ad-accent-strong), var(--ad-accent));
+    color: var(--ad-accent-contrast);
+  }
+
+  .ad-accent-ring {
+    box-shadow: 0 0 36px var(--ad-glow);
+  }
+
   .glass-panel {
     border: 1px solid rgba(221, 231, 255, 0.11);
     background: linear-gradient(145deg, rgba(16, 22, 45, 0.92), rgba(8, 11, 26, 0.84));
     box-shadow: 0 24px 90px rgba(0, 0, 0, 0.35);
     backdrop-filter: blur(22px);
+  }
+
+  .appearance-premium-dark {
+    background:
+      radial-gradient(circle at 50% -12rem, var(--ad-accent-soft), transparent 34rem),
+      #050713;
+  }
+
+  .appearance-dark {
+    background:
+      radial-gradient(circle at 50% -12rem, rgba(221, 231, 255, 0.08), transparent 32rem),
+      #02040d;
+  }
+
+  .appearance-light {
+    background:
+      radial-gradient(circle at 50% -12rem, rgba(255, 255, 255, 0.9), transparent 34rem),
+      linear-gradient(180deg, #dfe7f7 0%, #aebbd6 100%);
+  }
+
+  .appearance-light .glass-panel {
+    border-color: rgba(255, 255, 255, 0.22);
+    background: linear-gradient(145deg, rgba(14, 20, 40, 0.94), rgba(7, 10, 23, 0.9));
+  }
+
+  .appearance-light .orbital-grid {
+    opacity: 0.35;
+  }
+
+  .appearance-system {
+    background:
+      radial-gradient(circle at 50% -12rem, var(--ad-accent-soft), transparent 34rem),
+      #050713;
+  }
+
+  @media (prefers-color-scheme: light) {
+    .appearance-system {
+      background:
+        radial-gradient(circle at 50% -12rem, rgba(255, 255, 255, 0.82), transparent 34rem),
+        linear-gradient(180deg, #dfe7f7 0%, #aebbd6 100%);
+    }
   }
 
   .orbital-grid {
@@ -65,10 +120,149 @@ button {
     font-size: 106%;
   }
 
+  .reduced-glow-mode .shadow-glow,
+  .reduced-glow-mode .shadow-panel,
+  .reduced-glow-mode .ad-accent-ring {
+    box-shadow: 0 12px 36px rgba(0, 0, 0, 0.22) !important;
+  }
+
+  .disable-heavy-effects-mode .orbital-grid,
+  .disable-heavy-effects-mode .blur-3xl {
+    opacity: 0.12 !important;
+  }
+
+  .minimal-animation-mode * {
+    animation: none !important;
+  }
+
+  .compact-mode .glass-panel,
+  .compact-cards-mode .glass-panel {
+    box-shadow: 0 18px 54px rgba(0, 0, 0, 0.28);
+  }
+
+  .text-first-mode .orbital-grid {
+    opacity: 0.18;
+  }
+
   .high-contrast-mode .glass-panel,
   .high-contrast-mode [class*="bg-white/\\[0\\.06\\]"],
   .high-contrast-mode [class*="bg-white/\\[0\\.05\\]"] {
     border-color: rgba(221, 231, 255, 0.24);
     background-color: rgba(16, 22, 45, 0.96);
+  }
+
+  .chat-wallpaper-dark-stars {
+    background-image:
+      radial-gradient(circle at 16% 22%, rgba(255, 255, 255, 0.18) 0 1px, transparent 2px),
+      radial-gradient(circle at 80% 14%, var(--ad-accent-soft) 0 1px, transparent 2px),
+      radial-gradient(circle at 60% 72%, rgba(221, 231, 255, 0.16) 0 1px, transparent 2px),
+      linear-gradient(180deg, rgba(5, 7, 19, 0.94), rgba(5, 7, 19, 0.98));
+  }
+
+  .chat-wallpaper-deep-ocean {
+    background:
+      radial-gradient(circle at 20% 10%, rgba(56, 189, 248, 0.2), transparent 22rem),
+      linear-gradient(180deg, #061224, #030711);
+  }
+
+  .chat-wallpaper-neon-grid {
+    background-image:
+      linear-gradient(rgba(115, 251, 211, 0.08) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(93, 169, 255, 0.08) 1px, transparent 1px),
+      linear-gradient(180deg, #050713, #070a18);
+    background-size: 34px 34px, 34px 34px, 100% 100%;
+  }
+
+  .chat-wallpaper-plain-dark {
+    background: #050713;
+  }
+
+  .chat-wallpaper-metallic-gradient {
+    background:
+      radial-gradient(circle at 80% 0%, rgba(221, 231, 255, 0.16), transparent 22rem),
+      radial-gradient(circle at 8% 18%, var(--ad-accent-soft), transparent 20rem),
+      linear-gradient(145deg, #0b1020, #03050d 70%);
+  }
+
+  .profile-preview {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .profile-preview > * {
+    position: relative;
+    z-index: 1;
+  }
+
+  .profile-preview::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    opacity: 0.92;
+    z-index: 0;
+  }
+
+  .profile-banner-cosmic::before {
+    background:
+      radial-gradient(circle at 14% 0%, var(--profile-accent-soft), transparent 13rem),
+      radial-gradient(circle at 82% 16%, rgba(221, 231, 255, 0.13), transparent 11rem),
+      linear-gradient(145deg, rgba(16, 22, 45, 0.95), rgba(5, 7, 19, 0.92));
+  }
+
+  .profile-banner-world-grid::before {
+    background-image:
+      linear-gradient(rgba(221, 231, 255, 0.06) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(221, 231, 255, 0.06) 1px, transparent 1px),
+      radial-gradient(circle at 50% 0%, var(--profile-accent-soft), transparent 14rem),
+      linear-gradient(145deg, rgba(7, 12, 28, 0.96), rgba(5, 7, 19, 0.94));
+    background-size: 28px 28px, 28px 28px, 100% 100%, 100% 100%;
+  }
+
+  .profile-banner-neon-arena::before {
+    background:
+      linear-gradient(135deg, var(--profile-accent-soft), transparent 34%),
+      radial-gradient(circle at 70% 18%, rgba(167, 139, 250, 0.18), transparent 12rem),
+      linear-gradient(145deg, rgba(12, 6, 24, 0.96), rgba(5, 7, 19, 0.94));
+  }
+
+  .profile-banner-clean-metal::before {
+    background:
+      linear-gradient(135deg, rgba(221, 231, 255, 0.14), transparent 42%),
+      linear-gradient(145deg, rgba(22, 27, 43, 0.96), rgba(7, 10, 20, 0.94));
+  }
+
+  .profile-banner-aurora::before {
+    background:
+      radial-gradient(circle at 10% 12%, rgba(115, 251, 211, 0.14), transparent 12rem),
+      radial-gradient(circle at 88% 10%, var(--profile-accent-soft), transparent 14rem),
+      linear-gradient(145deg, rgba(8, 18, 32, 0.96), rgba(5, 7, 19, 0.94));
+  }
+
+  .avatar-frame-halo {
+    box-shadow: 0 0 0 2px var(--profile-accent-soft), 0 0 28px var(--profile-accent-soft);
+  }
+
+  .avatar-frame-orbit {
+    box-shadow: 0 0 0 2px rgba(221, 231, 255, 0.12), 0 0 0 5px var(--profile-accent-soft);
+  }
+
+  .avatar-frame-metal {
+    box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.28), 0 14px 34px rgba(0, 0, 0, 0.28);
+  }
+
+  .avatar-frame-minimal {
+    box-shadow: 0 0 0 1px rgba(221, 231, 255, 0.16);
+  }
+
+  .profile-layout-gamer {
+    border-color: color-mix(in srgb, var(--profile-accent) 42%, rgba(221, 231, 255, 0.12));
+  }
+
+  .profile-layout-minimal::before {
+    opacity: 0.76;
+  }
+
+  .profile-layout-global {
+    border-color: rgba(221, 231, 255, 0.18);
   }
 }

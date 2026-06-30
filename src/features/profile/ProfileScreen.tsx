@@ -1,5 +1,5 @@
-import { BadgeCheck, Globe2, MapPin, Settings, ShieldCheck, X } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { BadgeCheck, Globe2, MapPin, Settings, X } from 'lucide-react';
+import { useEffect, useState, type CSSProperties } from 'react';
 import { futureModules } from '../../app/data';
 import { Avatar } from '../../components/Avatar';
 import { CountryBadge } from '../../components/global/CountryBadge';
@@ -8,8 +8,10 @@ import { LanguageBadge } from '../../components/language/LanguageBadge';
 import { TranslationToggle } from '../../components/language/TranslationToggle';
 import { ScreenHeader } from '../../components/ScreenHeader';
 import { countryProfiles } from '../../data/mockGlobalData';
+import { profileAccentColors } from '../settings/defaultSettings';
 import { supabaseConfig } from '../../lib/supabase';
 import { getCurrentProfile, profileDisplayName, updateCurrentProfile, type BackendProfile } from '../../services/profileService';
+import type { AppSettings } from '../settings/settingsTypes';
 import type { GlobalOnboardingProfile, GlobalSafetySettings } from '../../types/global';
 
 const stats = [
@@ -144,17 +146,45 @@ function EditProfileModal({ profile, onClose, onSave }: EditProfileModalProps) {
 }
 
 type ProfileScreenProps = {
+  appSettings: AppSettings;
   globalProfile: GlobalOnboardingProfile;
   globalSettings: GlobalSafetySettings;
-  onOpenGlobalSettings: () => void;
+  onOpenSettingsCenter: () => void;
   onLogout?: () => void;
 };
 
-export function ProfileScreen({ globalProfile, globalSettings, onLogout, onOpenGlobalSettings }: ProfileScreenProps) {
+const badgeLabels = {
+  founder: 'Founder badge',
+  gamer: 'Gamer badge',
+  traveler: 'Traveler badge',
+  verified: 'Verified badge'
+} satisfies Record<AppSettings['profileBadgeStyle'], string>;
+
+function profileVisualStyle(settings: AppSettings) {
+  const accent = profileAccentColors[settings.profileAccentColor];
+
+  return {
+    '--profile-accent': accent.accent,
+    '--profile-accent-soft': accent.soft
+  } as CSSProperties;
+}
+
+export function ProfileScreen({ appSettings, globalProfile, globalSettings, onLogout, onOpenSettingsCenter }: ProfileScreenProps) {
   const [profile, setProfile] = useState(initialProfile);
   const [editing, setEditing] = useState(false);
   const [profileStatus, setProfileStatus] = useState('');
   const profileCountry = countryProfiles.find((country) => country.name === globalProfile.country) ?? countryProfiles[0];
+  const showCountry = !globalSettings.hideCountry && appSettings.showCountry;
+  const showLocalTime = !globalSettings.hideLocalTime && appSettings.showLocalTime;
+  const showLanguages = !globalSettings.hideLanguages && appSettings.showLanguages;
+  const profileCardPadding = appSettings.compactMode || appSettings.compactCards ? 'p-4' : 'p-5';
+  const profileCardClass = [
+    'glass-panel profile-preview rounded-[34px] text-center',
+    `profile-banner-${appSettings.profileBannerPreset}`,
+    `profile-layout-${appSettings.profileDisplayLayout}`,
+    appSettings.profileSpotlight ? 'ad-accent-ring' : '',
+    profileCardPadding
+  ].filter(Boolean).join(' ');
 
   useEffect(() => {
     let isMounted = true;
@@ -203,35 +233,49 @@ export function ProfileScreen({ globalProfile, globalSettings, onLogout, onOpenG
         eyebrow="World ID"
         title="Profile"
         action={
-          <button type="button" onClick={() => setEditing(true)} className="grid h-11 w-11 place-items-center rounded-full bg-white/10 text-white" aria-label="Open profile settings">
+          <button
+            type="button"
+            onClick={onOpenSettingsCenter}
+            className={`flex h-11 items-center justify-center rounded-full bg-white/10 text-white ${appSettings.buttonLabels ? 'gap-2 px-4' : 'w-11'}`}
+            aria-label="Open Settings Center"
+          >
             <Settings size={20} />
+            {appSettings.buttonLabels && <span className="text-xs font-bold">Settings</span>}
           </button>
         }
       />
       <div className="px-5 py-5">
-        <div className="glass-panel rounded-[34px] p-5 text-center">
-          <div className="mx-auto w-fit">
-            <Avatar label={profile.avatar} size="lg" active />
+        <div className={profileCardClass} style={profileVisualStyle(appSettings)}>
+          <div className={`avatar-frame-${appSettings.avatarFrameStyle} mx-auto w-fit rounded-full`}>
+            <Avatar label={profile.avatar} size="lg" active={appSettings.showOnlineStatus} />
           </div>
           <div className="mt-4 flex items-center justify-center gap-2">
             <h2 className="text-2xl font-black text-white">{profile.username}</h2>
-            <BadgeCheck size={20} className="text-aurora" />
+            <BadgeCheck size={20} style={{ color: 'var(--profile-accent)' }} />
           </div>
+          <span className="mt-2 inline-flex rounded-full px-3 py-1 text-[10px] font-black uppercase tracking-[0.16em]" style={{ backgroundColor: 'var(--profile-accent-soft)', color: 'var(--profile-accent)' }}>
+            {badgeLabels[appSettings.profileBadgeStyle]}
+          </span>
           <p className="mt-1 flex items-center justify-center gap-1 text-sm text-frost/55">
             <MapPin size={14} /> {profile.country}
           </p>
-          <TranslationToggle
-            className="mx-auto mt-4 max-w-xs text-sm leading-6"
-            text={profile.bio}
-            translatedText={`Translation preview: ${profile.bio}`}
-          />
+          {appSettings.translationPreview ? (
+            <TranslationToggle
+              className="mx-auto mt-4 max-w-xs text-sm leading-6"
+              text={profile.bio}
+              translatedText={`Translation preview: ${profile.bio}`}
+            />
+          ) : (
+            <p className="mx-auto mt-4 max-w-xs text-sm leading-6 text-frost/70">{profile.bio}</p>
+          )}
           <div className="mt-4 flex flex-wrap justify-center gap-2">
             {profile.interests.map((interest) => (
-              <span key={interest} className="rounded-full bg-aurora/10 px-3 py-1 text-xs font-semibold text-aurora">
+              <span key={interest} className="rounded-full px-3 py-1 text-xs font-semibold" style={{ backgroundColor: 'var(--profile-accent-soft)', color: 'var(--profile-accent)' }}>
                 {interest}
               </span>
             ))}
           </div>
+          {appSettings.profileDisplayLayout !== 'minimal' && (
           <div className="mt-5 grid grid-cols-3 gap-2">
             {stats.map((stat) => (
               <div key={stat.label} className="rounded-2xl bg-white/[0.06] p-3">
@@ -240,6 +284,10 @@ export function ProfileScreen({ globalProfile, globalSettings, onLogout, onOpenG
               </div>
             ))}
           </div>
+          )}
+          <p className="mt-4 text-xs font-bold text-frost/45">
+            {appSettings.showProfileInGlobalMatch ? 'Visible in Global Match' : 'Hidden from Global Match'}
+          </p>
           <button type="button" onClick={() => setEditing(true)} className="mt-5 w-full rounded-full bg-white px-5 py-3 text-sm font-bold text-void">
             Edit Profile
           </button>
@@ -251,23 +299,23 @@ export function ProfileScreen({ globalProfile, globalSettings, onLogout, onOpenG
           {profileStatus && <p className="mt-3 text-xs leading-5 text-frost/45">{profileStatus}</p>}
         </div>
 
-        <div className="mt-5 rounded-[30px] border border-white/10 bg-white/[0.06] p-5">
+        <div className={`mt-5 rounded-[30px] border border-white/10 bg-white/[0.06] ${appSettings.compactMode || appSettings.compactCards ? 'p-4' : 'p-5'}`}>
           <div className="flex items-start justify-between gap-3">
             <div>
-              <p className="text-xs font-bold uppercase tracking-[0.24em] text-aurora">Language identity</p>
+              <p className="text-xs font-bold uppercase tracking-[0.24em]" style={{ color: 'var(--profile-accent)' }}>Language identity</p>
               <h3 className="mt-2 text-xl font-black text-white">{globalProfile.focus}</h3>
               <p className="mt-1 text-sm text-frost/55">{globalProfile.region}</p>
             </div>
-            <div className="grid h-11 w-11 place-items-center rounded-2xl bg-aurora/15 text-aurora">
+            <div className="grid h-11 w-11 place-items-center rounded-2xl" style={{ backgroundColor: 'var(--profile-accent-soft)', color: 'var(--profile-accent)' }}>
               <Globe2 size={21} />
             </div>
           </div>
           <div className="mt-4 flex flex-wrap gap-2">
-            {!globalSettings.hideCountry && <CountryBadge code={profileCountry.code} label={globalProfile.country} />}
-            {!globalSettings.hideLocalTime && <WorldClockLabel timeZone={profileCountry.timeZone} />}
+            {showCountry && <CountryBadge code={profileCountry.code} label={globalProfile.country} />}
+            {showLocalTime && <WorldClockLabel timeZone={profileCountry.timeZone} />}
             <LanguageBadge label={globalProfile.appLanguage} tone="preferred" />
           </div>
-          {!globalSettings.hideLanguages && (
+          {showLanguages && (
             <div className="mt-4 grid gap-3">
               <div>
                 <p className="mb-2 text-xs font-bold uppercase tracking-[0.18em] text-frost/45">Speaks</p>
@@ -283,15 +331,6 @@ export function ProfileScreen({ globalProfile, globalSettings, onLogout, onOpenG
               </div>
             </div>
           )}
-          <button
-            type="button"
-            onClick={onOpenGlobalSettings}
-            className="mt-5 flex w-full items-center justify-center gap-2 rounded-full bg-white px-5 py-3 text-sm font-bold text-void"
-            aria-label="Open global safety and accessibility settings"
-          >
-            <ShieldCheck size={17} />
-            Global Safety and Accessibility
-          </button>
         </div>
 
         <div className="mt-5 rounded-[28px] border border-white/10 bg-white/[0.05] p-4">

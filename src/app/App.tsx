@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState, type CSSProperties } from 'react';
 import { Sparkles } from 'lucide-react';
 import { StartupSplash } from '../components/logo/StartupSplash';
 import { defaultGlobalProfile, defaultGlobalSettings, focusOptions } from '../data/mockGlobalData';
@@ -13,10 +13,14 @@ import { GlobalOnboarding } from '../features/global/GlobalOnboarding';
 import { NotificationsScreen } from '../features/notifications/NotificationsScreen';
 import { ProfileScreen } from '../features/profile/ProfileScreen';
 import { GlobalSettingsScreen } from '../features/settings/GlobalSettingsScreen';
+import { SettingsCenterScreen } from '../features/settings/SettingsCenterScreen';
+import { themePresets } from '../features/settings/defaultSettings';
+import { readAppSettings, writeAppSettings } from '../features/settings/settingsStorage';
 import { WelcomeScreen } from '../features/welcome/WelcomeScreen';
 import { BottomNavigation } from '../navigation/BottomNavigation';
 import { getCurrentSession, logout } from '../services/authService';
 import type { AppScreen } from './types';
+import type { AppSettings } from '../features/settings/settingsTypes';
 import type { GlobalOnboardingProfile, GlobalSafetySettings } from '../types/global';
 
 const GLOBAL_PROFILE_KEY = 'ace-domain.global-profile';
@@ -122,6 +126,7 @@ export default function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [showSplash, setShowSplash] = useState(true);
   const [activeChatId, setActiveChatId] = useState('c1');
+  const [appSettings, setAppSettings] = useState<AppSettings>(readAppSettings);
   const [globalProfile, setGlobalProfile] = useState<GlobalOnboardingProfile>(readGlobalProfile);
   const [globalSettings, setGlobalSettings] = useState<GlobalSafetySettings>(readGlobalSettings);
   const [showGlobalOnboarding, setShowGlobalOnboarding] = useState(() => !hasStoredFlag(GLOBAL_ONBOARDING_KEY));
@@ -148,6 +153,11 @@ export default function App() {
     return () => {
       isMounted = false;
     };
+  }, []);
+
+  const handleAppSettingsChange = useCallback((settings: AppSettings) => {
+    setAppSettings(settings);
+    writeAppSettings(settings);
   }, []);
 
   const page = useMemo(() => {
@@ -181,7 +191,7 @@ export default function App() {
           />
         );
       case 'chatRoom':
-        return <ChatRoomScreen key={activeChatId} chatId={activeChatId} onBack={() => setScreen('chat')} />;
+        return <ChatRoomScreen key={activeChatId} chatId={activeChatId} chatSettings={appSettings} onBack={() => setScreen('chat')} />;
       case 'global':
         return (
           <GlobalDiscoveryScreen
@@ -207,15 +217,25 @@ export default function App() {
               setGlobalSettings(settings);
               writeJson(GLOBAL_SETTINGS_KEY, settings);
             }}
+            onBack={() => setScreen('settingsCenter')}
+          />
+        );
+      case 'settingsCenter':
+        return (
+          <SettingsCenterScreen
+            settings={appSettings}
+            onChange={handleAppSettingsChange}
             onBack={() => setScreen('profile')}
+            onOpenGlobalSafety={() => setScreen('settings')}
           />
         );
       case 'profile':
         return (
           <ProfileScreen
+            appSettings={appSettings}
             globalProfile={globalProfile}
             globalSettings={globalSettings}
-            onOpenGlobalSettings={() => setScreen('settings')}
+            onOpenSettingsCenter={() => setScreen('settingsCenter')}
             onLogout={() => {
               logout().then(() => {
                 setIsAuthenticated(false);
@@ -240,17 +260,36 @@ export default function App() {
           />
         );
     }
-  }, [activeChatId, globalProfile, globalSettings, screen]);
+  }, [activeChatId, appSettings, globalProfile, globalSettings, handleAppSettingsChange, screen]);
 
   const appModes = [
-    globalSettings.lowDataMode ? 'low-data-mode' : '',
-    globalSettings.reducedMotion ? 'reduced-motion-mode' : '',
-    globalSettings.biggerText ? 'large-text-mode' : '',
-    globalSettings.highContrast ? 'high-contrast-mode' : ''
+    `appearance-${appSettings.appearanceMode}`,
+    globalSettings.lowDataMode || appSettings.dataSaverMode || appSettings.reduceAutoRefresh ? 'low-data-mode' : '',
+    globalSettings.reducedMotion || appSettings.reduceAnimations || appSettings.animationIntensity !== 'normal' ? 'reduced-motion-mode' : '',
+    globalSettings.biggerText || appSettings.biggerText ? 'large-text-mode' : '',
+    globalSettings.highContrast || appSettings.highContrast ? 'high-contrast-mode' : '',
+    appSettings.reducedGlow || appSettings.dataSaverMode || appSettings.disableHeavyEffects ? 'reduced-glow-mode' : '',
+    appSettings.compactMode ? 'compact-mode' : '',
+    appSettings.compactCards ? 'compact-cards-mode' : '',
+    appSettings.disableHeavyEffects ? 'disable-heavy-effects-mode' : '',
+    appSettings.textFirstCards ? 'text-first-mode' : '',
+    appSettings.animationIntensity === 'minimal' ? 'minimal-animation-mode' : ''
   ].filter(Boolean).join(' ');
 
+  const themeStyle = useMemo(() => {
+    const theme = themePresets[appSettings.themePreset];
+
+    return {
+      '--ad-accent': theme.accent,
+      '--ad-accent-contrast': theme.accentContrast,
+      '--ad-accent-soft': theme.accentSoft,
+      '--ad-accent-strong': theme.accentStrong,
+      '--ad-glow': theme.glow
+    } as CSSProperties;
+  }, [appSettings.themePreset]);
+
   return (
-    <main className={`relative min-h-screen overflow-hidden bg-void text-frost ${appModes}`}>
+    <main className={`relative min-h-screen overflow-hidden bg-void text-frost ${appModes}`} style={themeStyle}>
       <div className="orbital-grid pointer-events-none absolute inset-0" />
       <div className="pointer-events-none absolute left-1/2 top-[-14rem] h-96 w-96 -translate-x-1/2 rounded-full bg-aurora/20 blur-3xl" />
       <div className="pointer-events-none absolute bottom-20 right-[-7rem] h-72 w-72 rounded-full bg-plasma/20 blur-3xl" />
@@ -270,7 +309,7 @@ export default function App() {
           </button>
         )}
 
-        <Sparkles className="pointer-events-none absolute right-6 top-8 text-aurora/50 animate-pulseGlow" size={20} />
+        <Sparkles className="pointer-events-none absolute right-6 top-8 animate-pulseGlow" size={20} style={{ color: 'var(--ad-accent)' }} />
       </div>
       {isAuthenticated && showGlobalOnboarding && !showSplash && (
         <GlobalOnboarding
