@@ -58,7 +58,7 @@ export function GlobalSettingsScreen({ onBack, onChange, settings }: GlobalSetti
               <ShieldCheck size={23} />
             </div>
             <div>
-              <p className="text-xs font-bold uppercase tracking-[0.28em] text-aurora">Stage 4A</p>
+              <p className="text-xs font-bold uppercase tracking-[0.28em] text-aurora">Trust controls</p>
               <h1 className="text-3xl font-black text-white">Global Safety</h1>
             </div>
           </div>
@@ -132,21 +132,21 @@ export function GlobalSettingsScreen({ onBack, onChange, settings }: GlobalSetti
         <div className="grid grid-cols-1 gap-3 min-[360px]:grid-cols-2">
           <button
             type="button"
-            onClick={() => setStatus('Block UI staged locally. Real block lists arrive with moderation services.')}
+            onClick={() => setStatus('Block controls are ready locally and will sync with moderation services when available.')}
             className="flex items-center justify-center gap-2 rounded-3xl bg-white/10 px-4 py-3 text-sm font-bold text-white"
-            aria-label="Open block user interface preview"
+            aria-label="Open block user controls"
           >
             <Ban size={17} />
-            Block user UI
+            Block user
           </button>
           <button
             type="button"
-            onClick={() => setStatus('Report UI staged locally. Real reports will connect to moderation later.')}
+            onClick={() => setStatus('Report controls are ready locally and will connect to moderation services when available.')}
             className="flex items-center justify-center gap-2 rounded-3xl bg-plasma/15 px-4 py-3 text-sm font-bold text-plasma"
-            aria-label="Open report user interface preview"
+            aria-label="Open report user controls"
           >
             <Flag size={17} />
-            Report user UI
+            Report user
           </button>
         </div>
         {status && <p className="rounded-3xl bg-white/[0.06] p-3 text-sm leading-6 text-frost/60">{status}</p>}

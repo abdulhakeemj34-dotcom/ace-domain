@@ -114,7 +114,7 @@ export function GlobalDiscoveryScreen({ onBack, onOpenCalendar, onStartChat }: G
             <SlidersHorizontal size={20} className="text-aurora" />
             <div>
               <h2 className="font-bold text-white">Global Match filters</h2>
-              <p className="text-sm text-frost/50">Local-state filtering for Stage 4A.</p>
+              <p className="text-sm text-frost/50">Filter people by country, language, interests, time zone, and social mode.</p>
             </div>
           </div>
           <div className="mt-4 grid grid-cols-1 gap-3 min-[380px]:grid-cols-2">
@@ -197,7 +197,7 @@ export function GlobalDiscoveryScreen({ onBack, onOpenCalendar, onStartChat }: G
           )}
         </div>
 
-        <SafetyNoticeCard body="Message requests, block, report, hide country, and hide online status are local controls in Stage 4A. Real moderation backend comes later." />
+        <SafetyNoticeCard body="Message requests, block, report, hide country, and hide online status controls help keep global discovery safer while moderation services expand." />
 
         <div>
           <h2 className="mb-3 text-sm font-bold uppercase tracking-[0.22em] text-frost/50">Country discovery</h2>

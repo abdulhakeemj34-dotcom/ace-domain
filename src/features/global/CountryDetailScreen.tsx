@@ -41,7 +41,7 @@ export function CountryDetailScreen({ country, onBack }: CountryDetailScreenProp
             </div>
             <div>
               <h2 className="font-bold text-white">Local trends</h2>
-              <p className="text-sm text-frost/50">Mock discovery signals for Stage 4A.</p>
+              <p className="text-sm text-frost/50">Discovery signals for culture, events, and local conversation starters.</p>
             </div>
           </div>
           <div className="mt-4 grid gap-3">

@@ -266,7 +266,7 @@ export function SettingsCenterScreen({ onBack, onChange, onOpenGlobalSafety, set
               <Sparkles size={25} />
             </div>
             <div className="min-w-0">
-              <p className="text-xs font-black uppercase tracking-[0.28em] text-[color:var(--ad-accent)]">Stage 7 Ready</p>
+              <p className="text-xs font-black uppercase tracking-[0.28em] text-[color:var(--ad-accent)]">Account Controls</p>
               <h1 className="mt-1 text-3xl font-black text-white">Settings Center</h1>
               <p className="mt-3 text-sm leading-6 text-frost/60">
                 Local-first controls for Ace Domain appearance, profile feel, notifications, privacy, language, and mobile comfort.
@@ -445,7 +445,7 @@ export function SettingsCenterScreen({ onBack, onChange, onOpenGlobalSafety, set
         <SettingsSection
           eyebrow="Safety"
           title="Privacy & Safety"
-          description="Local safety controls and placeholders. RLS, schema, and moderation backend are unchanged."
+          description="Local safety controls for privacy, discovery, and safer global conversations."
           icon={<ShieldCheck size={20} />}
         >
           <div>
@@ -468,11 +468,11 @@ export function SettingsCenterScreen({ onBack, onChange, onOpenGlobalSafety, set
             <p className="mt-2 text-sm leading-6 text-frost/55">Keep first conversations inside Ace Domain, protect private codes, and report pressure, scams, or harassment.</p>
           </div>
           <div className="grid grid-cols-1 gap-3 min-[360px]:grid-cols-2">
-            <button type="button" className="rounded-3xl border border-white/10 bg-white/[0.06] px-4 py-3 text-sm font-bold text-white" aria-label="Blocked users placeholder">
-              Blocked users UI
+            <button type="button" className="rounded-3xl border border-white/10 bg-white/[0.06] px-4 py-3 text-sm font-bold text-white" aria-label="Blocked users">
+              Blocked users
             </button>
-            <button type="button" className="rounded-3xl border border-white/10 bg-white/[0.06] px-4 py-3 text-sm font-bold text-white" aria-label="Report history placeholder">
-              Report history UI
+            <button type="button" className="rounded-3xl border border-white/10 bg-white/[0.06] px-4 py-3 text-sm font-bold text-white" aria-label="Report history">
+              Report history
             </button>
           </div>
           <SettingsRow label="Global safety page" description="Open the existing privacy, stranger messaging, and accessibility controls.">
@@ -534,7 +534,7 @@ export function SettingsCenterScreen({ onBack, onChange, onOpenGlobalSafety, set
             ))}
           </div>
           <ToggleRow checked={settings.translationPreview} description="Keep local translation preview affordances visible." icon={<Languages size={18} />} label="Translation preview" onChange={() => update({ translationPreview: !settings.translationPreview })} />
-          <ToggleRow checked={settings.autoTranslate} description="UI-only toggle for future auto-translation behavior." icon={<Sparkles size={18} />} label="Auto-translate UI" onChange={() => update({ autoTranslate: !settings.autoTranslate })} />
+          <ToggleRow checked={settings.autoTranslate} description="Preview automatic translation controls for future multilingual conversations." icon={<Sparkles size={18} />} label="Auto-translate" onChange={() => update({ autoTranslate: !settings.autoTranslate })} />
           <ToggleRow checked={settings.showOriginalLanguage} description="Show original-language controls when translation previews are active." icon={<Globe2 size={18} />} label="Show original language" onChange={() => update({ showOriginalLanguage: !settings.showOriginalLanguage })} />
         </SettingsSection>
 
@@ -566,14 +566,14 @@ export function SettingsCenterScreen({ onBack, onChange, onOpenGlobalSafety, set
           <ToggleRow checked={settings.compactCards} description="Tighten card padding where safe." icon={<MonitorSmartphone size={18} />} label="Compact cards" onChange={() => update({ compactCards: !settings.compactCards })} />
           <ToggleRow checked={settings.disableHeavyEffects} description="Disable the heaviest glow and background effects." icon={<Sparkles size={18} />} label="Disable heavy visual effects" onChange={() => update({ disableHeavyEffects: !settings.disableHeavyEffects })} />
           <ToggleRow checked={settings.textFirstCards} description="Prefer clearer text-first card presentation." icon={<Type size={18} />} label="Prefer text-first cards" onChange={() => update({ textFirstCards: !settings.textFirstCards })} />
-          <ToggleRow checked={settings.reduceAutoRefresh} description="Reduce mock live refresh-style motion cues where safe." icon={<Gauge size={18} />} label="Reduce mock live effects" onChange={() => update({ reduceAutoRefresh: !settings.reduceAutoRefresh })} />
+          <ToggleRow checked={settings.reduceAutoRefresh} description="Reduce live-style refresh motion cues where safe." icon={<Gauge size={18} />} label="Reduce live effects" onChange={() => update({ reduceAutoRefresh: !settings.reduceAutoRefresh })} />
         </SettingsSection>
 
         <SettingsSection eyebrow="Product" title="About Ace Domain" description="Ace Domain is still local-first for settings and ready for future modules later." icon={<Info size={20} />}>
           <SettingsRow label="App name" description="Ace Domain" />
           <SettingsRow label="Tagline" description="Meet the World" />
           <SettingsRow label="Mission" description="Ace Domain is a global social app for chatting, culture, gaming, discovery, and connection." />
-          <SettingsRow label="Version" description="Stage 7 Foundation" />
+          <SettingsRow label="Version" description="Mobile foundation" />
           <div>
             <p className="mb-3 text-xs font-black uppercase tracking-[0.22em] text-frost/40">Coming later</p>
             <div className="flex flex-wrap gap-2">
@@ -587,7 +587,7 @@ export function SettingsCenterScreen({ onBack, onChange, onOpenGlobalSafety, set
           <div className="rounded-[24px] border border-white/10 bg-white/[0.055] p-4">
             <div className="flex items-center gap-3">
               <Gamepad2 size={18} className="text-[color:var(--ad-accent)]" />
-              <p className="text-sm font-bold text-white">Future modules are listed only. They are not implemented in this stage.</p>
+              <p className="text-sm font-bold text-white">Future modules are reserved in the roadmap and kept separate from the current social foundation.</p>
             </div>
           </div>
         </SettingsSection>

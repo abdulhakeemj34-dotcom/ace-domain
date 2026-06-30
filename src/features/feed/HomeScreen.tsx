@@ -110,7 +110,7 @@ function StoryViewer({ story, onClose }: { story: Story; onClose: () => void }) 
           <div className="absolute bottom-6 left-5 right-5 rounded-[28px] bg-white/10 p-4 backdrop-blur-xl">
             <p className="text-sm uppercase tracking-[0.3em] text-aurora">Story live</p>
             <h3 className="mt-2 text-xl font-black text-white sm:text-2xl">{story.caption}</h3>
-            <p className="mt-2 text-sm text-frost/60">Reply, react, and meet through story moments in a future realtime layer.</p>
+            <p className="mt-2 text-sm text-frost/60">Reply, react, and meet through story moments as Ace Domain expands.</p>
           </div>
         </div>
       </div>
@@ -353,7 +353,7 @@ export function HomeScreen({ globalProfile, globalSettings, onOpenAiChat, onOpen
         <div className="flex items-center justify-between gap-3">
           <div>
             <h2 className="font-bold text-white">Mini-Game Hub</h2>
-            <p className="mt-1 text-sm text-frost/55">UI-only game rooms for future social play.</p>
+            <p className="mt-1 text-sm text-frost/55">Preview game rooms for fast social play.</p>
           </div>
           <Gamepad2 className="text-aurora" size={22} />
         </div>
