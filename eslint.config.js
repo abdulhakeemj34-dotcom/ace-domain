@@ -8,6 +8,13 @@ export default [
   { ignores: ['dist', 'android', 'ios', 'node_modules', 'capacitor.config.js'] },
   ...tseslint.configs.recommended,
   {
+    files: ['api/**/*.ts'],
+    languageOptions: {
+      ecmaVersion: 2022,
+      globals: globals.node
+    }
+  },
+  {
     files: ['**/*.{ts,tsx}'],
     languageOptions: {
       ecmaVersion: 2022,
