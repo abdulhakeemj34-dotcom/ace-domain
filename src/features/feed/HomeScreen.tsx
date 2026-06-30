@@ -1,15 +1,26 @@
 import { Bookmark, Gamepad2, Heart, MessageCircle, Radio, Repeat2, Rocket, Share2, X } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
-import { communities, globalMatches, miniGamePreviews, posts as mockPosts, stories, trendingConversations } from '../../app/data';
+import { globalMatches, miniGamePreviews, posts as mockPosts, stories, trendingConversations } from '../../app/data';
 import { Avatar } from '../../components/Avatar';
 import { Button } from '../../components/Button';
+import { CountryBadge } from '../../components/global/CountryBadge';
+import { CultureFactCard } from '../../components/global/CultureFactCard';
+import { WorldClockLabel } from '../../components/global/WorldClockLabel';
+import { LanguageBadge } from '../../components/language/LanguageBadge';
+import { TranslationToggle } from '../../components/language/TranslationToggle';
 import { ScreenHeader } from '../../components/ScreenHeader';
 import { SearchBar } from '../../components/SearchBar';
 import type { Post, Story } from '../../app/types';
+import { buildSmartSearchResults, countryProfiles, cultureFacts, globalEvents } from '../../data/mockGlobalData';
 import { getFeedPosts } from '../../services/postService';
+import type { GlobalOnboardingProfile, GlobalSafetySettings } from '../../types/global';
 
 type HomeScreenProps = {
+  globalProfile: GlobalOnboardingProfile;
+  globalSettings: GlobalSafetySettings;
   onOpenCommunities: () => void;
+  onOpenCalendar: () => void;
+  onOpenGlobal: () => void;
   onStartChat: () => void;
 };
 
@@ -106,11 +117,15 @@ function StoryViewer({ story, onClose }: { story: Story; onClose: () => void }) 
   );
 }
 
-export function HomeScreen({ onOpenCommunities, onStartChat }: HomeScreenProps) {
+export function HomeScreen({ globalProfile, globalSettings, onOpenCalendar, onOpenCommunities, onOpenGlobal, onStartChat }: HomeScreenProps) {
   const [activeStory, setActiveStory] = useState<Story | null>(null);
   const [feedPosts, setFeedPosts] = useState<Post[]>(mockPosts);
   const [postActions, setPostActions] = useState<Record<string, PostActionState>>(() => buildInitialPostActions(mockPosts));
   const [searchQuery, setSearchQuery] = useState('');
+  const profileCountry = useMemo(
+    () => countryProfiles.find((country) => country.name === globalProfile.country) ?? countryProfiles[0],
+    [globalProfile.country]
+  );
 
   useEffect(() => {
     let isMounted = true;
@@ -129,22 +144,8 @@ export function HomeScreen({ onOpenCommunities, onStartChat }: HomeScreenProps) 
     };
   }, []);
 
-  const normalizedQuery = searchQuery.trim().toLowerCase();
-  const searchResults = useMemo(() => {
-    if (!normalizedQuery) {
-      return null;
-    }
-
-    const matchesText = (...values: string[]) => values.some((value) => value.toLowerCase().includes(normalizedQuery));
-
-    return {
-      communities: communities.filter((community) => matchesText(community.name, community.topic, community.description ?? '')),
-      games: miniGamePreviews.filter((game) => matchesText(game.name, game.genre, game.tagline)),
-      matches: globalMatches.filter((match) => matchesText(match.name, match.country, match.vibe, ...match.interests)),
-      posts: feedPosts.filter((post) => matchesText(post.author, post.body, post.region, ...post.interests)),
-      stories: stories.filter((story) => matchesText(story.name, story.location, story.caption ?? ''))
-    };
-  }, [feedPosts, normalizedQuery]);
+  const searchResults = useMemo(() => buildSmartSearchResults(searchQuery), [searchQuery]);
+  const hasSearchQuery = searchQuery.trim().length > 0;
 
   const updatePost = (postId: string, updater: (current: PostActionState) => PostActionState) => {
     setPostActions((current) => ({ ...current, [postId]: updater(current[postId]) }));
@@ -162,17 +163,17 @@ export function HomeScreen({ onOpenCommunities, onStartChat }: HomeScreenProps) 
         }
       />
       <SearchBar
-        placeholder="Search people, worlds, games, trends..."
+        placeholder="Search people, countries, languages, games, events..."
         value={searchQuery}
         onChange={setSearchQuery}
       />
 
-      {searchResults && (
+      {hasSearchQuery && (
         <div className="mx-5 mt-4 rounded-[28px] border border-white/10 bg-white/[0.06] p-4">
           <div className="flex items-center justify-between gap-3">
             <div>
-              <h2 className="font-bold text-white">Ace AI Search</h2>
-              <p className="text-xs text-frost/50">Filtered across people, posts, communities, and games.</p>
+              <h2 className="font-bold text-white">Ace smart search</h2>
+              <p className="text-xs text-frost/50">Filtered across people, countries, languages, communities, posts, games, events, and culture facts.</p>
             </div>
             <button
               type="button"
@@ -184,22 +185,48 @@ export function HomeScreen({ onOpenCommunities, onStartChat }: HomeScreenProps) 
             </button>
           </div>
           <div className="mt-4 grid gap-2">
-            {[...searchResults.matches, ...searchResults.communities, ...searchResults.games, ...searchResults.posts, ...searchResults.stories]
-              .slice(0, 6)
-              .map((item) => (
-                <div key={item.id} className="rounded-2xl bg-white/[0.06] px-3 py-2">
-                  <p className="text-sm font-bold text-white">{'name' in item ? item.name : item.author}</p>
-                  <p className="truncate text-xs text-frost/50">
-                    {'country' in item ? item.country : 'topic' in item ? item.topic : 'genre' in item ? item.genre : 'body' in item ? item.body : item.location}
-                  </p>
+            {searchResults.map((item) => (
+              <div key={item.id} className="rounded-2xl bg-white/[0.06] px-3 py-2">
+                <div className="flex items-center justify-between gap-3">
+                  <p className="truncate text-sm font-bold text-white">{item.label}</p>
+                  <span className="shrink-0 rounded-full bg-aurora/10 px-2 py-1 text-[10px] font-bold text-aurora">{item.category}</span>
                 </div>
-              ))}
-            {[...searchResults.matches, ...searchResults.communities, ...searchResults.games, ...searchResults.posts, ...searchResults.stories].length === 0 && (
-              <p className="rounded-2xl bg-white/[0.06] px-3 py-3 text-sm text-frost/55">No local results yet. Try Gaming, Seoul, food, or coding.</p>
+                <p className="mt-1 truncate text-xs text-frost/50">{item.description}</p>
+              </div>
+            ))}
+            {searchResults.length === 0 && (
+              <p className="rounded-2xl bg-white/[0.06] px-3 py-3 text-sm text-frost/55">No local results yet. Try Gaming, Seoul, Yoruba, food, or calendar.</p>
             )}
           </div>
         </div>
       )}
+
+      <div className="mx-5 mt-5 rounded-[32px] border border-white/10 bg-white/[0.06] p-4">
+        <div className="flex items-start justify-between gap-3">
+          <div>
+            <p className="text-xs font-bold uppercase tracking-[0.22em] text-aurora">World profile</p>
+            <h2 className="mt-1 text-xl font-black text-white">{globalProfile.focus}</h2>
+            <p className="mt-1 text-sm text-frost/55">
+              {globalSettings.lowDataMode ? 'Low-data mode is active.' : 'Global discovery is tuned locally.'}
+            </p>
+          </div>
+          {!globalSettings.hideCountry && <CountryBadge code={profileCountry.code} label={globalProfile.country} />}
+        </div>
+        <div className="mt-4 flex flex-wrap gap-2">
+          {!globalSettings.hideLanguages && (
+            <>
+              <LanguageBadge label={globalProfile.appLanguage} tone="preferred" />
+              {globalProfile.languagesSpoken.slice(0, 2).map((language) => <LanguageBadge key={language} label={language} />)}
+              {globalProfile.languagesLearning.slice(0, 2).map((language) => <LanguageBadge key={language} label={language} tone="learning" />)}
+            </>
+          )}
+          {!globalSettings.hideLocalTime && <WorldClockLabel timeZone={profileCountry.timeZone} />}
+        </div>
+        <div className="mt-4 grid grid-cols-2 gap-3">
+          <Button onClick={onOpenGlobal} className="py-3">Global</Button>
+          <Button variant="secondary" onClick={onOpenCalendar} className="py-3">Calendar</Button>
+        </div>
+      </div>
 
       <div className="mx-5 mt-5 rounded-[32px] bg-gradient-to-br from-aurora/25 via-signal/20 to-plasma/20 p-[1px]">
         <div className="rounded-[31px] bg-obsidian/90 p-4">
@@ -242,6 +269,26 @@ export function HomeScreen({ onOpenCommunities, onStartChat }: HomeScreenProps) 
           <Button variant="secondary" className="mt-4 w-full" onClick={onOpenCommunities}>
             Explore More Worlds
           </Button>
+        </div>
+      </div>
+
+      <div className="mx-5 mt-5 rounded-[28px] border border-white/10 bg-white/[0.05] p-4">
+        <div className="flex items-center justify-between gap-3">
+          <div>
+            <h2 className="font-bold text-white">Global Calendar</h2>
+            <p className="mt-1 text-sm text-frost/55">Events, culture days, tournaments, meetups, and birthdays.</p>
+          </div>
+          <button type="button" onClick={onOpenCalendar} className="rounded-full bg-white px-4 py-2 text-xs font-bold text-void">
+            Open
+          </button>
+        </div>
+        <div className="mt-4 grid gap-3">
+          {globalEvents.slice(0, 2).map((event) => (
+            <div key={event.id} className="rounded-3xl bg-white/[0.06] p-3">
+              <p className="font-bold text-white">{event.title}</p>
+              <p className="mt-1 text-xs text-frost/50">{event.date} / {event.time} / {event.timeZone}</p>
+            </div>
+          ))}
         </div>
       </div>
 
@@ -305,6 +352,10 @@ export function HomeScreen({ onOpenCommunities, onStartChat }: HomeScreenProps) 
         </div>
       </div>
 
+      <div className="mx-5 mt-5">
+        <CultureFactCard fact={cultureFacts[0]} />
+      </div>
+
       <div className="space-y-4 px-5 py-5">
         {feedPosts.map((post) => {
           const action =
@@ -326,7 +377,11 @@ export function HomeScreen({ onOpenCommunities, onStartChat }: HomeScreenProps) 
                   </p>
                 </div>
               </div>
-              <p className="mt-4 text-sm leading-6 text-frost/80">{post.body}</p>
+              <TranslationToggle
+                className="mt-4 text-sm leading-6"
+                text={post.body}
+                translatedText={`Translation preview: ${post.body}`}
+              />
               <div className="mt-4 flex flex-wrap gap-2">
                 {post.interests.map((interest) => (
                   <span key={interest} className="rounded-full bg-aurora/10 px-3 py-1 text-xs font-semibold text-aurora">

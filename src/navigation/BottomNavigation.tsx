@@ -20,7 +20,11 @@ export function BottomNavigation({ activeScreen, onNavigate }: BottomNavigationP
       <div className="grid grid-cols-5 gap-1">
         {navItems.map((item) => {
           const Icon = item.icon;
-          const active = activeScreen === item.screen || (activeScreen === 'chatRoom' && item.screen === 'chat');
+          const active =
+            activeScreen === item.screen ||
+            (activeScreen === 'chatRoom' && item.screen === 'chat') ||
+            ((activeScreen === 'global' || activeScreen === 'calendar') && item.screen === 'home') ||
+            (activeScreen === 'settings' && item.screen === 'profile');
           return (
             <button
               key={item.screen}

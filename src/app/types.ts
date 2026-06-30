@@ -1,4 +1,15 @@
-export type AppScreen = 'welcome' | 'auth' | 'home' | 'chat' | 'chatRoom' | 'communities' | 'notifications' | 'profile';
+export type AppScreen =
+  | 'welcome'
+  | 'auth'
+  | 'home'
+  | 'chat'
+  | 'chatRoom'
+  | 'communities'
+  | 'notifications'
+  | 'profile'
+  | 'global'
+  | 'calendar'
+  | 'settings';
 
 export type Story = {
   id: string;

@@ -1,10 +1,16 @@
-import { BadgeCheck, MapPin, Settings, X } from 'lucide-react';
+import { BadgeCheck, Globe2, MapPin, Settings, ShieldCheck, X } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { futureModules } from '../../app/data';
 import { Avatar } from '../../components/Avatar';
+import { CountryBadge } from '../../components/global/CountryBadge';
+import { WorldClockLabel } from '../../components/global/WorldClockLabel';
+import { LanguageBadge } from '../../components/language/LanguageBadge';
+import { TranslationToggle } from '../../components/language/TranslationToggle';
 import { ScreenHeader } from '../../components/ScreenHeader';
+import { countryProfiles } from '../../data/mockGlobalData';
 import { supabaseConfig } from '../../lib/supabase';
 import { getCurrentProfile, profileDisplayName, updateCurrentProfile, type BackendProfile } from '../../services/profileService';
+import type { GlobalOnboardingProfile, GlobalSafetySettings } from '../../types/global';
 
 const stats = [
   { label: 'Friends', value: '18.2K' },
@@ -138,13 +144,17 @@ function EditProfileModal({ profile, onClose, onSave }: EditProfileModalProps) {
 }
 
 type ProfileScreenProps = {
+  globalProfile: GlobalOnboardingProfile;
+  globalSettings: GlobalSafetySettings;
+  onOpenGlobalSettings: () => void;
   onLogout?: () => void;
 };
 
-export function ProfileScreen({ onLogout }: ProfileScreenProps) {
+export function ProfileScreen({ globalProfile, globalSettings, onLogout, onOpenGlobalSettings }: ProfileScreenProps) {
   const [profile, setProfile] = useState(initialProfile);
   const [editing, setEditing] = useState(false);
   const [profileStatus, setProfileStatus] = useState('');
+  const profileCountry = countryProfiles.find((country) => country.name === globalProfile.country) ?? countryProfiles[0];
 
   useEffect(() => {
     let isMounted = true;
@@ -210,7 +220,11 @@ export function ProfileScreen({ onLogout }: ProfileScreenProps) {
           <p className="mt-1 flex items-center justify-center gap-1 text-sm text-frost/55">
             <MapPin size={14} /> {profile.country}
           </p>
-          <p className="mx-auto mt-4 max-w-xs text-sm leading-6 text-frost/65">{profile.bio}</p>
+          <TranslationToggle
+            className="mx-auto mt-4 max-w-xs text-sm leading-6"
+            text={profile.bio}
+            translatedText={`Translation preview: ${profile.bio}`}
+          />
           <div className="mt-4 flex flex-wrap justify-center gap-2">
             {profile.interests.map((interest) => (
               <span key={interest} className="rounded-full bg-aurora/10 px-3 py-1 text-xs font-semibold text-aurora">
@@ -235,6 +249,48 @@ export function ProfileScreen({ onLogout }: ProfileScreenProps) {
             </button>
           )}
           {profileStatus && <p className="mt-3 text-xs leading-5 text-frost/45">{profileStatus}</p>}
+        </div>
+
+        <div className="mt-5 rounded-[30px] border border-white/10 bg-white/[0.06] p-5">
+          <div className="flex items-start justify-between gap-3">
+            <div>
+              <p className="text-xs font-bold uppercase tracking-[0.24em] text-aurora">Language identity</p>
+              <h3 className="mt-2 text-xl font-black text-white">{globalProfile.focus}</h3>
+              <p className="mt-1 text-sm text-frost/55">{globalProfile.region}</p>
+            </div>
+            <div className="grid h-11 w-11 place-items-center rounded-2xl bg-aurora/15 text-aurora">
+              <Globe2 size={21} />
+            </div>
+          </div>
+          <div className="mt-4 flex flex-wrap gap-2">
+            {!globalSettings.hideCountry && <CountryBadge code={profileCountry.code} label={globalProfile.country} />}
+            {!globalSettings.hideLocalTime && <WorldClockLabel timeZone={profileCountry.timeZone} />}
+            <LanguageBadge label={globalProfile.appLanguage} tone="preferred" />
+          </div>
+          {!globalSettings.hideLanguages && (
+            <div className="mt-4 grid gap-3">
+              <div>
+                <p className="mb-2 text-xs font-bold uppercase tracking-[0.18em] text-frost/45">Speaks</p>
+                <div className="flex flex-wrap gap-2">
+                  {globalProfile.languagesSpoken.map((language) => <LanguageBadge key={language} label={language} />)}
+                </div>
+              </div>
+              <div>
+                <p className="mb-2 text-xs font-bold uppercase tracking-[0.18em] text-frost/45">Learning</p>
+                <div className="flex flex-wrap gap-2">
+                  {globalProfile.languagesLearning.map((language) => <LanguageBadge key={language} label={language} tone="learning" />)}
+                </div>
+              </div>
+            </div>
+          )}
+          <button
+            type="button"
+            onClick={onOpenGlobalSettings}
+            className="mt-5 flex w-full items-center justify-center gap-2 rounded-full bg-white px-5 py-3 text-sm font-bold text-void"
+          >
+            <ShieldCheck size={17} />
+            Global Safety and Accessibility
+          </button>
         </div>
 
         <div className="mt-5 rounded-[28px] border border-white/10 bg-white/[0.05] p-4">

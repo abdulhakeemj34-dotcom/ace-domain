@@ -52,4 +52,23 @@ button {
     background-size: 42px 42px;
     mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.8), transparent 80%);
   }
+
+  .low-data-mode *,
+  .reduced-motion-mode * {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.001ms !important;
+  }
+
+  .large-text-mode {
+    font-size: 106%;
+  }
+
+  .high-contrast-mode .glass-panel,
+  .high-contrast-mode [class*="bg-white/\\[0\\.06\\]"],
+  .high-contrast-mode [class*="bg-white/\\[0\\.05\\]"] {
+    border-color: rgba(221, 231, 255, 0.24);
+    background-color: rgba(16, 22, 45, 0.96);
+  }
 }

@@ -3,6 +3,7 @@ import { ArrowLeft, Gamepad2, Mic, Send, UsersRound } from 'lucide-react';
 import { chats as mockChats } from '../../app/data';
 import type { Chat } from '../../app/types';
 import { Avatar } from '../../components/Avatar';
+import { TranslationToggle } from '../../components/language/TranslationToggle';
 import { useChatMessages } from './useChatMessages';
 import { useChatThreads } from './useChatThreads';
 
@@ -135,7 +136,12 @@ export function ChatRoomScreen({ chatId, onBack }: ChatRoomScreenProps) {
                       : 'rounded-bl-md border border-white/10 bg-white/[0.08] text-frost/80'
                   }`}
                 >
-                  <p>{message.text}</p>
+                  <TranslationToggle
+                    compact
+                    text={message.text}
+                    tone={mine ? 'light' : 'dark'}
+                    translatedText={`Translation preview: ${message.text}`}
+                  />
                   <p className={`mt-1 text-[10px] ${mine ? 'text-void/50' : 'text-frost/40'}`}>
                     {message.time}
                     {message.status === 'sending' && ' / sending'}

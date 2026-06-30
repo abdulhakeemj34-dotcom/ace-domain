@@ -2,6 +2,7 @@ import { ArrowLeft, Check, Sparkles, UsersRound } from 'lucide-react';
 import type { Community } from '../../app/types';
 import { communityMembers, communityPosts } from '../../app/data';
 import { Avatar } from '../../components/Avatar';
+import { TranslationToggle } from '../../components/language/TranslationToggle';
 
 type CommunityDetailScreenProps = {
   community: Community;
@@ -25,7 +26,11 @@ export function CommunityDetailScreen({ community, joined, onBack, onToggleJoin 
             <div>
               <p className="text-xs font-bold uppercase tracking-[0.28em] text-aurora">Community world</p>
               <h1 className="mt-2 text-3xl font-black text-white">{community.name}</h1>
-              <p className="mt-2 text-sm leading-6 text-frost/60">{community.description}</p>
+              <TranslationToggle
+                className="mt-2 text-sm leading-6"
+                text={community.description ?? community.topic}
+                translatedText={`Translation preview: ${community.description ?? community.topic}`}
+              />
             </div>
             <Sparkles style={{ color: community.accent }} size={26} />
           </div>
@@ -82,7 +87,11 @@ export function CommunityDetailScreen({ community, joined, onBack, onToggleJoin 
                 <h3 className="font-bold text-white">{post.author}</h3>
                 <span className="text-xs text-aurora">{post.time}</span>
               </div>
-              <p className="mt-2 text-sm leading-6 text-frost/65">{post.body}</p>
+              <TranslationToggle
+                className="mt-2 text-sm leading-6"
+                text={post.body}
+                translatedText={`Translation preview: ${post.body}`}
+              />
               <p className="mt-3 text-xs font-bold text-frost/45">{post.reactions} reactions</p>
             </article>
           ))}
