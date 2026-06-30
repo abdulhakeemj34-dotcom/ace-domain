@@ -74,7 +74,7 @@ export default function App() {
           />
         );
       case 'chatRoom':
-        return <ChatRoomScreen chatId={activeChatId} onBack={() => setScreen('chat')} />;
+        return <ChatRoomScreen key={activeChatId} chatId={activeChatId} onBack={() => setScreen('chat')} />;
       case 'communities':
         return <CommunitiesScreen />;
       case 'notifications':

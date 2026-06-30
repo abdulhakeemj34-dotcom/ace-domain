@@ -229,6 +229,15 @@ function endpoint(path: string) {
   return `${supabaseConfig.url}${path}`;
 }
 
+export function realtimeEndpoint() {
+  if (!supabaseConfig.isConfigured) {
+    throw new SupabaseConfigError();
+  }
+
+  const realtimeUrl = supabaseConfig.url.replace(/^http/i, 'ws');
+  return `${realtimeUrl}/realtime/v1/websocket?apikey=${encodeURIComponent(supabaseConfig.anonKey)}&vsn=1.0.0`;
+}
+
 export async function supabaseAuthRequest<T>(path: string, options: SupabaseRequestOptions = {}) {
   const response = await fetch(endpoint(`/auth/v1${path}`), {
     body: options.body ? JSON.stringify(options.body) : undefined,
@@ -286,5 +295,6 @@ export const supabase = {
   request: {
     auth: supabaseAuthRequest,
     rest: supabaseRestRequest
-  }
+  },
+  realtimeEndpoint
 };

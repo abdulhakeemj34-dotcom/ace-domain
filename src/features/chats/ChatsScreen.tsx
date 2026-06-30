@@ -1,21 +1,32 @@
 import { Plus, UsersRound } from 'lucide-react';
-import { chats } from '../../app/data';
 import { Avatar } from '../../components/Avatar';
 import { ScreenHeader } from '../../components/ScreenHeader';
 import { SearchBar } from '../../components/SearchBar';
+import { useChatThreads } from './useChatThreads';
 
 type ChatsScreenProps = {
   onOpenChat: (chatId: string) => void;
 };
 
 export function ChatsScreen({ onOpenChat }: ChatsScreenProps) {
+  const { error, isLoading, refresh, threads, usingFallback } = useChatThreads();
+  const groupThreads = threads.filter((chat) => chat.kind === 'group');
+  const firstDirectThread = threads.find((chat) => chat.kind === 'direct');
+  const startThreadId = firstDirectThread?.id ?? threads[0]?.id ?? (usingFallback ? 'c4' : '');
+
   return (
     <section className="animate-rise pb-6">
       <ScreenHeader
         eyebrow="Private and groups"
         title="Chats"
         action={
-          <button type="button" onClick={() => onOpenChat('c4')} className="grid h-11 w-11 place-items-center rounded-full bg-white text-void" aria-label="Start new chat">
+          <button
+            type="button"
+            onClick={() => startThreadId && onOpenChat(startThreadId)}
+            className="grid h-11 w-11 place-items-center rounded-full bg-white text-void disabled:opacity-50"
+            aria-label="Start new chat"
+            disabled={!startThreadId}
+          >
             <Plus size={20} />
           </button>
         }
@@ -28,10 +39,26 @@ export function ChatsScreen({ onOpenChat }: ChatsScreenProps) {
               <h2 className="font-bold text-white">Group rooms</h2>
               <p className="mt-1 text-sm text-frost/55">Live rooms with members, previews, and quick jump-in.</p>
             </div>
-            <span className="rounded-full bg-aurora/15 px-3 py-1 text-xs font-bold text-aurora">Live</span>
+            <span className="rounded-full bg-aurora/15 px-3 py-1 text-xs font-bold text-aurora">
+              {usingFallback ? 'Demo' : 'Live'}
+            </span>
           </div>
+          {error && (
+            <div className="mt-4 rounded-3xl border border-plasma/20 bg-plasma/10 p-3 text-sm text-plasma">
+              <p>{error}</p>
+              <button type="button" onClick={refresh} className="mt-2 rounded-full bg-white/10 px-3 py-1 text-xs font-bold text-white">
+                Retry
+              </button>
+            </div>
+          )}
           <div className="mt-4 grid gap-3">
-            {chats.filter((chat) => chat.kind === 'group').map((chat) => (
+            {isLoading && threads.length === 0 && (
+              <div className="rounded-3xl bg-white/[0.06] p-4 text-sm text-frost/55">Loading chat rooms...</div>
+            )}
+            {!isLoading && groupThreads.length === 0 && (
+              <div className="rounded-3xl bg-white/[0.06] p-4 text-sm text-frost/55">No group rooms yet. Real rooms will appear here after membership is created.</div>
+            )}
+            {groupThreads.map((chat) => (
               <button
                 key={chat.id}
                 type="button"
@@ -55,16 +82,24 @@ export function ChatsScreen({ onOpenChat }: ChatsScreenProps) {
             ))}
           </div>
         </div>
-        <div className="mb-4 flex gap-3 overflow-x-auto [scrollbar-width:none]">
-          {chats.slice(0, 3).map((chat) => (
+        {threads.length > 0 && (
+          <div className="mb-4 flex gap-3 overflow-x-auto [scrollbar-width:none]">
+            {threads.slice(0, 3).map((chat) => (
             <div key={chat.id} className="w-28 shrink-0 rounded-3xl bg-white/[0.06] p-3 text-center">
               <Avatar label={chat.avatar} active={chat.unread > 0} />
               <p className="mt-2 truncate text-xs font-bold text-white">{chat.name}</p>
             </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        )}
         <div className="space-y-3">
-          {chats.map((chat) => (
+          {!isLoading && threads.length === 0 && (
+            <div className="glass-panel rounded-[26px] p-5 text-center">
+              <h2 className="font-bold text-white">No chat threads yet</h2>
+              <p className="mt-2 text-sm leading-6 text-frost/55">When Supabase has chat thread memberships for this account, they will appear here.</p>
+            </div>
+          )}
+          {threads.map((chat) => (
             <button
               key={chat.id}
               type="button"

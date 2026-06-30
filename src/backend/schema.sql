@@ -56,9 +56,13 @@ create table if not exists public.chat_threads (
   id uuid primary key default gen_random_uuid(),
   type text not null check (type in ('direct', 'group')),
   title text,
+  created_by uuid references public.profiles(id) on delete set null,
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now()
 );
+
+alter table public.chat_threads
+add column if not exists created_by uuid references public.profiles(id) on delete set null;
 
 create table if not exists public.chat_thread_members (
   id uuid primary key default gen_random_uuid(),
@@ -99,7 +103,9 @@ for each row execute function public.set_updated_at();
 create index if not exists posts_user_id_created_at_idx on public.posts (user_id, created_at desc);
 create index if not exists community_members_user_id_idx on public.community_members (user_id);
 create index if not exists community_members_community_id_idx on public.community_members (community_id);
+create index if not exists chat_threads_created_by_idx on public.chat_threads (created_by);
 create index if not exists chat_thread_members_user_id_idx on public.chat_thread_members (user_id);
+create index if not exists chat_thread_members_thread_id_idx on public.chat_thread_members (thread_id);
 create index if not exists chat_messages_thread_id_created_at_idx on public.chat_messages (thread_id, created_at);
 create index if not exists notifications_user_id_created_at_idx on public.notifications (user_id, created_at desc);
 
@@ -181,9 +187,37 @@ using (
   )
 );
 
+drop policy if exists "Users can create chat threads" on public.chat_threads;
+create policy "Users can create chat threads"
+on public.chat_threads for insert
+with check (auth.uid() = created_by);
+
+drop policy if exists "Thread creators can update chat threads" on public.chat_threads;
+create policy "Thread creators can update chat threads"
+on public.chat_threads for update
+using (auth.uid() = created_by)
+with check (auth.uid() = created_by);
+
 drop policy if exists "Members can read thread memberships" on public.chat_thread_members;
 create policy "Members can read thread memberships"
 on public.chat_thread_members for select
+using (auth.uid() = user_id);
+
+drop policy if exists "Thread creators can add members" on public.chat_thread_members;
+create policy "Thread creators can add members"
+on public.chat_thread_members for insert
+with check (
+  exists (
+    select 1
+    from public.chat_threads threads
+    where threads.id = chat_thread_members.thread_id
+      and threads.created_by = auth.uid()
+  )
+);
+
+drop policy if exists "Users can leave own chat thread memberships" on public.chat_thread_members;
+create policy "Users can leave own chat thread memberships"
+on public.chat_thread_members for delete
 using (auth.uid() = user_id);
 
 drop policy if exists "Users can join threads as themselves" on public.chat_thread_members;

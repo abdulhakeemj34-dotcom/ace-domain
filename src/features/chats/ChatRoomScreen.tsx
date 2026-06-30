@@ -1,8 +1,9 @@
 import { useState, type FormEvent } from 'react';
 import { ArrowLeft, Gamepad2, Mic, Send, UsersRound } from 'lucide-react';
-import { chats, chatMessagesByChatId } from '../../app/data';
-import type { ChatMessage } from '../../app/types';
+import { chats as mockChats } from '../../app/data';
 import { Avatar } from '../../components/Avatar';
+import { useChatMessages } from './useChatMessages';
+import { useChatThreads } from './useChatThreads';
 
 type ChatRoomScreenProps = {
   chatId: string;
@@ -10,15 +11,16 @@ type ChatRoomScreenProps = {
 };
 
 export function ChatRoomScreen({ chatId, onBack }: ChatRoomScreenProps) {
-  const chat = chats.find((item) => item.id === chatId) ?? chats[0];
+  const { threads, usingFallback: threadsUsingFallback } = useChatThreads();
+  const { error, isLoading, messages, realtimeStatus, refresh, sendMessage: sendChatMessage, usingFallback: messagesUsingFallback } = useChatMessages(chatId);
+  const chat = threads.find((item) => item.id === chatId) ?? mockChats.find((item) => item.id === chatId) ?? mockChats[0];
   const [draft, setDraft] = useState('');
   const [roomNotice, setRoomNotice] = useState<string | null>(null);
-  const [localMessagesByChatId, setLocalMessagesByChatId] = useState<Record<string, ChatMessage[]>>({});
-  const baseMessages = chatMessagesByChatId[chat.id] ?? chatMessagesByChatId.c1;
-  const messages = [...baseMessages, ...(localMessagesByChatId[chat.id] ?? [])];
   const isGroup = chat.kind === 'group';
+  const isFallback = threadsUsingFallback || messagesUsingFallback;
+  const isSending = messages.some((message) => message.status === 'sending');
 
-  const sendMessage = (event: FormEvent<HTMLFormElement>) => {
+  const sendMessage = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const text = draft.trim();
 
@@ -27,22 +29,26 @@ export function ChatRoomScreen({ chatId, onBack }: ChatRoomScreenProps) {
       return;
     }
 
-    const time = new Intl.DateTimeFormat(undefined, { hour: 'numeric', minute: '2-digit' }).format(new Date());
-    setLocalMessagesByChatId((current) => ({
-      ...current,
-      [chat.id]: [
-        ...(current[chat.id] ?? []),
-        {
-          id: `${chat.id}-${Date.now()}`,
-          author: 'me',
-          text,
-          time
-        }
-      ]
-    }));
-    setDraft('');
-    setRoomNotice('Message added locally.');
+    const result = await sendChatMessage(text);
+
+    if (result.ok) {
+      setDraft('');
+      setRoomNotice(result.usingFallback ? 'Message added locally.' : 'Message sent.');
+      return;
+    }
+
+    setRoomNotice(result.error ?? 'Message could not be sent.');
   };
+
+  const realtimeLabel = isFallback
+    ? 'Demo chat'
+    : realtimeStatus === 'connected'
+      ? 'Realtime connected'
+      : realtimeStatus === 'connecting'
+        ? 'Realtime connecting'
+        : realtimeStatus === 'error'
+          ? 'Realtime needs attention'
+          : 'Realtime ready';
 
   return (
     <section className="flex min-h-screen flex-col">
@@ -57,6 +63,7 @@ export function ChatRoomScreen({ chatId, onBack }: ChatRoomScreenProps) {
             <p className="truncate text-xs text-aurora">
               {isGroup ? `${chat.members} members / ${chat.online ? 'live now' : 'quiet room'}` : `${chat.online ? 'Online' : 'Recently active'} / ${chat.country ?? 'Global'}`}
             </p>
+            <p className="mt-1 truncate text-[10px] font-bold uppercase tracking-[0.18em] text-frost/40">{realtimeLabel}</p>
           </div>
         </div>
 
@@ -79,6 +86,28 @@ export function ChatRoomScreen({ chatId, onBack }: ChatRoomScreenProps) {
       </header>
 
       <div className="flex-1 space-y-3 px-5 py-5 pb-40">
+        {error && (
+          <div className="rounded-[24px] border border-plasma/20 bg-plasma/10 p-4 text-sm text-plasma">
+            <p>{error}</p>
+            <button type="button" onClick={refresh} className="mt-3 rounded-full bg-white/10 px-3 py-1 text-xs font-bold text-white">
+              Retry messages
+            </button>
+          </div>
+        )}
+
+        {isLoading && (
+          <div className="rounded-[24px] border border-white/10 bg-white/[0.06] p-4 text-sm text-frost/55">
+            Loading messages...
+          </div>
+        )}
+
+        {!isLoading && messages.length === 0 && !error && (
+          <div className="rounded-[28px] border border-white/10 bg-white/[0.06] p-5 text-center">
+            <h2 className="font-bold text-white">Start the room</h2>
+            <p className="mt-2 text-sm leading-6 text-frost/55">No messages yet. Send the first hello and this thread is ready for realtime updates.</p>
+          </div>
+        )}
+
         {messages.map((message) => {
           const mine = message.author === 'me';
           return (
@@ -93,7 +122,11 @@ export function ChatRoomScreen({ chatId, onBack }: ChatRoomScreenProps) {
                   }`}
                 >
                   <p>{message.text}</p>
-                  <p className={`mt-1 text-[10px] ${mine ? 'text-void/50' : 'text-frost/40'}`}>{message.time}</p>
+                  <p className={`mt-1 text-[10px] ${mine ? 'text-void/50' : 'text-frost/40'}`}>
+                    {message.time}
+                    {message.status === 'sending' && ' / sending'}
+                    {message.status === 'failed' && ' / failed'}
+                  </p>
                 </div>
               </div>
             </div>
@@ -107,7 +140,9 @@ export function ChatRoomScreen({ chatId, onBack }: ChatRoomScreenProps) {
                 <span key={dot} className="h-2 w-2 rounded-full bg-aurora animate-pulseGlow" style={{ animationDelay: `${dot * 160}ms` }} />
               ))}
             </div>
-            <p className="mt-2 text-[10px] text-frost/45">{isGroup ? 'The room is typing...' : `${chat.name} is typing...`}</p>
+            <p className="mt-2 text-[10px] text-frost/45">
+              {isFallback ? 'Typing and presence UI prepared locally.' : isGroup ? 'The room is ready for typing signals.' : `${chat.name} typing signal ready.`}
+            </p>
           </div>
         </div>
 
@@ -145,7 +180,7 @@ export function ChatRoomScreen({ chatId, onBack }: ChatRoomScreenProps) {
           value={draft}
           onChange={(event) => setDraft(event.target.value)}
         />
-        <button type="submit" className="grid h-11 w-11 place-items-center rounded-full bg-white text-void" aria-label="Send message">
+        <button type="submit" className="grid h-11 w-11 place-items-center rounded-full bg-white text-void disabled:opacity-50" aria-label="Send message" disabled={isSending}>
           <Send size={18} />
         </button>
       </form>

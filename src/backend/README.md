@@ -29,3 +29,9 @@ RLS is enabled for every table. Policies keep public reads limited to profiles, 
 ## Frontend Behavior
 
 The app remains mobile-first and demo-safe. If Supabase env keys are missing or a table has no rows yet, the existing premium mock UI stays visible instead of rendering empty screens or crashing.
+
+## Stage Four Chat
+
+Chat threads and messages are read through the service layer. When a user has a valid Supabase session, chat rooms subscribe to `chat_messages` inserts through Supabase Realtime and clean up the WebSocket subscription when the room unmounts.
+
+Thread membership writes are restricted: clients cannot self-join arbitrary threads by ID. Thread creators can add members through the schema policies, and a future trusted backend flow can expand this safely.
