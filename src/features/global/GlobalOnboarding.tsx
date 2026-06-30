@@ -31,7 +31,7 @@ export function GlobalOnboarding({ onComplete, onSkip }: GlobalOnboardingProps) 
   };
 
   return (
-    <div className="fixed inset-0 z-40 flex items-end justify-center overflow-y-auto bg-void/85 px-4 py-4 backdrop-blur-2xl sm:items-center">
+    <div className="fixed inset-0 z-40 flex items-end justify-center overflow-y-auto bg-void/85 px-4 py-4 pb-[calc(1rem+env(safe-area-inset-bottom))] backdrop-blur-2xl sm:items-center">
       <form
         className="max-h-[calc(100svh-2rem)] w-full max-w-md overflow-y-auto rounded-[34px] border border-white/10 bg-obsidian p-5 shadow-panel animate-rise"
         onSubmit={(event) => {
@@ -68,6 +68,7 @@ export function GlobalOnboarding({ onComplete, onSkip }: GlobalOnboardingProps) 
               value={profile.country}
               onChange={(event) => updateCountry(event.target.value)}
               className="mt-2 w-full rounded-3xl border border-white/10 bg-void px-4 py-3 text-sm normal-case tracking-normal text-white outline-none"
+              aria-label="Choose country"
             >
               {countryProfiles.map((country) => (
                 <option key={country.id} value={country.name}>{country.name}</option>
@@ -80,6 +81,7 @@ export function GlobalOnboarding({ onComplete, onSkip }: GlobalOnboardingProps) 
               value={profile.appLanguage}
               onChange={(event) => setProfile((current) => ({ ...current, appLanguage: event.target.value }))}
               className="mt-2 w-full rounded-3xl border border-white/10 bg-void px-4 py-3 text-sm normal-case tracking-normal text-white outline-none"
+              aria-label="Choose preferred app language"
             >
               {languageOptions.map((language) => (
                 <option key={language} value={language}>{language}</option>
@@ -129,7 +131,7 @@ export function GlobalOnboarding({ onComplete, onSkip }: GlobalOnboardingProps) 
 
           <div>
             <h3 className="text-sm font-bold text-white">Focus</h3>
-            <div className="mt-3 grid grid-cols-2 gap-2">
+            <div className="mt-3 grid grid-cols-1 gap-2 min-[360px]:grid-cols-2">
               {focusOptions.map((focus) => {
                 const active = profile.focus === focus;
                 return (
@@ -166,7 +168,7 @@ export function GlobalOnboarding({ onComplete, onSkip }: GlobalOnboardingProps) 
           </div>
         </div>
 
-        <div className="mt-5 grid grid-cols-2 gap-3">
+        <div className="sticky bottom-0 -mx-5 mt-5 grid grid-cols-1 gap-3 border-t border-white/10 bg-obsidian/95 px-5 pb-1 pt-4 backdrop-blur-xl min-[360px]:grid-cols-2">
           <button type="button" onClick={onSkip} className="rounded-full border border-white/10 bg-white/10 px-5 py-3 text-sm font-bold text-white">
             Skip
           </button>

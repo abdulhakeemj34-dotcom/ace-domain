@@ -287,6 +287,7 @@ export function ProfileScreen({ globalProfile, globalSettings, onLogout, onOpenG
             type="button"
             onClick={onOpenGlobalSettings}
             className="mt-5 flex w-full items-center justify-center gap-2 rounded-full bg-white px-5 py-3 text-sm font-bold text-void"
+            aria-label="Open global safety and accessibility settings"
           >
             <ShieldCheck size={17} />
             Global Safety and Accessibility

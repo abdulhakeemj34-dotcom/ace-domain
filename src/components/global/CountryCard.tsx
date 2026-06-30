@@ -11,12 +11,14 @@ type CountryCardProps = {
 export function CountryCard({ country, onExplore }: CountryCardProps) {
   return (
     <article className="rounded-[28px] border border-white/10 bg-white/[0.06] p-4">
-      <div className="flex items-start justify-between gap-3">
+      <div className="flex flex-wrap items-start justify-between gap-3">
         <div className="min-w-0">
           <CountryBadge code={country.code} label={country.name} />
           <p className="mt-3 text-sm text-frost/50">{country.region}</p>
         </div>
-        <WorldClockLabel compact timeZone={country.timeZone} />
+        <div className="max-w-full">
+          <WorldClockLabel compact timeZone={country.timeZone} />
+        </div>
       </div>
 
       <p className="mt-4 text-sm leading-6 text-frost/70">{country.funFact}</p>

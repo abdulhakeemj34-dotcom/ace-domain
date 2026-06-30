@@ -29,13 +29,13 @@ export function TranslationToggle({
   const buttonTone = tone === 'light' ? 'bg-void/10 text-void' : 'bg-white/10 text-frost/70';
 
   return (
-    <div className={className}>
+    <div className={className} aria-live="polite">
       <p className={bodyTone}>{currentText}</p>
       <div className={`mt-2 flex ${compact ? 'items-start' : 'items-center'} flex-wrap gap-2`}>
         {translated && (
           <span className={`inline-flex items-center gap-1 rounded-full px-2 py-1 text-[10px] font-bold uppercase tracking-[0.16em] ${buttonTone}`}>
             <Languages size={12} />
-            Preview
+            Translation preview
           </span>
         )}
         <button

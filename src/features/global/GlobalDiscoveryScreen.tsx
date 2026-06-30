@@ -39,17 +39,18 @@ const initialFilters: MatchFilters = {
 };
 
 function selectClass() {
-  return 'w-full rounded-3xl border border-white/10 bg-void px-3 py-3 text-sm text-white outline-none';
+  return 'min-w-0 w-full rounded-3xl border border-white/10 bg-void px-3 py-3 text-sm text-white outline-none';
 }
 
 export function GlobalDiscoveryScreen({ onBack, onOpenCalendar, onStartChat }: GlobalDiscoveryScreenProps) {
   const [filters, setFilters] = useState(initialFilters);
   const [selectedCountry, setSelectedCountry] = useState<CountryProfile | null>(null);
-  const countries = ['All', ...countryProfiles.map((country) => country.name)];
-  const interests = ['All', ...Array.from(new Set(globalPeople.flatMap((person) => person.interests)))];
-  const gamerTypes = ['All', ...Array.from(new Set(globalPeople.map((person) => person.gamerType)))];
-  const timeZones = ['All', ...Array.from(new Set(globalPeople.map((person) => person.timeZone)))];
-  const modes = ['All', 'Campus', 'Global'];
+  const countries = useMemo(() => ['All', ...countryProfiles.map((country) => country.name)], []);
+  const interests = useMemo(() => ['All', ...Array.from(new Set(globalPeople.flatMap((person) => person.interests)))], []);
+  const gamerTypes = useMemo(() => ['All', ...Array.from(new Set(globalPeople.map((person) => person.gamerType)))], []);
+  const timeZones = useMemo(() => ['All', ...Array.from(new Set(globalPeople.map((person) => person.timeZone)))], []);
+  const modes = useMemo(() => ['All', 'Campus', 'Global'], []);
+  const hasActiveFilters = Object.entries(filters).some(([key, value]) => initialFilters[key as keyof MatchFilters] !== value);
 
   const filteredPeople = useMemo(() => {
     return globalPeople.filter((person) => {
@@ -116,7 +117,7 @@ export function GlobalDiscoveryScreen({ onBack, onOpenCalendar, onStartChat }: G
               <p className="text-sm text-frost/50">Local-state filtering for Stage 4A.</p>
             </div>
           </div>
-          <div className="mt-4 grid grid-cols-2 gap-3">
+          <div className="mt-4 grid grid-cols-1 gap-3 min-[380px]:grid-cols-2">
             <select className={selectClass()} value={filters.country} onChange={(event) => setFilters((current) => ({ ...current, country: event.target.value }))} aria-label="Filter by country">
               {countries.map((country) => <option key={country}>{country}</option>)}
             </select>
@@ -143,6 +144,15 @@ export function GlobalDiscoveryScreen({ onBack, onOpenCalendar, onStartChat }: G
           >
             {filters.onlineOnly ? 'Online now only' : 'Include offline people'}
           </button>
+          {hasActiveFilters && (
+            <button
+              type="button"
+              onClick={() => setFilters(initialFilters)}
+              className="mt-2 w-full rounded-full border border-white/10 bg-white/[0.06] px-4 py-3 text-sm font-bold text-frost/70"
+            >
+              Clear filters
+            </button>
+          )}
         </div>
 
         <div className="grid gap-3">

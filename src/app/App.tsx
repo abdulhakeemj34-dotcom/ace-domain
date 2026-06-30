@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Sparkles } from 'lucide-react';
 import { StartupSplash } from '../components/logo/StartupSplash';
-import { defaultGlobalProfile, defaultGlobalSettings } from '../data/mockGlobalData';
+import { defaultGlobalProfile, defaultGlobalSettings, focusOptions } from '../data/mockGlobalData';
 import { AuthScreen } from '../features/auth/AuthScreen';
 import { CalendarScreen } from '../features/calendar/CalendarScreen';
 import { ChatsScreen } from '../features/chats/ChatsScreen';
@@ -23,12 +23,38 @@ const GLOBAL_PROFILE_KEY = 'ace-domain.global-profile';
 const GLOBAL_ONBOARDING_KEY = 'ace-domain.global-onboarding-complete';
 const GLOBAL_SETTINGS_KEY = 'ace-domain.global-settings';
 
-function readJson<T>(key: string, fallback: T): T {
+function readStorageItem(key: string) {
   try {
-    const raw = window.localStorage.getItem(key);
-    return raw ? { ...fallback, ...JSON.parse(raw) } : fallback;
+    return typeof window === 'undefined' ? null : window.localStorage.getItem(key);
   } catch {
-    return fallback;
+    return null;
+  }
+}
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === 'object' && value !== null && !Array.isArray(value);
+}
+
+function asString(value: unknown, fallback: string) {
+  return typeof value === 'string' && value.trim() ? value : fallback;
+}
+
+function asStringArray(value: unknown, fallback: string[]) {
+  return Array.isArray(value) ? value.filter((item): item is string => typeof item === 'string' && item.trim().length > 0) : fallback;
+}
+
+function readRecord(key: string) {
+  const raw = readStorageItem(key);
+
+  if (!raw) {
+    return null;
+  }
+
+  try {
+    const parsed: unknown = JSON.parse(raw);
+    return isRecord(parsed) ? parsed : null;
+  } catch {
+    return null;
   }
 }
 
@@ -41,11 +67,54 @@ function writeJson(key: string, value: unknown) {
 }
 
 function hasStoredFlag(key: string) {
-  try {
-    return window.localStorage.getItem(key) === 'true';
-  } catch {
-    return false;
+  return readStorageItem(key) === 'true';
+}
+
+function readGlobalProfile() {
+  const stored = readRecord(GLOBAL_PROFILE_KEY);
+
+  if (!stored) {
+    return defaultGlobalProfile;
   }
+
+  const focus = asString(stored.focus, defaultGlobalProfile.focus);
+
+  return {
+    appLanguage: asString(stored.appLanguage, defaultGlobalProfile.appLanguage),
+    country: asString(stored.country, defaultGlobalProfile.country),
+    focus: focusOptions.includes(focus as GlobalOnboardingProfile['focus']) ? focus as GlobalOnboardingProfile['focus'] : defaultGlobalProfile.focus,
+    interests: asStringArray(stored.interests, defaultGlobalProfile.interests),
+    languagesLearning: asStringArray(stored.languagesLearning, defaultGlobalProfile.languagesLearning),
+    languagesSpoken: asStringArray(stored.languagesSpoken, defaultGlobalProfile.languagesSpoken),
+    region: asString(stored.region, defaultGlobalProfile.region)
+  };
+}
+
+function readGlobalSettings() {
+  const stored = readRecord(GLOBAL_SETTINGS_KEY);
+
+  if (!stored) {
+    return defaultGlobalSettings;
+  }
+
+  const whoCanMessage = asString(stored.whoCanMessage, defaultGlobalSettings.whoCanMessage);
+  const messageOptions: GlobalSafetySettings['whoCanMessage'][] = ['Everyone', 'Friends of friends', 'Only friends'];
+
+  return {
+    biggerText: typeof stored.biggerText === 'boolean' ? stored.biggerText : defaultGlobalSettings.biggerText,
+    clearerLabels: typeof stored.clearerLabels === 'boolean' ? stored.clearerLabels : defaultGlobalSettings.clearerLabels,
+    highContrast: typeof stored.highContrast === 'boolean' ? stored.highContrast : defaultGlobalSettings.highContrast,
+    hideCountry: typeof stored.hideCountry === 'boolean' ? stored.hideCountry : defaultGlobalSettings.hideCountry,
+    hideLanguages: typeof stored.hideLanguages === 'boolean' ? stored.hideLanguages : defaultGlobalSettings.hideLanguages,
+    hideLocalTime: typeof stored.hideLocalTime === 'boolean' ? stored.hideLocalTime : defaultGlobalSettings.hideLocalTime,
+    hideOnlineStatus: typeof stored.hideOnlineStatus === 'boolean' ? stored.hideOnlineStatus : defaultGlobalSettings.hideOnlineStatus,
+    lowDataMode: typeof stored.lowDataMode === 'boolean' ? stored.lowDataMode : defaultGlobalSettings.lowDataMode,
+    messageRequests: typeof stored.messageRequests === 'boolean' ? stored.messageRequests : defaultGlobalSettings.messageRequests,
+    reducedMotion: typeof stored.reducedMotion === 'boolean' ? stored.reducedMotion : defaultGlobalSettings.reducedMotion,
+    whoCanMessage: messageOptions.includes(whoCanMessage as GlobalSafetySettings['whoCanMessage'])
+      ? whoCanMessage as GlobalSafetySettings['whoCanMessage']
+      : defaultGlobalSettings.whoCanMessage
+  };
 }
 
 export default function App() {
@@ -53,8 +122,8 @@ export default function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [showSplash, setShowSplash] = useState(true);
   const [activeChatId, setActiveChatId] = useState('c1');
-  const [globalProfile, setGlobalProfile] = useState<GlobalOnboardingProfile>(() => readJson(GLOBAL_PROFILE_KEY, defaultGlobalProfile));
-  const [globalSettings, setGlobalSettings] = useState<GlobalSafetySettings>(() => readJson(GLOBAL_SETTINGS_KEY, defaultGlobalSettings));
+  const [globalProfile, setGlobalProfile] = useState<GlobalOnboardingProfile>(readGlobalProfile);
+  const [globalSettings, setGlobalSettings] = useState<GlobalSafetySettings>(readGlobalSettings);
   const [showGlobalOnboarding, setShowGlobalOnboarding] = useState(() => !hasStoredFlag(GLOBAL_ONBOARDING_KEY));
 
   const showNav = isAuthenticated && !['welcome', 'auth'].includes(screen);
@@ -187,7 +256,7 @@ export default function App() {
       <div className="pointer-events-none absolute bottom-20 right-[-7rem] h-72 w-72 rounded-full bg-plasma/20 blur-3xl" />
 
       <div className="relative mx-auto flex min-h-screen w-full max-w-md flex-col">
-        <div className="flex-1 pb-24">{page}</div>
+        <div className="flex-1 pb-[calc(6.5rem+env(safe-area-inset-bottom))]">{page}</div>
 
         {showNav && <BottomNavigation activeScreen={screen} onNavigate={setScreen} />}
 

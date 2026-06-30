@@ -129,11 +129,12 @@ export function GlobalSettingsScreen({ onBack, onChange, settings }: GlobalSetti
           />
         </div>
 
-        <div className="grid grid-cols-2 gap-3">
+        <div className="grid grid-cols-1 gap-3 min-[360px]:grid-cols-2">
           <button
             type="button"
             onClick={() => setStatus('Block UI staged locally. Real block lists arrive with moderation services.')}
             className="flex items-center justify-center gap-2 rounded-3xl bg-white/10 px-4 py-3 text-sm font-bold text-white"
+            aria-label="Open block user interface preview"
           >
             <Ban size={17} />
             Block user UI
@@ -142,6 +143,7 @@ export function GlobalSettingsScreen({ onBack, onChange, settings }: GlobalSetti
             type="button"
             onClick={() => setStatus('Report UI staged locally. Real reports will connect to moderation later.')}
             className="flex items-center justify-center gap-2 rounded-3xl bg-plasma/15 px-4 py-3 text-sm font-bold text-plasma"
+            aria-label="Open report user interface preview"
           >
             <Flag size={17} />
             Report user UI

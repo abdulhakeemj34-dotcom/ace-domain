@@ -15,7 +15,7 @@ export function SearchBar({ placeholder = 'Ask Ace AI to find people, places, id
         placeholder={placeholder}
         value={value}
         onChange={(event) => onChange?.(event.target.value)}
-        aria-label="AI-powered search"
+        aria-label="Smart discovery search"
       />
       <Search size={18} />
     </label>

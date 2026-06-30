@@ -102,11 +102,12 @@ export function CalendarScreen({ onBack }: CalendarScreenProps) {
                   <span className="rounded-full bg-white/10 px-3 py-1 text-xs font-bold text-frost/65">{event.region}</span>
                   <WorldClockLabel timeZone={event.timeZone} />
                 </div>
-                <div className="mt-4 grid grid-cols-3 gap-2">
+                <div className="mt-4 grid grid-cols-1 gap-2 min-[380px]:grid-cols-3">
                   <button
                     type="button"
                     onClick={() => updateEvent(event.id, (current) => ({ ...current, interested: !current.interested }))}
                     className={`rounded-2xl px-3 py-3 text-xs font-bold ${state.interested ? 'bg-aurora text-void' : 'bg-white/10 text-frost/65'}`}
+                    aria-label={`${state.interested ? 'Remove interest in' : 'Mark interested in'} ${event.title}`}
                   >
                     Interested
                   </button>
@@ -114,6 +115,7 @@ export function CalendarScreen({ onBack }: CalendarScreenProps) {
                     type="button"
                     onClick={() => updateEvent(event.id, (current) => ({ ...current, going: !current.going }))}
                     className={`flex items-center justify-center gap-1 rounded-2xl px-3 py-3 text-xs font-bold ${state.going ? 'bg-white text-void' : 'bg-white/10 text-frost/65'}`}
+                    aria-label={`${state.going ? 'Stop going to' : 'Mark going to'} ${event.title}`}
                   >
                     {state.going && <Check size={13} />}
                     Going
@@ -122,6 +124,7 @@ export function CalendarScreen({ onBack }: CalendarScreenProps) {
                     type="button"
                     onClick={() => updateEvent(event.id, (current) => ({ ...current, reminder: !current.reminder }))}
                     className={`flex items-center justify-center gap-1 rounded-2xl px-3 py-3 text-xs font-bold ${state.reminder ? 'bg-signal text-void' : 'bg-white/10 text-frost/65'}`}
+                    aria-label={`${state.reminder ? 'Remove reminder for' : 'Add reminder for'} ${event.title}`}
                   >
                     <BellPlus size={13} />
                     Reminder
@@ -130,6 +133,11 @@ export function CalendarScreen({ onBack }: CalendarScreenProps) {
               </article>
             );
           })}
+          {visibleEvents.length === 0 && (
+            <p className="rounded-[26px] border border-white/10 bg-white/[0.06] p-4 text-sm text-frost/55">
+              No local events in this category yet.
+            </p>
+          )}
         </div>
       </div>
     </section>
