@@ -85,3 +85,17 @@ curl -X POST https://your-domain.example/api/ai-chat \
 ```
 
 The endpoint does not hardcode or return API keys. If `OPENAI_API_KEY` is missing, it returns a safe backend configuration error.
+
+## Local Dev AI Endpoint
+
+During `npm run dev`, `vite.config.ts` mounts a local-only middleware for `POST /api/ai-chat`. The middleware reuses `api/ai-chat.ts` and loads `OPENAI_API_KEY` from the root `.env` into the Vite dev server process only.
+
+This does not expose `OPENAI_API_KEY` to frontend code and does not create `VITE_OPENAI_API_KEY`.
+
+Local test:
+
+```bash
+curl -X POST http://127.0.0.1:5173/api/ai-chat \
+  -H "Content-Type: application/json" \
+  -d "{\"message\":\"Hello Ace Domain\"}"
+```

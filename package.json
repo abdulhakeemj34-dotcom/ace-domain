@@ -4,10 +4,10 @@
   "version": "0.1.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "tsc -b && vite build",
+    "dev": "vite --configLoader runner",
+    "build": "tsc -b && vite build --configLoader runner",
     "lint": "eslint .",
-    "preview": "vite preview",
+    "preview": "vite preview --configLoader runner",
     "cap:sync": "npm run build && cap sync",
     "cap:android": "npm run build && cap open android",
     "cap:ios": "npm run build && cap open ios"
