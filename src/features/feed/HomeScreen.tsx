@@ -53,16 +53,25 @@ function buildInitialPostActions(feedPosts: Post[]) {
 
 function StoryViewer({ story, onClose }: { story: Story; onClose: () => void }) {
   return (
-    <div className="fixed inset-0 z-40 flex items-center justify-center bg-void/95 px-5 backdrop-blur-2xl">
+    <div className="fixed inset-0 z-40 flex items-start justify-center overflow-y-auto bg-void/95 px-4 py-6 backdrop-blur-2xl sm:items-center">
       <div className="w-full max-w-md animate-rise">
         <div className="mb-4 flex gap-1">
           {stories.map((item) => (
             <div key={item.id} className="h-1 flex-1 overflow-hidden rounded-full bg-white/10">
-              <div className={`h-full rounded-full ${item.id === story.id ? 'w-4/5 bg-aurora' : 'w-full bg-white/25'}`} />
+              <div
+                className={`h-full rounded-full ${
+                  item.id === story.id
+                    ? 'w-4/5 origin-left animate-storyProgress bg-aurora shadow-[0_0_18px_rgba(115,251,211,0.45)]'
+                    : 'w-full bg-white/25'
+                }`}
+              />
             </div>
           ))}
         </div>
-        <div className="relative min-h-[620px] overflow-hidden rounded-[36px] border border-white/10 bg-gradient-to-br from-signal/30 via-obsidian to-void p-5 shadow-panel">
+        <div
+          className="relative overflow-hidden rounded-[36px] border border-white/10 bg-gradient-to-br from-signal/30 via-obsidian to-void p-5 shadow-panel"
+          style={{ height: 'min(620px, calc(100svh - 72px))', minHeight: '480px' }}
+        >
           <button
             type="button"
             onClick={onClose}
@@ -78,8 +87,8 @@ function StoryViewer({ story, onClose }: { story: Story; onClose: () => void }) 
               <p className="text-xs text-frost/55">{story.location}</p>
             </div>
           </div>
-          <div className="mt-20 grid place-items-center">
-            <div className="grid h-52 w-52 place-items-center rounded-full bg-gradient-to-br from-white via-aurora to-plasma p-1 shadow-glow animate-float">
+          <div className="mt-[clamp(2rem,9svh,5rem)] grid place-items-center">
+            <div className="grid h-36 w-36 place-items-center rounded-full bg-gradient-to-br from-white via-aurora to-plasma p-1 shadow-glow animate-float sm:h-52 sm:w-52">
               <div className="grid h-full w-full place-items-center rounded-full bg-void text-6xl font-black text-white">
                 {story.avatar}
               </div>
@@ -87,7 +96,7 @@ function StoryViewer({ story, onClose }: { story: Story; onClose: () => void }) 
           </div>
           <div className="absolute bottom-6 left-5 right-5 rounded-[28px] bg-white/10 p-4 backdrop-blur-xl">
             <p className="text-sm uppercase tracking-[0.3em] text-aurora">Story live</p>
-            <h3 className="mt-2 text-2xl font-black text-white">{story.caption}</h3>
+            <h3 className="mt-2 text-xl font-black text-white sm:text-2xl">{story.caption}</h3>
             <p className="mt-2 text-sm text-frost/60">Reply, react, and meet through story moments in a future realtime layer.</p>
           </div>
         </div>
@@ -123,12 +132,12 @@ export function HomeScreen({ onOpenCommunities, onStartChat }: HomeScreenProps) 
   };
 
   return (
-    <section className="animate-rise pb-6">
+    <section className="pb-6">
       <ScreenHeader
         eyebrow="Live network"
         title="Ace Domain"
         action={
-          <button className="grid h-11 w-11 place-items-center rounded-full bg-white text-void shadow-glow" type="button">
+          <button className="grid h-11 w-11 place-items-center rounded-full bg-white text-void shadow-glow" type="button" aria-label="Open live network">
             <Radio size={20} />
           </button>
         }
@@ -146,7 +155,12 @@ export function HomeScreen({ onOpenCommunities, onStartChat }: HomeScreenProps) 
               <h2 className="font-bold text-white">Ace AI Search</h2>
               <p className="text-xs text-frost/50">Filtered across people, posts, communities, and games.</p>
             </div>
-            <button type="button" onClick={() => setSearchQuery('')} className="rounded-full bg-white/10 px-3 py-1 text-xs font-bold text-frost/70">
+            <button
+              type="button"
+              onClick={() => setSearchQuery('')}
+              className="rounded-full bg-white/10 px-3 py-1 text-xs font-bold text-frost/70"
+              aria-label="Clear search"
+            >
               Clear
             </button>
           </div>
@@ -200,7 +214,7 @@ export function HomeScreen({ onOpenCommunities, onStartChat }: HomeScreenProps) 
                     </span>
                   ))}
                 </div>
-                <Button onClick={onStartChat} className="mt-4 w-full py-3">
+                <Button onClick={onStartChat} className="mt-4 w-full py-3" aria-label={`Start chat with ${match.name}`}>
                   Start Chat
                 </Button>
               </article>
@@ -215,7 +229,13 @@ export function HomeScreen({ onOpenCommunities, onStartChat }: HomeScreenProps) 
       <div className="mt-5 overflow-x-auto px-5 [scrollbar-width:none]">
         <div className="flex gap-3">
           {stories.map((story) => (
-            <button key={story.id} type="button" onClick={() => setActiveStory(story)} className="w-20 shrink-0 rounded-3xl bg-white/[0.06] p-2 text-center">
+            <button
+              key={story.id}
+              type="button"
+              onClick={() => setActiveStory(story)}
+              className="w-20 shrink-0 rounded-3xl bg-white/[0.06] p-2 text-center"
+              aria-label={`Open ${story.name} story`}
+            >
               <Avatar label={story.avatar} active={story.live} />
               <p className="mt-2 truncate text-xs font-semibold text-white">{story.name}</p>
               <p className="truncate text-[10px] text-frost/45">{story.location}</p>
@@ -293,6 +313,7 @@ export function HomeScreen({ onOpenCommunities, onStartChat }: HomeScreenProps) 
                   type="button"
                   onClick={() => updatePost(post.id, (current) => ({ ...current, liked: !current.liked, likes: current.likes + (current.liked ? -1 : 1) }))}
                   className={`flex items-center gap-1 rounded-full px-2 py-2 transition ${action.liked ? 'bg-plasma/15 text-plasma' : 'hover:bg-white/10'}`}
+                  aria-label={`${action.liked ? 'Unlike' : 'Like'} ${post.author}'s post`}
                 >
                   <Heart size={15} fill={action.liked ? 'currentColor' : 'none'} /> {formatStat(action.likes)}
                 </button>
@@ -300,6 +321,7 @@ export function HomeScreen({ onOpenCommunities, onStartChat }: HomeScreenProps) 
                   type="button"
                   onClick={() => updatePost(post.id, (current) => ({ ...current, comments: current.comments + 1 }))}
                   className="flex items-center gap-1 rounded-full px-2 py-2 hover:bg-white/10"
+                  aria-label={`Comment on ${post.author}'s post`}
                 >
                   <MessageCircle size={15} /> {formatStat(action.comments)}
                 </button>
@@ -307,6 +329,7 @@ export function HomeScreen({ onOpenCommunities, onStartChat }: HomeScreenProps) 
                   type="button"
                   onClick={() => updatePost(post.id, (current) => ({ ...current, shares: current.shares + 1 }))}
                   className="flex items-center gap-1 rounded-full px-2 py-2 hover:bg-white/10"
+                  aria-label={`Share ${post.author}'s post`}
                 >
                   <Share2 size={15} /> {formatStat(action.shares)}
                 </button>
@@ -314,6 +337,7 @@ export function HomeScreen({ onOpenCommunities, onStartChat }: HomeScreenProps) 
                   type="button"
                   onClick={() => updatePost(post.id, (current) => ({ ...current, saved: !current.saved }))}
                   className={`flex items-center gap-1 rounded-full px-2 py-2 transition ${action.saved ? 'bg-aurora/15 text-aurora' : 'hover:bg-white/10'}`}
+                  aria-label={`${action.saved ? 'Unsave' : 'Save'} ${post.author}'s post`}
                 >
                   <Bookmark size={15} fill={action.saved ? 'currentColor' : 'none'} /> Save
                 </button>

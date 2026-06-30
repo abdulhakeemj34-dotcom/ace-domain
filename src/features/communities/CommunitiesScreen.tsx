@@ -62,6 +62,7 @@ export function CommunitiesScreen() {
                   type="button"
                   onClick={() => setSelectedCommunityId(community.id)}
                   className="rounded-full bg-white px-4 py-2 text-xs font-bold text-void"
+                  aria-label={`View ${community.name} community`}
                 >
                   View
                 </button>

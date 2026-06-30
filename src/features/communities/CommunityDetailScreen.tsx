@@ -17,7 +17,7 @@ export function CommunityDetailScreen({ community, joined, onBack, onToggleJoin 
   return (
     <section className="animate-rise pb-8">
       <header className="px-5 pb-4 pt-8">
-        <button type="button" onClick={onBack} className="mb-4 grid h-11 w-11 place-items-center rounded-full bg-white/10 text-white">
+        <button type="button" onClick={onBack} className="mb-4 grid h-11 w-11 place-items-center rounded-full bg-white/10 text-white" aria-label="Back to communities">
           <ArrowLeft size={20} />
         </button>
         <div className="rounded-[34px] border border-white/10 bg-white/[0.06] p-5">

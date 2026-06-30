@@ -39,9 +39,9 @@ function EditProfileModal({ profile, onClose, onSave }: EditProfileModalProps) {
   });
 
   return (
-    <div className="fixed inset-0 z-40 flex items-end justify-center bg-void/80 px-4 pb-4 backdrop-blur-2xl">
+    <div className="fixed inset-0 z-40 flex items-end justify-center overflow-y-auto bg-void/80 px-4 py-4 backdrop-blur-2xl">
       <form
-        className="w-full max-w-md rounded-[34px] border border-white/10 bg-obsidian p-5 shadow-panel animate-rise"
+        className="max-h-[calc(100svh-2rem)] w-full max-w-md overflow-y-auto rounded-[34px] border border-white/10 bg-obsidian p-5 shadow-panel animate-rise"
         onSubmit={(event) => {
           event.preventDefault();
           onSave({
@@ -123,12 +123,12 @@ export function ProfileScreen() {
   const [editing, setEditing] = useState(false);
 
   return (
-    <section className="animate-rise pb-6">
+    <section className="pb-6">
       <ScreenHeader
         eyebrow="World ID"
         title="Profile"
         action={
-          <button type="button" onClick={() => setEditing(true)} className="grid h-11 w-11 place-items-center rounded-full bg-white/10 text-white">
+          <button type="button" onClick={() => setEditing(true)} className="grid h-11 w-11 place-items-center rounded-full bg-white/10 text-white" aria-label="Open profile settings">
             <Settings size={20} />
           </button>
         }

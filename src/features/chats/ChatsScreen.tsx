@@ -15,7 +15,7 @@ export function ChatsScreen({ onOpenChat }: ChatsScreenProps) {
         eyebrow="Private and groups"
         title="Chats"
         action={
-          <button type="button" className="grid h-11 w-11 place-items-center rounded-full bg-white text-void">
+          <button type="button" onClick={() => onOpenChat('c4')} className="grid h-11 w-11 place-items-center rounded-full bg-white text-void" aria-label="Start new chat">
             <Plus size={20} />
           </button>
         }
@@ -37,6 +37,7 @@ export function ChatsScreen({ onOpenChat }: ChatsScreenProps) {
                 type="button"
                 onClick={() => onOpenChat(chat.id)}
                 className="flex items-center gap-3 rounded-3xl bg-white/[0.06] p-3 text-left"
+                aria-label={`Open ${chat.name} group room`}
               >
                 <Avatar label={chat.avatar} active={chat.online} />
                 <div className="min-w-0 flex-1">
@@ -69,6 +70,7 @@ export function ChatsScreen({ onOpenChat }: ChatsScreenProps) {
               type="button"
               onClick={() => onOpenChat(chat.id)}
               className="glass-panel flex w-full items-center gap-3 rounded-[26px] p-4 text-left"
+              aria-label={`Open ${chat.name} chat`}
             >
               <Avatar label={chat.avatar} active={chat.unread > 0} />
               <div className="min-w-0 flex-1">

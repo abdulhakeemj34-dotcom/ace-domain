@@ -46,7 +46,7 @@ export function StartupSplash({ isVisible }: StartupSplashProps) {
 
         <div className="relative mt-10 animate-titleForge">
           <div className="absolute inset-x-2 top-1/2 h-px bg-gradient-to-r from-transparent via-gold/80 to-transparent blur-sm" />
-          <h1 className="text-4xl font-black uppercase leading-none tracking-[0.22em] text-transparent bg-clip-text bg-gradient-to-r from-[#F8F1D0] via-gold to-silver drop-shadow-[0_0_28px_rgba(232,193,96,0.28)]">
+          <h1 className="text-[clamp(2rem,9vw,2.25rem)] font-black uppercase leading-none tracking-[0.18em] text-transparent bg-clip-text bg-gradient-to-r from-[#F8F1D0] via-gold to-silver drop-shadow-[0_0_28px_rgba(232,193,96,0.28)]">
             Ace Domain
           </h1>
           <p className="mt-5 text-xs font-bold uppercase tracking-[0.56em] text-silver/80">

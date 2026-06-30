@@ -31,7 +31,7 @@ export default {
         },
         rise: {
           from: { opacity: '0', transform: 'translateY(18px)' },
-          to: { opacity: '1', transform: 'translateY(0)' }
+          to: { opacity: '1', transform: 'none' }
         },
         orbit: {
           from: { transform: 'rotate(0deg)' },
@@ -51,9 +51,9 @@ export default {
           '100%': { opacity: '1', transform: 'translateY(0) scale(1)', filter: 'blur(0)' }
         },
         titleForge: {
-          '0%': { opacity: '0', letterSpacing: '0.42em', transform: 'translateY(18px)', filter: 'blur(12px)' },
-          '58%': { opacity: '1', letterSpacing: '0.24em', filter: 'blur(0)' },
-          '100%': { opacity: '1', letterSpacing: '0.22em', transform: 'translateY(0)', filter: 'blur(0)' }
+          '0%': { opacity: '0', letterSpacing: '0.28em', transform: 'translateY(18px)', filter: 'blur(12px)' },
+          '58%': { opacity: '1', letterSpacing: '0.2em', filter: 'blur(0)' },
+          '100%': { opacity: '1', letterSpacing: '0.18em', transform: 'translateY(0)', filter: 'blur(0)' }
         },
         orbitReveal: {
           '0%': { opacity: '0', transform: 'rotate(0deg) scale(0.72)' },
@@ -63,6 +63,10 @@ export default {
         starDrift: {
           '0%, 100%': { opacity: '0.2', transform: 'translate3d(0, 0, 0) scale(0.8)' },
           '50%': { opacity: '0.9', transform: 'translate3d(8px, -10px, 0) scale(1.2)' }
+        },
+        storyProgress: {
+          from: { transform: 'scaleX(0)', opacity: '0.55' },
+          to: { transform: 'scaleX(1)', opacity: '1' }
         }
       },
       animation: {
@@ -75,7 +79,8 @@ export default {
         brandReveal: 'brandReveal 1.25s cubic-bezier(0.22, 1, 0.36, 1) both',
         titleForge: 'titleForge 1.35s cubic-bezier(0.22, 1, 0.36, 1) 260ms both',
         orbitReveal: 'orbitReveal 2.3s cubic-bezier(0.22, 1, 0.36, 1) both',
-        starDrift: 'starDrift 3.8s ease-in-out infinite'
+        starDrift: 'starDrift 3.8s ease-in-out infinite',
+        storyProgress: 'storyProgress 4.2s cubic-bezier(0.22, 1, 0.36, 1) both'
       }
     }
   },
