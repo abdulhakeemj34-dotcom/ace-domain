@@ -179,7 +179,8 @@ drop policy if exists "Members can read chat threads" on public.chat_threads;
 create policy "Members can read chat threads"
 on public.chat_threads for select
 using (
-  exists (
+  auth.uid() = created_by
+  or exists (
     select 1
     from public.chat_thread_members members
     where members.thread_id = chat_threads.id
@@ -261,3 +262,12 @@ create policy "Users can update own notifications"
 on public.notifications for update
 using (auth.uid() = user_id)
 with check (auth.uid() = user_id);
+
+do $$
+begin
+  alter publication supabase_realtime add table public.chat_messages;
+exception
+  when duplicate_object then null;
+  when undefined_object then null;
+end;
+$$;

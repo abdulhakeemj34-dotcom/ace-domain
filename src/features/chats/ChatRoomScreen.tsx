@@ -1,6 +1,7 @@
 import { useState, type FormEvent } from 'react';
 import { ArrowLeft, Gamepad2, Mic, Send, UsersRound } from 'lucide-react';
 import { chats as mockChats } from '../../app/data';
+import type { Chat } from '../../app/types';
 import { Avatar } from '../../components/Avatar';
 import { useChatMessages } from './useChatMessages';
 import { useChatThreads } from './useChatThreads';
@@ -10,10 +11,23 @@ type ChatRoomScreenProps = {
   onBack: () => void;
 };
 
+function fallbackChat(chatId: string): Chat {
+  return {
+    avatar: 'AD',
+    id: chatId,
+    kind: 'direct',
+    message: 'Realtime chat room is preparing.',
+    name: 'Ace Domain Chat',
+    online: true,
+    time: 'Now',
+    unread: 0
+  };
+}
+
 export function ChatRoomScreen({ chatId, onBack }: ChatRoomScreenProps) {
   const { threads, usingFallback: threadsUsingFallback } = useChatThreads();
   const { error, isLoading, messages, realtimeStatus, refresh, sendMessage: sendChatMessage, usingFallback: messagesUsingFallback } = useChatMessages(chatId);
-  const chat = threads.find((item) => item.id === chatId) ?? mockChats.find((item) => item.id === chatId) ?? mockChats[0];
+  const chat = threads.find((item) => item.id === chatId) ?? mockChats.find((item) => item.id === chatId) ?? fallbackChat(chatId);
   const [draft, setDraft] = useState('');
   const [roomNotice, setRoomNotice] = useState<string | null>(null);
   const isGroup = chat.kind === 'group';
@@ -154,7 +168,7 @@ export function ChatRoomScreen({ chatId, onBack }: ChatRoomScreenProps) {
       </div>
 
       <form
-        className="fixed bottom-24 left-1/2 z-20 flex w-[calc(100%-1.5rem)] max-w-md -translate-x-1/2 items-center gap-2 rounded-[28px] border border-white/10 bg-obsidian/95 p-2 shadow-panel backdrop-blur-2xl"
+        className="fixed bottom-[calc(6rem+env(safe-area-inset-bottom))] left-1/2 z-20 flex w-[calc(100%-1.5rem)] max-w-md -translate-x-1/2 items-center gap-2 rounded-[28px] border border-white/10 bg-obsidian/95 p-2 shadow-panel backdrop-blur-2xl"
         onSubmit={sendMessage}
       >
         <button
@@ -177,6 +191,7 @@ export function ChatRoomScreen({ chatId, onBack }: ChatRoomScreenProps) {
           className="min-w-0 flex-1 bg-transparent text-sm text-white outline-none placeholder:text-frost/35"
           placeholder="Message the world..."
           aria-label="Message input"
+          autoComplete="off"
           value={draft}
           onChange={(event) => setDraft(event.target.value)}
         />

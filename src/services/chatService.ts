@@ -276,12 +276,20 @@ export function subscribeToChatMessages(threadId: string, handlers: RealtimeHand
     return { unsubscribe: () => undefined };
   }
 
+  let socket: WebSocket;
   let isClosed = false;
   let ref = 1;
   let heartbeat: number | undefined;
   const joinRef = `join-${Date.now()}`;
   const topic = `realtime:public:chat_messages:${threadId}`;
-  const socket = new WebSocket(realtimeEndpoint());
+
+  try {
+    socket = new WebSocket(realtimeEndpoint());
+  } catch {
+    handlers.onStatus?.('error');
+    handlers.onError?.('Realtime chat could not open a connection.');
+    return { unsubscribe: () => undefined };
+  }
 
   const nextRef = () => String(ref++);
   const setStatus = (status: ChatRealtimeStatus) => handlers.onStatus?.(status);

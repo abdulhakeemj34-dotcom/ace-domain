@@ -43,6 +43,18 @@ function mergeMessage(current: ChatMessageView[], incoming: ChatMessage): ChatMe
   return [...current, { ...incoming, status: 'sent' }];
 }
 
+function mergeLoadedMessages(current: ChatMessageView[], loaded: ChatMessage[]): ChatMessageView[] {
+  const merged: ChatMessageView[] = loaded.map((message) => ({ ...message, status: 'sent' as const }));
+
+  current.forEach((message) => {
+    if (!merged.some((item) => item.id === message.id)) {
+      merged.push(message);
+    }
+  });
+
+  return merged;
+}
+
 export function useChatMessages(threadId: string): ChatMessagesState {
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(true);
@@ -82,7 +94,7 @@ export function useChatMessages(threadId: string): ChatMessagesState {
         return;
       }
 
-      setMessages(result.data.map((message) => ({ ...message, status: 'sent' })));
+      setMessages((current) => mergeLoadedMessages(current, result.data));
       setUsingFallback(result.usingFallback);
       setError(result.error ?? '');
       setIsLoading(false);
