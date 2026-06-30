@@ -1,10 +1,33 @@
 import { Compass, Sparkles } from 'lucide-react';
+import { useState } from 'react';
 import { communities } from '../../app/data';
 import { Button } from '../../components/Button';
 import { ScreenHeader } from '../../components/ScreenHeader';
 import { SearchBar } from '../../components/SearchBar';
+import { CommunityDetailScreen } from './CommunityDetailScreen';
 
 export function CommunitiesScreen() {
+  const [selectedCommunityId, setSelectedCommunityId] = useState<string | null>(null);
+  const [joinedCommunities, setJoinedCommunities] = useState<Record<string, boolean>>({ co1: true, co7: true });
+
+  const selectedCommunity = communities.find((community) => community.id === selectedCommunityId);
+
+  if (selectedCommunity) {
+    return (
+      <CommunityDetailScreen
+        community={selectedCommunity}
+        joined={Boolean(joinedCommunities[selectedCommunity.id])}
+        onBack={() => setSelectedCommunityId(null)}
+        onToggleJoin={() =>
+          setJoinedCommunities((current) => ({
+            ...current,
+            [selectedCommunity.id]: !current[selectedCommunity.id]
+          }))
+        }
+      />
+    );
+  }
+
   return (
     <section className="animate-rise pb-6">
       <ScreenHeader eyebrow="Interest planets" title="Communities" />
@@ -35,8 +58,12 @@ export function CommunitiesScreen() {
               </div>
               <div className="mt-4 flex items-center justify-between">
                 <span className="rounded-full bg-white/10 px-3 py-1 text-xs text-frost/70">{community.members} members</span>
-                <button type="button" className="rounded-full bg-white px-4 py-2 text-xs font-bold text-void">
-                  Join
+                <button
+                  type="button"
+                  onClick={() => setSelectedCommunityId(community.id)}
+                  className="rounded-full bg-white px-4 py-2 text-xs font-bold text-void"
+                >
+                  View
                 </button>
               </div>
             </article>

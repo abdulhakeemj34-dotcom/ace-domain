@@ -6,6 +6,7 @@ export type Story = {
   avatar: string;
   location: string;
   live?: boolean;
+  caption?: string;
 };
 
 export type Post = {
@@ -32,11 +33,16 @@ export type Chat = {
   time: string;
   unread: number;
   kind: 'direct' | 'group';
+  online?: boolean;
+  members?: number;
+  avatars?: string[];
+  country?: string;
 };
 
 export type ChatMessage = {
   id: string;
   author: 'me' | 'them';
+  authorName?: string;
   text: string;
   time: string;
 };
@@ -47,6 +53,8 @@ export type Community = {
   members: string;
   accent: string;
   topic: string;
+  description?: string;
+  online?: string;
 };
 
 export type NotificationItem = {
@@ -54,6 +62,8 @@ export type NotificationItem = {
   title: string;
   body: string;
   time: string;
+  category: 'social' | 'message' | 'match' | 'community';
+  unread: boolean;
 };
 
 export type TrendingConversation = {
@@ -68,4 +78,34 @@ export type MiniGamePreview = {
   name: string;
   genre: string;
   players: string;
+  tagline: string;
+  status: 'ready' | 'soon';
+};
+
+export type GlobalMatch = {
+  id: string;
+  name: string;
+  avatar: string;
+  country: string;
+  countryCode: string;
+  distance: string;
+  interests: string[];
+  vibe: string;
+};
+
+export type CommunityPost = {
+  id: string;
+  communityId: string;
+  author: string;
+  body: string;
+  time: string;
+  reactions: string;
+};
+
+export type CommunityMember = {
+  id: string;
+  communityId: string;
+  name: string;
+  avatar: string;
+  role: string;
 };

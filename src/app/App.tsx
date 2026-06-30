@@ -16,6 +16,7 @@ export default function App() {
   const [screen, setScreen] = useState<AppScreen>('welcome');
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [showSplash, setShowSplash] = useState(true);
+  const [activeChatId, setActiveChatId] = useState('c1');
 
   const showNav = isAuthenticated && !['welcome', 'auth'].includes(screen);
 
@@ -46,9 +47,16 @@ export default function App() {
           />
         );
       case 'chat':
-        return <ChatsScreen onOpenChat={() => setScreen('chatRoom')} />;
+        return (
+          <ChatsScreen
+            onOpenChat={(chatId) => {
+              setActiveChatId(chatId);
+              setScreen('chatRoom');
+            }}
+          />
+        );
       case 'chatRoom':
-        return <ChatRoomScreen onBack={() => setScreen('chat')} />;
+        return <ChatRoomScreen chatId={activeChatId} onBack={() => setScreen('chat')} />;
       case 'communities':
         return <CommunitiesScreen />;
       case 'notifications':
@@ -57,9 +65,17 @@ export default function App() {
         return <ProfileScreen />;
       case 'home':
       default:
-        return <HomeScreen onOpenCommunities={() => setScreen('communities')} />;
+        return (
+          <HomeScreen
+            onOpenCommunities={() => setScreen('communities')}
+            onStartChat={() => {
+              setActiveChatId('c4');
+              setScreen('chatRoom');
+            }}
+          />
+        );
     }
-  }, [screen]);
+  }, [activeChatId, screen]);
 
   return (
     <main className="relative min-h-screen overflow-hidden bg-void text-frost">
