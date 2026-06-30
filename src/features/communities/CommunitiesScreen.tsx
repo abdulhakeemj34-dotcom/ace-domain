@@ -1,16 +1,57 @@
 import { Compass, Sparkles } from 'lucide-react';
-import { useState } from 'react';
-import { communities } from '../../app/data';
+import { useEffect, useState } from 'react';
+import { communities as mockCommunities } from '../../app/data';
+import type { Community } from '../../app/types';
 import { Button } from '../../components/Button';
 import { ScreenHeader } from '../../components/ScreenHeader';
 import { SearchBar } from '../../components/SearchBar';
+import { getCommunities, joinCommunity, leaveCommunity } from '../../services/communityService';
 import { CommunityDetailScreen } from './CommunityDetailScreen';
 
 export function CommunitiesScreen() {
+  const [communityList, setCommunityList] = useState<Community[]>(mockCommunities);
   const [selectedCommunityId, setSelectedCommunityId] = useState<string | null>(null);
   const [joinedCommunities, setJoinedCommunities] = useState<Record<string, boolean>>({ co1: true, co7: true });
+  const [syncStatus, setSyncStatus] = useState('');
 
-  const selectedCommunity = communities.find((community) => community.id === selectedCommunityId);
+  const selectedCommunity = communityList.find((community) => community.id === selectedCommunityId);
+
+  useEffect(() => {
+    let isMounted = true;
+
+    getCommunities().then((result) => {
+      if (!isMounted) {
+        return;
+      }
+
+      setCommunityList(result.data);
+
+      if (result.error) {
+        setSyncStatus('Using demo communities until Supabase data is ready.');
+      }
+    });
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
+  const toggleCommunity = (communityId: string) => {
+    const nextJoined = !joinedCommunities[communityId];
+    setJoinedCommunities((current) => ({
+      ...current,
+      [communityId]: nextJoined
+    }));
+
+    const syncAction = nextJoined ? joinCommunity(communityId) : leaveCommunity(communityId);
+    syncAction.then((result) => {
+      if (result.usingFallback) {
+        setSyncStatus('Membership updated locally. Supabase auth will sync this live later.');
+      } else {
+        setSyncStatus(nextJoined ? 'Community joined on Supabase.' : 'Community left on Supabase.');
+      }
+    });
+  };
 
   if (selectedCommunity) {
     return (
@@ -18,12 +59,7 @@ export function CommunitiesScreen() {
         community={selectedCommunity}
         joined={Boolean(joinedCommunities[selectedCommunity.id])}
         onBack={() => setSelectedCommunityId(null)}
-        onToggleJoin={() =>
-          setJoinedCommunities((current) => ({
-            ...current,
-            [selectedCommunity.id]: !current[selectedCommunity.id]
-          }))
-        }
+        onToggleJoin={() => toggleCommunity(selectedCommunity.id)}
       />
     );
   }
@@ -44,10 +80,11 @@ export function CommunitiesScreen() {
             </div>
           </div>
           <Button className="mt-4 w-full">Start Matching Worldwide</Button>
+          {syncStatus && <p className="mt-3 text-xs leading-5 text-frost/45">{syncStatus}</p>}
         </div>
 
         <div className="mt-5 grid gap-3">
-          {communities.map((community) => (
+          {communityList.map((community) => (
             <article key={community.id} className="rounded-[28px] border border-white/10 bg-white/[0.06] p-4">
               <div className="flex items-start justify-between gap-3">
                 <div>

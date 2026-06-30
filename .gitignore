@@ -2,6 +2,9 @@ node_modules
 dist
 .npm-cache
 .git-data
+.env
+.env.*
+!.env.example
 *.tsbuildinfo
 *.local
 .DS_Store

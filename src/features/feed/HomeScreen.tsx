@@ -1,11 +1,12 @@
 import { Bookmark, Gamepad2, Heart, MessageCircle, Radio, Repeat2, Rocket, Share2, X } from 'lucide-react';
-import { useMemo, useState } from 'react';
-import { communities, globalMatches, miniGamePreviews, posts, stories, trendingConversations } from '../../app/data';
+import { useEffect, useMemo, useState } from 'react';
+import { communities, globalMatches, miniGamePreviews, posts as mockPosts, stories, trendingConversations } from '../../app/data';
 import { Avatar } from '../../components/Avatar';
 import { Button } from '../../components/Button';
 import { ScreenHeader } from '../../components/ScreenHeader';
 import { SearchBar } from '../../components/SearchBar';
 import type { Post, Story } from '../../app/types';
+import { getFeedPosts } from '../../services/postService';
 
 type HomeScreenProps = {
   onOpenCommunities: () => void;
@@ -107,8 +108,26 @@ function StoryViewer({ story, onClose }: { story: Story; onClose: () => void }) 
 
 export function HomeScreen({ onOpenCommunities, onStartChat }: HomeScreenProps) {
   const [activeStory, setActiveStory] = useState<Story | null>(null);
-  const [postActions, setPostActions] = useState<Record<string, PostActionState>>(() => buildInitialPostActions(posts));
+  const [feedPosts, setFeedPosts] = useState<Post[]>(mockPosts);
+  const [postActions, setPostActions] = useState<Record<string, PostActionState>>(() => buildInitialPostActions(mockPosts));
   const [searchQuery, setSearchQuery] = useState('');
+
+  useEffect(() => {
+    let isMounted = true;
+
+    getFeedPosts().then((result) => {
+      if (!isMounted) {
+        return;
+      }
+
+      setFeedPosts(result.data);
+      setPostActions(buildInitialPostActions(result.data));
+    });
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
 
   const normalizedQuery = searchQuery.trim().toLowerCase();
   const searchResults = useMemo(() => {
@@ -122,10 +141,10 @@ export function HomeScreen({ onOpenCommunities, onStartChat }: HomeScreenProps) 
       communities: communities.filter((community) => matchesText(community.name, community.topic, community.description ?? '')),
       games: miniGamePreviews.filter((game) => matchesText(game.name, game.genre, game.tagline)),
       matches: globalMatches.filter((match) => matchesText(match.name, match.country, match.vibe, ...match.interests)),
-      posts: posts.filter((post) => matchesText(post.author, post.body, post.region, ...post.interests)),
+      posts: feedPosts.filter((post) => matchesText(post.author, post.body, post.region, ...post.interests)),
       stories: stories.filter((story) => matchesText(story.name, story.location, story.caption ?? ''))
     };
-  }, [normalizedQuery]);
+  }, [feedPosts, normalizedQuery]);
 
   const updatePost = (postId: string, updater: (current: PostActionState) => PostActionState) => {
     setPostActions((current) => ({ ...current, [postId]: updater(current[postId]) }));
@@ -287,8 +306,15 @@ export function HomeScreen({ onOpenCommunities, onStartChat }: HomeScreenProps) 
       </div>
 
       <div className="space-y-4 px-5 py-5">
-        {posts.map((post) => {
-          const action = postActions[post.id];
+        {feedPosts.map((post) => {
+          const action =
+            postActions[post.id] ?? {
+              comments: parseStat(post.stats.comments),
+              liked: false,
+              likes: parseStat(post.stats.likes),
+              saved: false,
+              shares: parseStat(post.stats.shares)
+            };
           return (
             <article key={post.id} className="glass-panel rounded-[28px] p-4">
               <div className="flex items-center gap-3">

@@ -1,5 +1,7 @@
 import { useState } from 'react';
 import { Button } from '../../components/Button';
+import { supabaseConfig, supabaseSetupMessage } from '../../lib/supabase';
+import { loginWithEmail, signUpWithEmail } from '../../services/authService';
 
 type AuthScreenProps = {
   onComplete: () => void;
@@ -7,6 +9,47 @@ type AuthScreenProps = {
 
 export function AuthScreen({ onComplete }: AuthScreenProps) {
   const [mode, setMode] = useState<'signup' | 'login'>('signup');
+  const [displayName, setDisplayName] = useState('');
+  const [email, setEmail] = useState('');
+  const [error, setError] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const [password, setPassword] = useState('');
+  const [status, setStatus] = useState('');
+
+  const backendReady = supabaseConfig.isConfigured;
+
+  const submitAuth = async () => {
+    setError('');
+    setStatus('');
+
+    if (!backendReady) {
+      setStatus('Supabase keys are missing, so Ace Domain is continuing in demo mode.');
+      onComplete();
+      return;
+    }
+
+    setIsLoading(true);
+
+    const result =
+      mode === 'signup'
+        ? await signUpWithEmail({ displayName, email, password })
+        : await loginWithEmail({ email, password });
+
+    setIsLoading(false);
+
+    if (result.error) {
+      setError(result.error);
+      return;
+    }
+
+    if (result.needsEmailConfirmation) {
+      setStatus('Account created. Check your email to confirm your Ace Domain login.');
+      return;
+    }
+
+    setStatus(mode === 'signup' ? 'World ID created.' : 'Welcome back.');
+    onComplete();
+  };
 
   return (
     <section className="flex min-h-screen flex-col justify-end px-5 pb-8 pt-20">
@@ -16,6 +59,12 @@ export function AuthScreen({ onComplete }: AuthScreenProps) {
         <p className="mt-2 text-sm leading-6 text-frost/65">
           Version 1 account flow for profiles, posts, communities, chats, and notifications.
         </p>
+
+        {!backendReady && (
+          <p className="mt-4 rounded-3xl border border-gold/20 bg-gold/10 px-4 py-3 text-sm leading-6 text-gold">
+            {supabaseSetupMessage} This screen can still open the demo app without a live backend.
+          </p>
+        )}
 
         <div className="mt-5 grid grid-cols-2 rounded-full bg-white/[0.06] p-1">
           {(['signup', 'login'] as const).map((item) => (
@@ -36,31 +85,39 @@ export function AuthScreen({ onComplete }: AuthScreenProps) {
           className="mt-5 space-y-3"
           onSubmit={(event) => {
             event.preventDefault();
-            onComplete();
+            void submitAuth();
           }}
         >
           {mode === 'signup' && (
             <input
-              required
+              required={backendReady}
+              value={displayName}
+              onChange={(event) => setDisplayName(event.target.value)}
               className="w-full rounded-3xl border border-white/10 bg-white/[0.07] px-4 py-4 text-white outline-none placeholder:text-frost/35"
               placeholder="Display name"
             />
           )}
           <input
-            required
+            required={backendReady}
             type="email"
+            value={email}
+            onChange={(event) => setEmail(event.target.value)}
             className="w-full rounded-3xl border border-white/10 bg-white/[0.07] px-4 py-4 text-white outline-none placeholder:text-frost/35"
             placeholder="Email address"
           />
           <input
-            required
+            required={backendReady}
             minLength={6}
             type="password"
+            value={password}
+            onChange={(event) => setPassword(event.target.value)}
             className="w-full rounded-3xl border border-white/10 bg-white/[0.07] px-4 py-4 text-white outline-none placeholder:text-frost/35"
             placeholder="Password"
           />
-          <Button type="submit" className="w-full py-4">
-            {mode === 'signup' ? 'Create Account' : 'Login'}
+          {error && <p className="rounded-3xl border border-plasma/25 bg-plasma/10 px-4 py-3 text-sm text-plasma">{error}</p>}
+          {status && <p className="rounded-3xl border border-aurora/20 bg-aurora/10 px-4 py-3 text-sm text-aurora">{status}</p>}
+          <Button type="submit" className="w-full py-4" disabled={isLoading}>
+            {isLoading ? 'Connecting...' : backendReady ? mode === 'signup' ? 'Create Account' : 'Login' : 'Continue Demo'}
           </Button>
         </form>
         <div className="mt-5">

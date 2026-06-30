@@ -1,8 +1,9 @@
 import { BellRing, CheckCheck } from 'lucide-react';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { notifications } from '../../app/data';
 import { ScreenHeader } from '../../components/ScreenHeader';
 import type { NotificationItem } from '../../app/types';
+import { getNotifications, markAllNotificationsRead, setNotificationRead } from '../../services/notificationService';
 
 type NotificationFilter = 'all' | 'unread' | NotificationItem['category'];
 
@@ -18,6 +19,27 @@ const filters: Array<{ label: string; value: NotificationFilter }> = [
 export function NotificationsScreen() {
   const [items, setItems] = useState(notifications);
   const [activeFilter, setActiveFilter] = useState<NotificationFilter>('all');
+  const [syncStatus, setSyncStatus] = useState('');
+
+  useEffect(() => {
+    let isMounted = true;
+
+    getNotifications().then((result) => {
+      if (!isMounted) {
+        return;
+      }
+
+      setItems(result.data);
+
+      if (result.error) {
+        setSyncStatus('Using demo notifications until Supabase notifications are ready.');
+      }
+    });
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
 
   const filteredItems = useMemo(() => {
     if (activeFilter === 'all') {
@@ -33,6 +55,29 @@ export function NotificationsScreen() {
 
   const unreadCount = items.filter((item) => item.unread).length;
 
+  const markAllRead = () => {
+    setItems((current) => current.map((item) => ({ ...item, unread: false })));
+    markAllNotificationsRead().then((result) => {
+      if (result.usingFallback) {
+        setSyncStatus('Notifications marked locally. Supabase auth will sync reads later.');
+      }
+    });
+  };
+
+  const toggleRead = (item: NotificationItem) => {
+    const nextUnread = !item.unread;
+    setItems((current) =>
+      current.map((notification) =>
+        notification.id === item.id ? { ...notification, unread: nextUnread } : notification
+      )
+    );
+    setNotificationRead(item.id, !nextUnread).then((result) => {
+      if (result.usingFallback) {
+        setSyncStatus('Notification state updated locally.');
+      }
+    });
+  };
+
   return (
     <section className="animate-rise pb-6">
       <ScreenHeader
@@ -41,7 +86,7 @@ export function NotificationsScreen() {
         action={
           <button
             type="button"
-            onClick={() => setItems((current) => current.map((item) => ({ ...item, unread: false })))}
+            onClick={markAllRead}
             className="grid h-11 w-11 place-items-center rounded-full bg-white/10 text-aurora"
             aria-label="Mark all notifications as read"
           >
@@ -58,6 +103,7 @@ export function NotificationsScreen() {
               <p className="mt-2 text-sm leading-6 text-frost/60">
                 Match alerts, community invites, chat updates, and social signals all land here.
               </p>
+              {syncStatus && <p className="mt-3 text-xs leading-5 text-frost/45">{syncStatus}</p>}
             </div>
             <span className="rounded-full bg-plasma/15 px-3 py-1 text-xs font-bold text-plasma">{unreadCount} unread</span>
           </div>
@@ -86,13 +132,7 @@ export function NotificationsScreen() {
             <button
               key={item.id}
               type="button"
-              onClick={() =>
-                setItems((current) =>
-                  current.map((notification) =>
-                    notification.id === item.id ? { ...notification, unread: !notification.unread } : notification
-                  )
-                )
-              }
+              onClick={() => toggleRead(item)}
               className={`w-full rounded-[26px] border p-4 text-left transition ${
                 item.unread ? 'border-aurora/30 bg-aurora/[0.08]' : 'border-white/10 bg-white/[0.06]'
               }`}

@@ -1,8 +1,10 @@
 import { BadgeCheck, MapPin, Settings, X } from 'lucide-react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { futureModules } from '../../app/data';
 import { Avatar } from '../../components/Avatar';
 import { ScreenHeader } from '../../components/ScreenHeader';
+import { supabaseConfig } from '../../lib/supabase';
+import { getCurrentProfile, profileDisplayName, updateCurrentProfile, type BackendProfile } from '../../services/profileService';
 
 const stats = [
   { label: 'Friends', value: '18.2K' },
@@ -25,6 +27,23 @@ const initialProfile: ProfileState = {
   interests: ['Gaming', 'Music', 'Coding', 'Travel', 'Anime'],
   username: 'Ace Explorer'
 };
+
+function profileFromBackend(profile: BackendProfile): ProfileState {
+  const displayName = profileDisplayName(profile);
+
+  return {
+    avatar: displayName
+      .split(/\s+/)
+      .map((part) => part[0])
+      .join('')
+      .slice(0, 3)
+      .toUpperCase() || 'AD',
+    bio: profile.bio || initialProfile.bio,
+    country: profile.country || initialProfile.country,
+    interests: profile.interests?.length ? profile.interests : initialProfile.interests,
+    username: displayName
+  };
+}
 
 type EditProfileModalProps = {
   profile: ProfileState;
@@ -118,9 +137,55 @@ function EditProfileModal({ profile, onClose, onSave }: EditProfileModalProps) {
   );
 }
 
-export function ProfileScreen() {
+type ProfileScreenProps = {
+  onLogout?: () => void;
+};
+
+export function ProfileScreen({ onLogout }: ProfileScreenProps) {
   const [profile, setProfile] = useState(initialProfile);
   const [editing, setEditing] = useState(false);
+  const [profileStatus, setProfileStatus] = useState('');
+
+  useEffect(() => {
+    let isMounted = true;
+
+    getCurrentProfile().then((result) => {
+      if (!isMounted) {
+        return;
+      }
+
+      if (result.data) {
+        setProfile(profileFromBackend(result.data));
+        setProfileStatus('Live profile connected.');
+      } else if (result.error) {
+        setProfileStatus('Using local profile until Supabase profile data is ready.');
+      }
+    });
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
+  const saveProfile = async (nextProfile: ProfileState) => {
+    setProfile(nextProfile);
+    setEditing(false);
+
+    if (!supabaseConfig.isConfigured) {
+      setProfileStatus('Profile saved locally. Add Supabase keys to sync it live.');
+      return;
+    }
+
+    const result = await updateCurrentProfile({
+      bio: nextProfile.bio,
+      country: nextProfile.country,
+      displayName: nextProfile.username,
+      interests: nextProfile.interests,
+      username: nextProfile.username.toLowerCase().replace(/[^a-z0-9_]/g, '_').slice(0, 24)
+    });
+
+    setProfileStatus(result.error ? 'Profile saved locally; live sync is waiting on Supabase.' : 'Profile synced to Supabase.');
+  };
 
   return (
     <section className="pb-6">
@@ -164,6 +229,12 @@ export function ProfileScreen() {
           <button type="button" onClick={() => setEditing(true)} className="mt-5 w-full rounded-full bg-white px-5 py-3 text-sm font-bold text-void">
             Edit Profile
           </button>
+          {onLogout && (
+            <button type="button" onClick={onLogout} className="mt-3 w-full rounded-full border border-white/10 bg-white/10 px-5 py-3 text-sm font-bold text-white">
+              Logout
+            </button>
+          )}
+          {profileStatus && <p className="mt-3 text-xs leading-5 text-frost/45">{profileStatus}</p>}
         </div>
 
         <div className="mt-5 rounded-[28px] border border-white/10 bg-white/[0.05] p-4">
@@ -186,8 +257,7 @@ export function ProfileScreen() {
           profile={profile}
           onClose={() => setEditing(false)}
           onSave={(nextProfile) => {
-            setProfile(nextProfile);
-            setEditing(false);
+            void saveProfile(nextProfile);
           }}
         />
       )}

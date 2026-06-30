@@ -10,6 +10,7 @@ import { NotificationsScreen } from '../features/notifications/NotificationsScre
 import { ProfileScreen } from '../features/profile/ProfileScreen';
 import { WelcomeScreen } from '../features/welcome/WelcomeScreen';
 import { BottomNavigation } from '../navigation/BottomNavigation';
+import { getCurrentSession, logout } from '../services/authService';
 import type { AppScreen } from './types';
 
 export default function App() {
@@ -23,6 +24,23 @@ export default function App() {
   useEffect(() => {
     const splashTimer = window.setTimeout(() => setShowSplash(false), 2600);
     return () => window.clearTimeout(splashTimer);
+  }, []);
+
+  useEffect(() => {
+    let isMounted = true;
+
+    getCurrentSession().then((session) => {
+      if (!isMounted || !session) {
+        return;
+      }
+
+      setIsAuthenticated(true);
+      setScreen('home');
+    });
+
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
   const page = useMemo(() => {
@@ -62,7 +80,16 @@ export default function App() {
       case 'notifications':
         return <NotificationsScreen />;
       case 'profile':
-        return <ProfileScreen />;
+        return (
+          <ProfileScreen
+            onLogout={() => {
+              logout().then(() => {
+                setIsAuthenticated(false);
+                setScreen('welcome');
+              });
+            }}
+          />
+        );
       case 'home':
       default:
         return (
