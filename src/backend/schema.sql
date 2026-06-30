@@ -90,6 +90,14 @@ create table if not exists public.notifications (
   created_at timestamptz not null default now()
 );
 
+create table if not exists public.user_settings (
+  user_id uuid primary key references auth.users(id) on delete cascade,
+  settings jsonb not null default '{}'::jsonb,
+  settings_version integer not null default 1,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+
 drop trigger if exists set_profiles_updated_at on public.profiles;
 create trigger set_profiles_updated_at
 before update on public.profiles
@@ -100,6 +108,11 @@ create trigger set_chat_threads_updated_at
 before update on public.chat_threads
 for each row execute function public.set_updated_at();
 
+drop trigger if exists set_user_settings_updated_at on public.user_settings;
+create trigger set_user_settings_updated_at
+before update on public.user_settings
+for each row execute function public.set_updated_at();
+
 create index if not exists posts_user_id_created_at_idx on public.posts (user_id, created_at desc);
 create index if not exists community_members_user_id_idx on public.community_members (user_id);
 create index if not exists community_members_community_id_idx on public.community_members (community_id);
@@ -108,6 +121,7 @@ create index if not exists chat_thread_members_user_id_idx on public.chat_thread
 create index if not exists chat_thread_members_thread_id_idx on public.chat_thread_members (thread_id);
 create index if not exists chat_messages_thread_id_created_at_idx on public.chat_messages (thread_id, created_at);
 create index if not exists notifications_user_id_created_at_idx on public.notifications (user_id, created_at desc);
+create index if not exists user_settings_updated_at_idx on public.user_settings (updated_at desc);
 
 alter table public.profiles enable row level security;
 alter table public.posts enable row level security;
@@ -117,6 +131,7 @@ alter table public.chat_threads enable row level security;
 alter table public.chat_thread_members enable row level security;
 alter table public.chat_messages enable row level security;
 alter table public.notifications enable row level security;
+alter table public.user_settings enable row level security;
 
 drop policy if exists "Public profiles are readable" on public.profiles;
 create policy "Public profiles are readable"
@@ -260,6 +275,22 @@ using (auth.uid() = user_id);
 drop policy if exists "Users can update own notifications" on public.notifications;
 create policy "Users can update own notifications"
 on public.notifications for update
+using (auth.uid() = user_id)
+with check (auth.uid() = user_id);
+
+drop policy if exists "Users can read own settings" on public.user_settings;
+create policy "Users can read own settings"
+on public.user_settings for select
+using (auth.uid() = user_id);
+
+drop policy if exists "Users can insert own settings" on public.user_settings;
+create policy "Users can insert own settings"
+on public.user_settings for insert
+with check (auth.uid() = user_id);
+
+drop policy if exists "Users can update own settings" on public.user_settings;
+create policy "Users can update own settings"
+on public.user_settings for update
 using (auth.uid() = user_id)
 with check (auth.uid() = user_id);
 

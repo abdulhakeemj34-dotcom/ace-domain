@@ -20,6 +20,7 @@ import { readAppSettings, writeAppSettings } from '../features/settings/settings
 import { WelcomeScreen } from '../features/welcome/WelcomeScreen';
 import { BottomNavigation } from '../navigation/BottomNavigation';
 import { getCurrentSession, logout } from '../services/authService';
+import { loadCurrentUserSettings, upsertCurrentUserSettings } from '../services/settingsService';
 import type { AppScreen } from './types';
 import type { AppSettings } from '../features/settings/settingsTypes';
 import type { GlobalOnboardingProfile, GlobalSafetySettings } from '../types/global';
@@ -134,6 +135,20 @@ export default function App() {
 
   const showNav = isAuthenticated && !['welcome', 'auth'].includes(screen);
 
+  const syncRemoteAppSettings = useCallback(async () => {
+    const result = await loadCurrentUserSettings();
+
+    if (result.data) {
+      setAppSettings(result.data);
+      writeAppSettings(result.data);
+      return;
+    }
+
+    if (!result.usingFallback && !result.remoteExists) {
+      void upsertCurrentUserSettings(readAppSettings());
+    }
+  }, []);
+
   useEffect(() => {
     const splashTimer = window.setTimeout(() => setShowSplash(false), 2600);
     return () => window.clearTimeout(splashTimer);
@@ -149,16 +164,18 @@ export default function App() {
 
       setIsAuthenticated(true);
       setScreen('home');
+      void syncRemoteAppSettings();
     });
 
     return () => {
       isMounted = false;
     };
-  }, []);
+  }, [syncRemoteAppSettings]);
 
   const handleAppSettingsChange = useCallback((settings: AppSettings) => {
     setAppSettings(settings);
     writeAppSettings(settings);
+    void upsertCurrentUserSettings(settings);
   }, []);
 
   const page = useMemo(() => {
@@ -179,6 +196,7 @@ export default function App() {
             onComplete={() => {
               setIsAuthenticated(true);
               setScreen('home');
+              void syncRemoteAppSettings();
             }}
           />
         );
@@ -264,7 +282,7 @@ export default function App() {
           />
         );
     }
-  }, [activeChatId, appSettings, globalProfile, globalSettings, handleAppSettingsChange, screen]);
+  }, [activeChatId, appSettings, globalProfile, globalSettings, handleAppSettingsChange, screen, syncRemoteAppSettings]);
 
   const appModes = [
     `appearance-${appSettings.appearanceMode}`,

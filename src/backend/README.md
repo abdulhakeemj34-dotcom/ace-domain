@@ -26,12 +26,26 @@ Run `src/backend/schema.sql` in the Supabase SQL editor or through a migration r
 - `chat_thread_members`
 - `chat_messages`
 - `notifications`
+- `user_settings`
 
 RLS is enabled for every table. Policies keep public reads limited to profiles, posts, and communities, while user-owned writes are restricted to the authenticated user.
 
 ## Frontend Behavior
 
 The app remains mobile-first and demo-safe. If Supabase env keys are missing or a table has no rows yet, the existing premium mock UI stays visible instead of rendering empty screens or crashing.
+
+Settings are local-first. The app reads validated settings from localStorage immediately, then attempts to load `user_settings` for the authenticated Supabase user. If remote settings exist, they are sanitized, applied, and written back to localStorage. Local settings still work without login or Supabase, and failed remote saves do not block the UI.
+
+## Stage Seven Settings Sync
+
+`user_settings` stores each user's Stage 5 app settings as `jsonb`.
+
+- Primary key: `user_id`
+- Settings payload: `settings`
+- Version marker: `settings_version`
+- Timestamp trigger: `set_user_settings_updated_at`
+
+RLS policies allow users to select, insert, and update only their own settings rows. The frontend sync foundation lives in `src/services/settingsService.ts` and preserves the localStorage fallback as the immediate source of truth.
 
 ## Stage Four Chat
 
