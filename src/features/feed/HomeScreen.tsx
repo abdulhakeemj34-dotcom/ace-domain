@@ -415,34 +415,34 @@ export function HomeScreen({ globalProfile, globalSettings, onOpenAiChat, onOpen
                 <button
                   type="button"
                   onClick={() => updatePost(post.id, (current) => ({ ...current, liked: !current.liked, likes: current.likes + (current.liked ? -1 : 1) }))}
-                  className={`flex items-center gap-1 rounded-full px-2 py-2 transition ${action.liked ? 'bg-plasma/15 text-plasma' : 'hover:bg-white/10'}`}
+                  className={`flex min-w-0 items-center justify-center gap-1 rounded-full px-1.5 py-2 transition ${action.liked ? 'bg-plasma/15 text-plasma' : 'hover:bg-white/10'}`}
                   aria-label={`${action.liked ? 'Unlike' : 'Like'} ${post.author}'s post`}
                 >
-                  <Heart size={15} fill={action.liked ? 'currentColor' : 'none'} /> {formatStat(action.likes)}
+                  <Heart className="shrink-0" size={15} fill={action.liked ? 'currentColor' : 'none'} /> <span className="min-w-0 truncate">{formatStat(action.likes)}</span>
                 </button>
                 <button
                   type="button"
                   onClick={() => updatePost(post.id, (current) => ({ ...current, comments: current.comments + 1 }))}
-                  className="flex items-center gap-1 rounded-full px-2 py-2 hover:bg-white/10"
+                  className="flex min-w-0 items-center justify-center gap-1 rounded-full px-1.5 py-2 hover:bg-white/10"
                   aria-label={`Comment on ${post.author}'s post`}
                 >
-                  <MessageCircle size={15} /> {formatStat(action.comments)}
+                  <MessageCircle className="shrink-0" size={15} /> <span className="min-w-0 truncate">{formatStat(action.comments)}</span>
                 </button>
                 <button
                   type="button"
                   onClick={() => updatePost(post.id, (current) => ({ ...current, shares: current.shares + 1 }))}
-                  className="flex items-center gap-1 rounded-full px-2 py-2 hover:bg-white/10"
+                  className="flex min-w-0 items-center justify-center gap-1 rounded-full px-1.5 py-2 hover:bg-white/10"
                   aria-label={`Share ${post.author}'s post`}
                 >
-                  <Share2 size={15} /> {formatStat(action.shares)}
+                  <Share2 className="shrink-0" size={15} /> <span className="min-w-0 truncate">{formatStat(action.shares)}</span>
                 </button>
                 <button
                   type="button"
                   onClick={() => updatePost(post.id, (current) => ({ ...current, saved: !current.saved }))}
-                  className={`flex items-center gap-1 rounded-full px-2 py-2 transition ${action.saved ? 'bg-aurora/15 text-aurora' : 'hover:bg-white/10'}`}
+                  className={`flex min-w-0 items-center justify-center gap-1 rounded-full px-1.5 py-2 transition ${action.saved ? 'bg-aurora/15 text-aurora' : 'hover:bg-white/10'}`}
                   aria-label={`${action.saved ? 'Unsave' : 'Save'} ${post.author}'s post`}
                 >
-                  <Bookmark size={15} fill={action.saved ? 'currentColor' : 'none'} /> Save
+                  <Bookmark className="shrink-0" size={15} fill={action.saved ? 'currentColor' : 'none'} /> <span className="min-w-0 truncate">Save</span>
                 </button>
               </div>
             </article>
