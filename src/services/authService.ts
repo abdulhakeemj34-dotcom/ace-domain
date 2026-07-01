@@ -6,6 +6,7 @@ import {
   storeSession,
   supabaseAuthRequest,
   supabaseConfig,
+  SupabaseRequestError,
   supabaseSetupMessage,
   type SupabaseSession,
   type SupabaseUser
@@ -27,6 +28,8 @@ type AuthResult = {
   user: SupabaseUser | null;
 };
 
+const authRateLimitMessage = 'Email signup is temporarily limited. Please try again later or continue in demo mode.';
+
 function setupRequiredResult(): AuthResult {
   return {
     canUseDemoFallback: true,
@@ -37,9 +40,24 @@ function setupRequiredResult(): AuthResult {
   };
 }
 
+function isRateLimitError(error: unknown, message: string) {
+  const normalizedMessage = message.toLowerCase();
+
+  return (
+    error instanceof SupabaseRequestError && error.status === 429
+  ) || (
+    normalizedMessage.includes('rate limit') ||
+    normalizedMessage.includes('rate-limit') ||
+    normalizedMessage.includes('too many requests') ||
+    normalizedMessage.includes('email signup is disabled') ||
+    normalizedMessage.includes('email rate limit')
+  );
+}
+
 function authErrorResult(error: unknown, fallback: string): AuthResult {
   const message = error instanceof Error ? error.message : fallback;
   const normalizedMessage = message.toLowerCase();
+  const isRateLimited = isRateLimitError(error, message);
   const isNetworkFailure =
     error instanceof TypeError ||
     normalizedMessage.includes('failed to fetch') ||
@@ -48,8 +66,10 @@ function authErrorResult(error: unknown, fallback: string): AuthResult {
     normalizedMessage.includes('load failed');
 
   return {
-    canUseDemoFallback: isNetworkFailure,
-    error: isNetworkFailure
+    canUseDemoFallback: isNetworkFailure || isRateLimited,
+    error: isRateLimited
+      ? authRateLimitMessage
+      : isNetworkFailure
       ? 'Live authentication is unavailable right now. Check your connection or continue in demo mode.'
       : message,
     session: null,

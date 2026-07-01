@@ -23,7 +23,7 @@ export function AuthScreen({ onComplete }: AuthScreenProps) {
   const continueDemo = () => {
     setCanUseDemoFallback(false);
     setError('');
-    setStatus('Opening Ace Domain locally.');
+    setStatus('Opening Ace Domain in demo mode.');
     onComplete();
   };
 
@@ -54,7 +54,7 @@ export function AuthScreen({ onComplete }: AuthScreenProps) {
         setCanUseDemoFallback(Boolean(result.canUseDemoFallback || result.setupRequired));
 
         if (result.canUseDemoFallback || result.setupRequired) {
-          setStatus('You can keep exploring locally without creating a live account.');
+          setStatus('You can keep exploring in demo mode without creating a live account.');
         }
 
         return;
@@ -68,8 +68,8 @@ export function AuthScreen({ onComplete }: AuthScreenProps) {
       setStatus(mode === 'signup' ? 'Account created.' : 'Welcome back.');
       onComplete();
     } catch {
-      setError('Live authentication could not finish. You can continue locally without creating a live account.');
-      setStatus('Local access is still available.');
+      setError('Live authentication could not finish. You can continue in demo mode without creating a live account.');
+      setStatus('Demo mode is still available.');
       setCanUseDemoFallback(true);
     } finally {
       setIsLoading(false);
@@ -164,7 +164,7 @@ export function AuthScreen({ onComplete }: AuthScreenProps) {
           className="mt-2 flex min-h-14 items-center justify-center gap-2 rounded-full bg-white px-5 text-base font-black text-black disabled:opacity-60"
           disabled={isLoading}
         >
-          {isLoading ? 'Connecting...' : backendReady ? mode === 'signup' ? 'Create account' : 'Login' : 'Continue locally'}
+          {isLoading ? 'Connecting...' : backendReady ? mode === 'signup' ? 'Create account' : 'Login' : 'Continue in demo mode'}
           {!isLoading && <ArrowRight size={18} />}
         </button>
 
@@ -174,7 +174,7 @@ export function AuthScreen({ onComplete }: AuthScreenProps) {
             className="min-h-14 rounded-full border border-white/15 px-5 text-base font-bold text-white"
             onClick={continueDemo}
           >
-            Continue locally
+            Continue in demo mode
           </button>
         )}
       </form>
