@@ -109,14 +109,14 @@ export function ChatRoomScreen({ chatId, chatSettings, onBack }: ChatRoomScreenP
   const personalization = getChatPersonalization(chatSettings);
   const bubbleShapeClass = bubbleShapeClasses[personalization.chatBubbleShape];
   const densityClass = densityClasses[personalization.messageDensity];
-  const messageStackClass = personalization.messageDensity === 'compact' ? 'space-y-2 px-4 py-4' : 'space-y-3 px-5 py-5';
+  const messageStackClass = personalization.messageDensity === 'compact' ? 'space-y-2 px-4 py-3.5' : 'space-y-2.5 px-4 py-4';
   const sentCornerClass = personalization.chatBubbleShape === 'sharp' ? 'rounded-br-sm' : 'rounded-br-md';
   const receivedCornerClass = personalization.chatBubbleShape === 'sharp' ? 'rounded-bl-sm' : 'rounded-bl-md';
   const wallpaperClass = `chat-wallpaper-${personalization.chatWallpaper}`;
 
   return (
     <section className={`flex min-h-screen flex-col ${wallpaperClass}`}>
-      <header className="sticky top-0 z-20 border-b border-white/10 bg-void/90 px-5 pb-4 pt-8 backdrop-blur-2xl">
+      <header className="sticky top-0 z-20 border-b border-white/10 bg-void/90 px-4 pb-3 pt-6 backdrop-blur-2xl">
         <div className="flex items-center gap-3">
           <button type="button" onClick={onBack} className="grid h-11 w-11 place-items-center rounded-full bg-white/10 text-white" aria-label="Back to chats">
             <ArrowLeft size={20} />
@@ -132,7 +132,7 @@ export function ChatRoomScreen({ chatId, chatSettings, onBack }: ChatRoomScreenP
         </div>
 
         {isGroup && (
-          <div className="mt-4 flex items-center justify-between gap-3 rounded-3xl bg-white/[0.06] p-3">
+          <div className="mt-3 flex items-center justify-between gap-3 rounded-[22px] bg-white/[0.06] p-2.5">
             <div className="flex -space-x-2">
               {(chat.avatars ?? []).map((avatar) => (
                 <span key={avatar} className="grid h-8 w-8 place-items-center rounded-full border border-obsidian bg-gradient-to-br from-aurora to-signal text-[10px] font-black text-void">
@@ -149,7 +149,7 @@ export function ChatRoomScreen({ chatId, chatSettings, onBack }: ChatRoomScreenP
         )}
       </header>
 
-      <div className={`flex-1 ${messageStackClass} pb-40`}>
+      <div className={`flex-1 ${messageStackClass} pb-36`}>
         {error && (
           <div className="rounded-[24px] border border-plasma/20 bg-plasma/10 p-4 text-sm text-plasma">
             <p>{error}</p>
@@ -166,7 +166,7 @@ export function ChatRoomScreen({ chatId, chatSettings, onBack }: ChatRoomScreenP
         )}
 
         {!isLoading && messages.length === 0 && !error && (
-          <div className="rounded-[28px] border border-white/10 bg-white/[0.06] p-5 text-center">
+          <div className="rounded-[24px] border border-white/10 bg-white/[0.06] p-4 text-center">
             <h2 className="font-bold text-white">Start the room</h2>
             <p className="mt-2 text-sm leading-6 text-frost/55">No messages yet. Send the first hello and this thread is ready for realtime updates.</p>
           </div>
@@ -231,7 +231,7 @@ export function ChatRoomScreen({ chatId, chatSettings, onBack }: ChatRoomScreenP
       </div>
 
       <form
-        className="fixed bottom-[calc(6rem+env(safe-area-inset-bottom))] left-1/2 z-20 flex w-[calc(100%-1.5rem)] max-w-md -translate-x-1/2 items-center gap-2 rounded-[28px] border border-white/10 bg-obsidian/95 p-2 shadow-panel backdrop-blur-2xl"
+        className="fixed bottom-[calc(6rem+env(safe-area-inset-bottom))] left-1/2 z-20 flex w-[calc(100%-1rem)] max-w-md -translate-x-1/2 items-center gap-2 rounded-[24px] border border-white/10 bg-obsidian/95 p-1.5 shadow-panel backdrop-blur-2xl"
         onSubmit={sendMessage}
       >
         <button

@@ -68,8 +68,8 @@ export function CommunitiesScreen() {
     <section className="animate-rise pb-6">
       <ScreenHeader eyebrow="Interest planets" title="Communities" />
       <SearchBar placeholder="Ask Ace AI to find communities for your vibe..." />
-      <div className="px-5 py-5">
-        <div className="glass-panel rounded-[30px] p-5">
+      <div className="px-4 py-4">
+        <div className="glass-panel rounded-[24px] p-4">
           <div className="flex items-center gap-3">
             <div className="grid h-12 w-12 place-items-center rounded-2xl bg-aurora text-void">
               <Compass size={22} />
@@ -85,9 +85,9 @@ export function CommunitiesScreen() {
           {syncStatus && <p className="mt-3 text-xs leading-5 text-frost/45">{syncStatus}</p>}
         </div>
 
-        <div className="mt-5 grid gap-3">
+        <div className="mt-4 grid gap-2.5">
           {communityList.map((community) => (
-            <article key={community.id} className="rounded-[28px] border border-white/10 bg-white/[0.06] p-4">
+            <article key={community.id} className="rounded-[22px] border border-white/10 bg-white/[0.06] p-3.5">
               <div className="flex items-start justify-between gap-3">
                 <div>
                   <h3 className="text-lg font-bold text-white">{community.name}</h3>

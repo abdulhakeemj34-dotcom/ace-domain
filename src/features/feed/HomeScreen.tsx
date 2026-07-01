@@ -169,7 +169,7 @@ export function HomeScreen({ globalProfile, globalSettings, onOpenAiChat, onOpen
         onChange={setSearchQuery}
       />
 
-      <div className="mx-5 mt-5 overflow-hidden rounded-[32px] border border-white/10 bg-gradient-to-br from-white/[0.1] via-white/[0.05] to-transparent p-4">
+      <div className="mx-4 mt-4 overflow-hidden rounded-[24px] border border-white/10 bg-gradient-to-br from-white/[0.1] via-white/[0.05] to-transparent p-3.5">
         <div className="flex items-center gap-3">
           <div className="grid h-12 w-12 place-items-center rounded-2xl ad-accent-bg ad-accent-ring">
             <Bot size={22} />
@@ -183,7 +183,7 @@ export function HomeScreen({ globalProfile, globalSettings, onOpenAiChat, onOpen
         <button
           type="button"
           onClick={onOpenAiChat}
-          className="mt-4 w-full rounded-full px-5 py-3 text-sm font-black ad-accent-bg"
+          className="mt-3 w-full rounded-full px-5 py-3 text-sm font-black ad-accent-bg"
           aria-label="Open Ace Domain AI chat"
         >
           Open Ace AI
@@ -191,7 +191,7 @@ export function HomeScreen({ globalProfile, globalSettings, onOpenAiChat, onOpen
       </div>
 
       {hasSearchQuery && (
-        <div className="mx-5 mt-4 rounded-[28px] border border-white/10 bg-white/[0.06] p-4">
+        <div className="mx-4 mt-3 rounded-[24px] border border-white/10 bg-white/[0.06] p-3.5">
           <div className="flex items-center justify-between gap-3">
             <div>
               <h2 className="font-bold text-white">Ace smart search</h2>
@@ -223,7 +223,7 @@ export function HomeScreen({ globalProfile, globalSettings, onOpenAiChat, onOpen
         </div>
       )}
 
-      <div className="mx-5 mt-5 rounded-[32px] border border-white/10 bg-white/[0.06] p-4">
+      <div className="mx-4 mt-4 rounded-[24px] border border-white/10 bg-white/[0.06] p-3.5">
         <div className="flex items-start justify-between gap-3">
           <div>
             <p className="text-xs font-bold uppercase tracking-[0.22em] text-aurora">World profile</p>
@@ -244,14 +244,14 @@ export function HomeScreen({ globalProfile, globalSettings, onOpenAiChat, onOpen
           )}
           {!globalSettings.hideLocalTime && <WorldClockLabel timeZone={profileCountry.timeZone} />}
         </div>
-        <div className="mt-4 grid grid-cols-2 gap-3">
+        <div className="mt-3 grid grid-cols-2 gap-2.5">
           <Button onClick={onOpenGlobal} className="py-3">Global</Button>
           <Button variant="secondary" onClick={onOpenCalendar} className="py-3">Calendar</Button>
         </div>
       </div>
 
-      <div className="mx-5 mt-5 rounded-[32px] bg-gradient-to-br from-aurora/25 via-signal/20 to-plasma/20 p-[1px]">
-        <div className="rounded-[31px] bg-obsidian/90 p-4">
+      <div className="mx-4 mt-4 rounded-[24px] bg-gradient-to-br from-aurora/25 via-signal/20 to-plasma/20 p-[1px]">
+        <div className="rounded-[23px] bg-obsidian/90 p-3.5">
           <div className="flex items-center gap-3">
             <div className="grid h-12 w-12 place-items-center rounded-2xl bg-white text-void">
               <Rocket size={22} />
@@ -261,9 +261,9 @@ export function HomeScreen({ globalProfile, globalSettings, onOpenAiChat, onOpen
               <p className="text-sm text-frost/60">Meet aligned people worldwide in one tap.</p>
             </div>
           </div>
-          <div className="mt-4 flex gap-3 overflow-x-auto [scrollbar-width:none]">
+          <div className="mt-3 flex gap-3 overflow-x-auto [scrollbar-width:none]">
             {globalMatches.map((match) => (
-              <article key={match.id} className="w-64 shrink-0 rounded-[28px] border border-white/10 bg-white/[0.07] p-4">
+              <article key={match.id} className="w-60 shrink-0 rounded-[22px] border border-white/10 bg-white/[0.07] p-3.5">
                 <div className="flex items-center gap-3">
                   <Avatar label={match.avatar} active />
                   <div className="min-w-0 flex-1">
@@ -282,19 +282,19 @@ export function HomeScreen({ globalProfile, globalSettings, onOpenAiChat, onOpen
                     </span>
                   ))}
                 </div>
-                <Button onClick={onStartChat} className="mt-4 w-full py-3" aria-label={`Start chat with ${match.name}`}>
+                <Button onClick={onStartChat} className="mt-3 w-full py-3" aria-label={`Start chat with ${match.name}`}>
                   Start Chat
                 </Button>
               </article>
             ))}
           </div>
-          <Button variant="secondary" className="mt-4 w-full" onClick={onOpenCommunities}>
+          <Button variant="secondary" className="mt-3 w-full" onClick={onOpenCommunities}>
             Explore More Worlds
           </Button>
         </div>
       </div>
 
-      <div className="mx-5 mt-5 rounded-[28px] border border-white/10 bg-white/[0.05] p-4">
+      <div className="mx-4 mt-4 rounded-[24px] border border-white/10 bg-white/[0.05] p-3.5">
         <div className="flex items-center justify-between gap-3">
           <div>
             <h2 className="font-bold text-white">Global Calendar</h2>
@@ -304,7 +304,7 @@ export function HomeScreen({ globalProfile, globalSettings, onOpenAiChat, onOpen
             Open
           </button>
         </div>
-        <div className="mt-4 grid gap-3">
+        <div className="mt-3 grid gap-2.5">
           {globalEvents.slice(0, 2).map((event) => (
             <div key={event.id} className="rounded-3xl bg-white/[0.06] p-3">
               <p className="font-bold text-white">{event.title}</p>
@@ -314,7 +314,7 @@ export function HomeScreen({ globalProfile, globalSettings, onOpenAiChat, onOpen
         </div>
       </div>
 
-      <div className="mt-5 overflow-x-auto px-5 [scrollbar-width:none]">
+      <div className="mt-4 overflow-x-auto px-4 [scrollbar-width:none]">
         <div className="flex gap-3">
           {stories.map((story) => (
             <button
@@ -332,11 +332,11 @@ export function HomeScreen({ globalProfile, globalSettings, onOpenAiChat, onOpen
         </div>
       </div>
 
-      <div className="mt-5 px-5">
+      <div className="mt-4 px-4">
         <h2 className="mb-3 text-sm font-bold uppercase tracking-[0.22em] text-frost/50">Trending Global Conversations</h2>
-        <div className="grid gap-3">
+        <div className="grid gap-2.5">
           {trendingConversations.map((item) => (
-            <article key={item.id} className="rounded-[24px] border border-white/10 bg-white/[0.06] p-4">
+            <article key={item.id} className="rounded-[22px] border border-white/10 bg-white/[0.06] p-3.5">
               <div className="flex items-center justify-between gap-3">
                 <div>
                   <h3 className="font-bold text-white">{item.title}</h3>
@@ -349,7 +349,7 @@ export function HomeScreen({ globalProfile, globalSettings, onOpenAiChat, onOpen
         </div>
       </div>
 
-      <div className="mx-5 mt-5 rounded-[28px] border border-white/10 bg-white/[0.05] p-4">
+      <div className="mx-4 mt-4 rounded-[24px] border border-white/10 bg-white/[0.05] p-3.5">
         <div className="flex items-center justify-between gap-3">
           <div>
             <h2 className="font-bold text-white">Mini-Game Hub</h2>
@@ -357,9 +357,9 @@ export function HomeScreen({ globalProfile, globalSettings, onOpenAiChat, onOpen
           </div>
           <Gamepad2 className="text-aurora" size={22} />
         </div>
-        <div className="mt-4 flex gap-3 overflow-x-auto [scrollbar-width:none]">
+        <div className="mt-3 flex gap-3 overflow-x-auto [scrollbar-width:none]">
           {miniGamePreviews.map((game) => (
-            <div key={game.id} className="w-44 shrink-0 rounded-3xl bg-gradient-to-br from-white/12 to-white/[0.04] p-4">
+            <div key={game.id} className="w-40 shrink-0 rounded-[22px] bg-gradient-to-br from-white/12 to-white/[0.04] p-3.5">
               <div className="flex items-center justify-between gap-2">
                 <p className="text-sm font-bold text-white">{game.name}</p>
                 <span className={`rounded-full px-2 py-1 text-[10px] font-bold ${game.status === 'ready' ? 'bg-aurora/15 text-aurora' : 'bg-white/10 text-frost/55'}`}>
@@ -374,11 +374,11 @@ export function HomeScreen({ globalProfile, globalSettings, onOpenAiChat, onOpen
         </div>
       </div>
 
-      <div className="mx-5 mt-5">
+      <div className="mx-4 mt-4">
         <CultureFactCard fact={cultureFacts[0]} />
       </div>
 
-      <div className="space-y-4 px-5 py-5">
+      <div className="space-y-3 px-4 py-4">
         {feedPosts.map((post) => {
           const action =
             postActions[post.id] ?? {
@@ -389,7 +389,7 @@ export function HomeScreen({ globalProfile, globalSettings, onOpenAiChat, onOpen
               shares: parseStat(post.stats.shares)
             };
           return (
-            <article key={post.id} className="glass-panel rounded-[28px] p-4">
+            <article key={post.id} className="glass-panel rounded-[24px] p-3.5">
               <div className="flex items-center gap-3">
                 <Avatar label={post.avatar} active />
                 <div className="min-w-0 flex-1">

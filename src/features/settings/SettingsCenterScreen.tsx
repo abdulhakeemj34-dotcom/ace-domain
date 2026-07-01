@@ -178,7 +178,7 @@ function OptionButton({ active, description, label, onClick }: OptionButtonProps
     <button
       type="button"
       onClick={onClick}
-      className={`rounded-[22px] border p-3 text-left transition duration-300 ${
+      className={`rounded-[20px] border p-3 text-left transition duration-300 ${
         active ? 'border-white/30 shadow-glow' : 'border-white/10 bg-white/[0.045] hover:border-white/20'
       }`}
       style={active ? { backgroundColor: 'var(--ad-accent-soft)' } : undefined}
@@ -257,24 +257,24 @@ export function SettingsCenterScreen({ onBack, onChange, onOpenGlobalSafety, set
 
   return (
     <section className="animate-rise pb-8">
-      <header className="px-5 pb-4 pt-8">
-        <button type="button" onClick={onBack} className="mb-4 grid h-11 w-11 place-items-center rounded-full bg-white/10 text-white" aria-label="Back to profile">
+      <header className="px-4 pb-3 pt-6">
+        <button type="button" onClick={onBack} className="mb-3 grid h-11 w-11 place-items-center rounded-full bg-white/10 text-white" aria-label="Back to profile">
           <ArrowLeft size={20} />
         </button>
-        <div className="glass-panel overflow-hidden rounded-[34px] p-5">
+        <div className="glass-panel overflow-hidden rounded-[28px] p-4">
           <div className="flex items-start gap-3">
-            <div className="grid h-14 w-14 shrink-0 place-items-center rounded-2xl text-[color:var(--ad-accent-contrast)] ad-accent-bg ad-accent-ring">
+            <div className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl text-[color:var(--ad-accent-contrast)] ad-accent-bg ad-accent-ring">
               <Sparkles size={25} />
             </div>
             <div className="min-w-0">
               <p className="text-xs font-black uppercase tracking-[0.28em] text-[color:var(--ad-accent)]">Account Controls</p>
-              <h1 className="mt-1 text-3xl font-black text-white">Settings Center</h1>
-              <p className="mt-3 text-sm leading-6 text-frost/60">
+              <h1 className="mt-1 text-2xl font-black text-white">Settings Center</h1>
+              <p className="mt-2 text-sm leading-5 text-frost/60">
                 Local-first controls for Ace Domain appearance, profile feel, notifications, privacy, language, and mobile comfort.
               </p>
             </div>
           </div>
-          <div className="mt-5 rounded-[24px] border border-white/10 bg-white/[0.055] p-4">
+          <div className="mt-4 rounded-[20px] border border-white/10 bg-white/[0.055] p-3">
             <p className="text-xs font-black uppercase tracking-[0.22em] text-frost/40">Active theme</p>
             <p className="mt-2 text-xl font-black text-white">{selectedTheme.name}</p>
             <p className="mt-1 text-sm leading-6 text-frost/50">{selectedTheme.description}</p>
@@ -282,7 +282,7 @@ export function SettingsCenterScreen({ onBack, onChange, onOpenGlobalSafety, set
         </div>
       </header>
 
-      <div className="space-y-5 px-5">
+      <div className="space-y-4 px-4">
         <SettingsSection
           eyebrow="Account"
           title="Account"

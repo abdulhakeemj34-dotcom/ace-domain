@@ -32,8 +32,8 @@ export function ChatsScreen({ onOpenChat }: ChatsScreenProps) {
         }
       />
       <SearchBar placeholder="Search chats or ask Ace AI for introductions..." />
-      <div className="px-5 py-5">
-        <div className="mb-5 overflow-hidden rounded-[30px] border border-white/10 bg-white/[0.06] p-4">
+      <div className="px-4 py-4">
+        <div className="mb-4 overflow-hidden rounded-[24px] border border-white/10 bg-white/[0.06] p-3.5">
           <div className="flex items-center justify-between gap-3">
             <div className="min-w-0">
               <h2 className="font-bold text-white">Group rooms</h2>
@@ -51,7 +51,7 @@ export function ChatsScreen({ onOpenChat }: ChatsScreenProps) {
               </button>
             </div>
           )}
-          <div className="mt-4 grid gap-3">
+          <div className="mt-3 grid gap-2.5">
             {isLoading && threads.length === 0 && (
               <div className="rounded-3xl bg-white/[0.06] p-4 text-sm text-frost/55">Loading chat rooms...</div>
             )}
@@ -63,7 +63,7 @@ export function ChatsScreen({ onOpenChat }: ChatsScreenProps) {
                 key={chat.id}
                 type="button"
                 onClick={() => onOpenChat(chat.id)}
-                className="flex w-full min-w-0 items-center gap-3 overflow-hidden rounded-3xl bg-white/[0.06] p-3 text-left"
+                className="flex w-full min-w-0 items-center gap-3 overflow-hidden rounded-[22px] bg-white/[0.06] p-3 text-left"
                 aria-label={`Open ${chat.name} group room`}
               >
                 <Avatar label={chat.avatar} active={chat.online} />
@@ -83,16 +83,16 @@ export function ChatsScreen({ onOpenChat }: ChatsScreenProps) {
           </div>
         </div>
         {threads.length > 0 && (
-          <div className="mb-4 flex gap-3 overflow-x-auto [scrollbar-width:none]">
+          <div className="mb-4 flex gap-2.5 overflow-x-auto [scrollbar-width:none]">
             {threads.slice(0, 3).map((chat) => (
-            <div key={chat.id} className="w-28 shrink-0 rounded-3xl bg-white/[0.06] p-3 text-center">
+            <div key={chat.id} className="w-24 shrink-0 rounded-[22px] bg-white/[0.06] p-3 text-center">
               <Avatar label={chat.avatar} active={chat.unread > 0} />
               <p className="mt-2 truncate text-xs font-bold text-white">{chat.name}</p>
             </div>
             ))}
           </div>
         )}
-        <div className="space-y-3">
+        <div className="space-y-2.5">
           {!isLoading && threads.length === 0 && (
             <div className="glass-panel rounded-[26px] p-5 text-center">
               <h2 className="font-bold text-white">No chat threads yet</h2>
@@ -104,7 +104,7 @@ export function ChatsScreen({ onOpenChat }: ChatsScreenProps) {
               key={chat.id}
               type="button"
               onClick={() => onOpenChat(chat.id)}
-              className="glass-panel flex w-full min-w-0 items-center gap-3 overflow-hidden rounded-[26px] p-4 text-left"
+              className="glass-panel flex w-full min-w-0 items-center gap-3 overflow-hidden rounded-[22px] p-3.5 text-left"
               aria-label={`Open ${chat.name} chat`}
             >
               <Avatar label={chat.avatar} active={chat.unread > 0} />

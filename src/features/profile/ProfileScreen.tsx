@@ -68,7 +68,7 @@ function EditProfileModal({ profile, onClose, onSave }: EditProfileModalProps) {
   return (
     <div className="fixed inset-0 z-40 flex items-end justify-center overflow-y-auto bg-void/80 px-4 py-4 backdrop-blur-2xl">
       <form
-        className="max-h-[calc(100svh-2rem)] w-full max-w-md overflow-y-auto rounded-[34px] border border-white/10 bg-obsidian p-5 shadow-panel animate-rise"
+        className="max-h-[calc(100svh-2rem)] w-full max-w-md overflow-y-auto rounded-[28px] border border-white/10 bg-obsidian p-4 shadow-panel animate-rise"
         onSubmit={(event) => {
           event.preventDefault();
           onSave({
@@ -179,7 +179,7 @@ export function ProfileScreen({ appSettings, globalProfile, globalSettings, onLo
   const showLanguages = !globalSettings.hideLanguages && appSettings.showLanguages;
   const profileCardPadding = appSettings.compactMode || appSettings.compactCards ? 'p-4' : 'p-5';
   const profileCardClass = [
-    'glass-panel profile-preview rounded-[34px] text-center',
+    'glass-panel profile-preview rounded-[28px] text-center',
     `profile-banner-${appSettings.profileBannerPreset}`,
     `profile-layout-${appSettings.profileDisplayLayout}`,
     appSettings.profileSpotlight ? 'ad-accent-ring' : '',
@@ -244,12 +244,12 @@ export function ProfileScreen({ appSettings, globalProfile, globalSettings, onLo
           </button>
         }
       />
-      <div className="px-5 py-5">
+      <div className="px-4 py-4">
         <div className={profileCardClass} style={profileVisualStyle(appSettings)}>
           <div className={`avatar-frame-${appSettings.avatarFrameStyle} mx-auto w-fit rounded-full`}>
             <Avatar label={profile.avatar} size="lg" active={appSettings.showOnlineStatus} />
           </div>
-          <div className="mt-4 flex items-center justify-center gap-2">
+          <div className="mt-3 flex items-center justify-center gap-2">
             <h2 className="text-2xl font-black text-white">{profile.username}</h2>
             <BadgeCheck size={20} style={{ color: 'var(--profile-accent)' }} />
           </div>
@@ -268,7 +268,7 @@ export function ProfileScreen({ appSettings, globalProfile, globalSettings, onLo
           ) : (
             <p className="mx-auto mt-4 max-w-xs text-sm leading-6 text-frost/70">{profile.bio}</p>
           )}
-          <div className="mt-4 flex flex-wrap justify-center gap-2">
+          <div className="mt-3 flex flex-wrap justify-center gap-2">
             {profile.interests.map((interest) => (
               <span key={interest} className="rounded-full px-3 py-1 text-xs font-semibold" style={{ backgroundColor: 'var(--profile-accent-soft)', color: 'var(--profile-accent)' }}>
                 {interest}
@@ -276,9 +276,9 @@ export function ProfileScreen({ appSettings, globalProfile, globalSettings, onLo
             ))}
           </div>
           {appSettings.profileDisplayLayout !== 'minimal' && (
-          <div className="mt-5 grid grid-cols-3 gap-2">
+          <div className="mt-4 grid grid-cols-3 gap-2">
             {stats.map((stat) => (
-              <div key={stat.label} className="rounded-2xl bg-white/[0.06] p-3">
+              <div key={stat.label} className="rounded-2xl bg-white/[0.06] p-2.5">
                 <p className="text-lg font-black text-white">{stat.value}</p>
                 <p className="text-xs text-frost/45">{stat.label}</p>
               </div>
@@ -288,7 +288,7 @@ export function ProfileScreen({ appSettings, globalProfile, globalSettings, onLo
           <p className="mt-4 text-xs font-bold text-frost/45">
             {appSettings.showProfileInGlobalMatch ? 'Visible in Global Match' : 'Hidden from Global Match'}
           </p>
-          <button type="button" onClick={() => setEditing(true)} className="mt-5 w-full rounded-full bg-white px-5 py-3 text-sm font-bold text-void">
+          <button type="button" onClick={() => setEditing(true)} className="mt-4 w-full rounded-full bg-white px-5 py-3 text-sm font-bold text-void">
             Edit Profile
           </button>
           {onLogout && (
@@ -299,7 +299,7 @@ export function ProfileScreen({ appSettings, globalProfile, globalSettings, onLo
           {profileStatus && <p className="mt-3 text-xs leading-5 text-frost/45">{profileStatus}</p>}
         </div>
 
-        <div className={`mt-5 rounded-[30px] border border-white/10 bg-white/[0.06] ${appSettings.compactMode || appSettings.compactCards ? 'p-4' : 'p-5'}`}>
+        <div className={`mt-4 rounded-[24px] border border-white/10 bg-white/[0.06] ${appSettings.compactMode || appSettings.compactCards ? 'p-3.5' : 'p-4'}`}>
           <div className="flex items-start justify-between gap-3">
             <div>
               <p className="text-xs font-bold uppercase tracking-[0.24em]" style={{ color: 'var(--profile-accent)' }}>Language identity</p>
@@ -310,13 +310,13 @@ export function ProfileScreen({ appSettings, globalProfile, globalSettings, onLo
               <Globe2 size={21} />
             </div>
           </div>
-          <div className="mt-4 flex flex-wrap gap-2">
+          <div className="mt-3 flex flex-wrap gap-2">
             {showCountry && <CountryBadge code={profileCountry.code} label={globalProfile.country} />}
             {showLocalTime && <WorldClockLabel timeZone={profileCountry.timeZone} />}
             <LanguageBadge label={globalProfile.appLanguage} tone="preferred" />
           </div>
           {showLanguages && (
-            <div className="mt-4 grid gap-3">
+            <div className="mt-3 grid gap-3">
               <div>
                 <p className="mb-2 text-xs font-bold uppercase tracking-[0.18em] text-frost/45">Speaks</p>
                 <div className="flex flex-wrap gap-2">
@@ -333,7 +333,7 @@ export function ProfileScreen({ appSettings, globalProfile, globalSettings, onLo
           )}
         </div>
 
-        <div className="mt-5 rounded-[28px] border border-white/10 bg-white/[0.05] p-4">
+        <div className="mt-4 rounded-[24px] border border-white/10 bg-white/[0.05] p-3.5">
           <h3 className="font-bold text-white">Future-ready architecture</h3>
           <p className="mt-2 text-sm leading-6 text-frost/55">
             These modules are reserved in the product roadmap, separate from the Version 1 social layer.

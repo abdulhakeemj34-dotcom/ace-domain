@@ -21,7 +21,7 @@ export function CommunityDetailScreen({ community, joined, onBack, onToggleJoin 
         <button type="button" onClick={onBack} className="mb-4 grid h-11 w-11 place-items-center rounded-full bg-white/10 text-white" aria-label="Back to communities">
           <ArrowLeft size={20} />
         </button>
-        <div className="rounded-[34px] border border-white/10 bg-white/[0.06] p-5">
+        <div className="rounded-[28px] border border-white/10 bg-white/[0.06] p-4">
           <div className="flex items-start justify-between gap-4">
             <div>
               <p className="text-xs font-bold uppercase tracking-[0.28em] text-aurora">Community world</p>
@@ -34,7 +34,7 @@ export function CommunityDetailScreen({ community, joined, onBack, onToggleJoin 
             </div>
             <Sparkles style={{ color: community.accent }} size={26} />
           </div>
-          <div className="mt-5 grid grid-cols-2 gap-3">
+          <div className="mt-4 grid grid-cols-2 gap-2.5">
             <div className="rounded-2xl bg-white/[0.06] p-3">
               <p className="text-lg font-black text-white">{community.members}</p>
               <p className="text-xs text-frost/45">Members</p>
@@ -47,7 +47,7 @@ export function CommunityDetailScreen({ community, joined, onBack, onToggleJoin 
           <button
             type="button"
             onClick={onToggleJoin}
-            className={`mt-5 flex w-full items-center justify-center gap-2 rounded-full px-5 py-3 text-sm font-bold transition ${
+            className={`mt-4 flex w-full items-center justify-center gap-2 rounded-full px-5 py-3 text-sm font-bold transition ${
               joined ? 'bg-aurora/15 text-aurora' : 'bg-white text-void'
             }`}
           >
@@ -58,7 +58,7 @@ export function CommunityDetailScreen({ community, joined, onBack, onToggleJoin 
       </header>
 
       <div className="px-5">
-        <div className="rounded-[28px] border border-white/10 bg-white/[0.05] p-4">
+        <div className="rounded-[24px] border border-white/10 bg-white/[0.05] p-3.5">
           <div className="mb-4 flex items-center justify-between gap-3">
             <div>
               <h2 className="font-bold text-white">Members preview</h2>
@@ -79,7 +79,7 @@ export function CommunityDetailScreen({ community, joined, onBack, onToggleJoin 
           </div>
         </div>
 
-        <div className="mt-5 space-y-3">
+        <div className="mt-4 space-y-2.5">
           <h2 className="text-sm font-bold uppercase tracking-[0.22em] text-frost/50">Community posts</h2>
           {posts.map((post) => (
             <article key={post.id} className="rounded-[26px] border border-white/10 bg-white/[0.06] p-4">

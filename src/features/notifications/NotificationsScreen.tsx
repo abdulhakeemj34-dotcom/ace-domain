@@ -94,8 +94,8 @@ export function NotificationsScreen() {
           </button>
         }
       />
-      <div className="px-5 py-5">
-        <div className="glass-panel rounded-[30px] p-5">
+      <div className="px-4 py-4">
+        <div className="glass-panel rounded-[24px] p-4">
           <div className="flex items-start justify-between gap-4">
             <div>
               <BellRing className="text-aurora" size={28} />
@@ -109,7 +109,7 @@ export function NotificationsScreen() {
           </div>
         </div>
 
-        <div className="mt-5 flex gap-2 overflow-x-auto [scrollbar-width:none]">
+        <div className="mt-4 flex gap-2 overflow-x-auto [scrollbar-width:none]">
           {filters.map((filter) => {
             const active = activeFilter === filter.value;
             return (
@@ -127,13 +127,13 @@ export function NotificationsScreen() {
           })}
         </div>
 
-        <div className="mt-5 space-y-3">
+        <div className="mt-4 space-y-2.5">
           {filteredItems.map((item) => (
             <button
               key={item.id}
               type="button"
               onClick={() => toggleRead(item)}
-              className={`w-full rounded-[26px] border p-4 text-left transition ${
+              className={`w-full rounded-[22px] border p-3.5 text-left transition ${
                 item.unread ? 'border-aurora/30 bg-aurora/[0.08]' : 'border-white/10 bg-white/[0.06]'
               }`}
             >
