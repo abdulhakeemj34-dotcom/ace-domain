@@ -2,11 +2,13 @@
 
 Stage 10A defines the safe path for adding the next Ace Domain brand system without changing the current app experience yet.
 
+Stage 10B adds the source-ready brand asset folder and updates the reusable logo components toward the approved blue/cyan `AD` direction without changing app behavior.
+
 ## Brand Direction
 
 - Premium, modern, mobile-first, and startup-quality.
 - Clean tech foundation using black, deep blue, white, and silver.
-- Controlled cyan or violet accents for energy, not visual noise.
+- Controlled electric blue, cyan, or violet accents for energy, not visual noise.
 - A strong `AD` symbol should lead the identity, with the full `Ace Domain` wordmark used only where space allows.
 - Branding should feel global, social, futuristic, and confident without making the interface crowded.
 
@@ -49,6 +51,7 @@ Stage 10A defines the safe path for adding the next Ace Domain brand system with
   - Platinum silver
   - Cyan signal accent
   - Optional violet energy accent
+- Stage 10B component colors reference the approved board direction: `#0D47FF`, `#00B2FF`, `#00F0FF`, `#0F172A`, and `#FFFFFF`.
 - Preserve user theme settings and localStorage/Supabase settings sync behavior.
 
 ## Typography Direction
