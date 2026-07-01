@@ -2,6 +2,12 @@
 
 A mobile-first social networking app built with React, TypeScript, Vite, Tailwind CSS, and Capacitor.
 
+## Requirements
+
+- Node.js and npm
+- Android Studio for Android device/emulator work
+- Xcode on macOS for iOS device/simulator work
+
 ## Version 1
 
 - Welcome and account access flow
@@ -37,6 +43,32 @@ Use `.env.example` as the template for local configuration. Real `.env` files ar
 
 The app stays demo-safe when Supabase or OpenAI configuration is missing.
 
+## Quick Start
+
+```bash
+npm install
+copy .env.example .env
+npm run dev
+```
+
+On macOS or Linux, use `cp .env.example .env` instead of `copy`.
+
+The app can run in demo mode with placeholder env values. Add real Supabase values to enable live auth/data flows, and add `OPENAI_API_KEY` only for the backend AI endpoint.
+
+For a production web build:
+
+```bash
+npm run build
+```
+
+For native project sync after a successful build:
+
+```bash
+npm run cap:sync
+```
+
+`dist` is generated build output and is intentionally ignored. The `android` and `ios` folders are tracked because this project is prepared as a real Capacitor mobile app.
+
 ## Release Checks
 
 Before sharing or building a release candidate, run:
@@ -49,11 +81,12 @@ npm run build
 
 ## Scripts
 
-```bash
-npm install
-npm run dev
-npm run build
-npm run cap:sync
-npm run cap:android
-npm run cap:ios
-```
+| Command | Purpose |
+| --- | --- |
+| `npm run dev` | Start the local Vite development server. |
+| `npm run build` | Run TypeScript build checks and create the production web build in `dist`. |
+| `npm run lint` | Run ESLint across the project. |
+| `npm run preview` | Preview the production build locally. |
+| `npm run cap:sync` | Build the web app and sync `dist` into Android and iOS Capacitor projects. |
+| `npm run cap:android` | Build and open the Android project. |
+| `npm run cap:ios` | Build and open the iOS project. |
