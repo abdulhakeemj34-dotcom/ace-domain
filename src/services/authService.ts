@@ -19,6 +19,7 @@ type AuthCredentials = {
 };
 
 type AuthResult = {
+  canUseDemoFallback?: boolean;
   error?: string;
   needsEmailConfirmation?: boolean;
   session: SupabaseSession | null;
@@ -28,9 +29,30 @@ type AuthResult = {
 
 function setupRequiredResult(): AuthResult {
   return {
+    canUseDemoFallback: true,
     error: supabaseSetupMessage,
     session: null,
     setupRequired: true,
+    user: null
+  };
+}
+
+function authErrorResult(error: unknown, fallback: string): AuthResult {
+  const message = error instanceof Error ? error.message : fallback;
+  const normalizedMessage = message.toLowerCase();
+  const isNetworkFailure =
+    error instanceof TypeError ||
+    normalizedMessage.includes('failed to fetch') ||
+    normalizedMessage.includes('networkerror') ||
+    normalizedMessage.includes('network error') ||
+    normalizedMessage.includes('load failed');
+
+  return {
+    canUseDemoFallback: isNetworkFailure,
+    error: isNetworkFailure
+      ? 'Live authentication is unavailable right now. Check your connection or continue in demo mode.'
+      : message,
+    session: null,
     user: null
   };
 }
@@ -83,11 +105,7 @@ export async function signUpWithEmail({ displayName, email, password }: AuthCred
       user
     };
   } catch (error) {
-    return {
-      error: error instanceof Error ? error.message : 'Sign up failed.',
-      session: null,
-      user: null
-    };
+    return authErrorResult(error, 'Sign up failed.');
   }
 }
 
@@ -125,11 +143,7 @@ export async function loginWithEmail({ email, password }: AuthCredentials): Prom
     return { session, user: session.user };
   } catch (error) {
     clearStoredSession();
-    return {
-      error: error instanceof Error ? error.message : 'Login failed.',
-      session: null,
-      user: null
-    };
+    return authErrorResult(error, 'Login failed.');
   }
 }
 

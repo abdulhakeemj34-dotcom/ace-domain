@@ -12,43 +12,67 @@ export function AuthScreen({ onComplete }: AuthScreenProps) {
   const [displayName, setDisplayName] = useState('');
   const [email, setEmail] = useState('');
   const [error, setError] = useState('');
+  const [canUseDemoFallback, setCanUseDemoFallback] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [password, setPassword] = useState('');
   const [status, setStatus] = useState('');
 
   const backendReady = supabaseConfig.isConfigured;
 
+  const continueDemo = () => {
+    setCanUseDemoFallback(false);
+    setError('');
+    setStatus('Continuing in demo mode. No live account was created.');
+    onComplete();
+  };
+
   const submitAuth = async () => {
+    if (isLoading) {
+      return;
+    }
+
     setError('');
     setStatus('');
+    setCanUseDemoFallback(false);
 
     if (!backendReady) {
-      setStatus('Supabase keys are missing, so Ace Domain is continuing in demo mode.');
-      onComplete();
+      continueDemo();
       return;
     }
 
     setIsLoading(true);
 
-    const result =
-      mode === 'signup'
-        ? await signUpWithEmail({ displayName, email, password })
-        : await loginWithEmail({ email, password });
+    try {
+      const result =
+        mode === 'signup'
+          ? await signUpWithEmail({ displayName, email, password })
+          : await loginWithEmail({ email, password });
 
-    setIsLoading(false);
+      if (result.error) {
+        setError(result.error);
+        setCanUseDemoFallback(Boolean(result.canUseDemoFallback || result.setupRequired));
 
-    if (result.error) {
-      setError(result.error);
-      return;
+        if (result.canUseDemoFallback || result.setupRequired) {
+          setStatus('No live account was created. You can keep exploring safely in demo mode.');
+        }
+
+        return;
+      }
+
+      if (result.needsEmailConfirmation) {
+        setStatus('Account created. Check your email to confirm your Ace Domain login.');
+        return;
+      }
+
+      setStatus(mode === 'signup' ? 'World ID created.' : 'Welcome back.');
+      onComplete();
+    } catch {
+      setError('Live authentication could not finish. You can continue in demo mode without creating a live account.');
+      setStatus('No live account was created. Demo mode is still available.');
+      setCanUseDemoFallback(true);
+    } finally {
+      setIsLoading(false);
     }
-
-    if (result.needsEmailConfirmation) {
-      setStatus('Account created. Check your email to confirm your Ace Domain login.');
-      return;
-    }
-
-    setStatus(mode === 'signup' ? 'World ID created.' : 'Welcome back.');
-    onComplete();
   };
 
   return (
@@ -71,7 +95,12 @@ export function AuthScreen({ onComplete }: AuthScreenProps) {
             <button
               key={item}
               type="button"
-              onClick={() => setMode(item)}
+              onClick={() => {
+                setMode(item);
+                setCanUseDemoFallback(false);
+                setError('');
+                setStatus('');
+              }}
               className={`rounded-full py-3 text-sm font-semibold capitalize transition ${
                 mode === item ? 'bg-white text-void' : 'text-frost/60'
               }`}
@@ -119,6 +148,11 @@ export function AuthScreen({ onComplete }: AuthScreenProps) {
           <Button type="submit" className="w-full py-4" disabled={isLoading}>
             {isLoading ? 'Connecting...' : backendReady ? mode === 'signup' ? 'Create Account' : 'Login' : 'Continue Demo'}
           </Button>
+          {canUseDemoFallback && (
+            <Button type="button" variant="secondary" className="w-full py-4" onClick={continueDemo}>
+              Continue in Demo Mode
+            </Button>
+          )}
         </form>
         <div className="mt-5">
           <div className="flex items-center gap-3 text-xs text-frost/35">
