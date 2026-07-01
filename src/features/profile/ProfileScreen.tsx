@@ -1,6 +1,5 @@
 import { BadgeCheck, ChevronRight, Globe2, LogOut, MapPin, Settings, X } from 'lucide-react';
 import { useEffect, useState, type CSSProperties, type ReactNode } from 'react';
-import { futureModules } from '../../app/data';
 import { Avatar } from '../../components/Avatar';
 import { CountryBadge } from '../../components/global/CountryBadge';
 import { WorldClockLabel } from '../../components/global/WorldClockLabel';
@@ -11,7 +10,6 @@ import { countryProfiles } from '../../data/mockGlobalData';
 import { supabaseConfig } from '../../lib/supabase';
 import { getCurrentProfile, profileDisplayName, updateCurrentProfile, type BackendProfile } from '../../services/profileService';
 import type { GlobalOnboardingProfile, GlobalSafetySettings } from '../../types/global';
-import { profileAccentColors } from '../settings/defaultSettings';
 import type { AppSettings } from '../settings/settingsTypes';
 
 const stats = [
@@ -66,9 +64,9 @@ function EditProfileModal({ profile, onClose, onSave }: EditProfileModalProps) {
   });
 
   return (
-    <div className="fixed inset-0 z-40 flex items-end justify-center overflow-y-auto bg-void/80 px-4 py-4 backdrop-blur-2xl">
+    <div className="fixed inset-0 z-40 flex items-end justify-center overflow-y-auto bg-black/80 px-4 py-4 backdrop-blur-xl">
       <form
-        className="max-h-[calc(100svh-2rem)] w-full max-w-md overflow-y-auto rounded-[28px] border border-white/10 bg-obsidian p-4 shadow-panel animate-rise"
+        className="max-h-[calc(100svh-2rem)] w-full max-w-md overflow-y-auto rounded-[28px] border border-white/10 bg-black p-4 animate-rise"
         onSubmit={(event) => {
           event.preventDefault();
           onSave({
@@ -86,7 +84,7 @@ function EditProfileModal({ profile, onClose, onSave }: EditProfileModalProps) {
       >
         <div className="mb-5 flex items-center justify-between gap-3">
           <div>
-            <p className="text-xs font-bold uppercase tracking-[0.28em] text-aurora">Profile editor</p>
+            <p className="text-xs font-bold uppercase tracking-[0.28em] text-zinc-500">Profile editor</p>
             <h2 className="mt-1 text-2xl font-black text-white">Edit World ID</h2>
           </div>
           <button type="button" onClick={onClose} className="grid h-10 w-10 place-items-center rounded-full bg-white/10 text-white" aria-label="Close edit profile">
@@ -100,7 +98,7 @@ function EditProfileModal({ profile, onClose, onSave }: EditProfileModalProps) {
             <input
               value={draft.avatar}
               onChange={(event) => setDraft((current) => ({ ...current, avatar: event.target.value }))}
-              className="mt-2 w-full rounded-3xl border border-white/10 bg-white/[0.07] px-4 py-3 text-sm normal-case tracking-normal text-white outline-none"
+              className="mt-2 w-full rounded-2xl border border-white/10 bg-zinc-950 px-4 py-3 text-sm normal-case tracking-normal text-white outline-none"
             />
           </label>
           <label className="text-xs font-bold uppercase tracking-[0.2em] text-frost/45">
@@ -108,7 +106,7 @@ function EditProfileModal({ profile, onClose, onSave }: EditProfileModalProps) {
             <input
               value={draft.username}
               onChange={(event) => setDraft((current) => ({ ...current, username: event.target.value }))}
-              className="mt-2 w-full rounded-3xl border border-white/10 bg-white/[0.07] px-4 py-3 text-sm normal-case tracking-normal text-white outline-none"
+              className="mt-2 w-full rounded-2xl border border-white/10 bg-zinc-950 px-4 py-3 text-sm normal-case tracking-normal text-white outline-none"
             />
           </label>
           <label className="text-xs font-bold uppercase tracking-[0.2em] text-frost/45">
@@ -116,7 +114,7 @@ function EditProfileModal({ profile, onClose, onSave }: EditProfileModalProps) {
             <textarea
               value={draft.bio}
               onChange={(event) => setDraft((current) => ({ ...current, bio: event.target.value }))}
-              className="mt-2 min-h-24 w-full resize-none rounded-3xl border border-white/10 bg-white/[0.07] px-4 py-3 text-sm normal-case leading-6 tracking-normal text-white outline-none"
+              className="mt-2 min-h-24 w-full resize-none rounded-2xl border border-white/10 bg-zinc-950 px-4 py-3 text-sm normal-case leading-6 tracking-normal text-white outline-none"
             />
           </label>
           <label className="text-xs font-bold uppercase tracking-[0.2em] text-frost/45">
@@ -124,7 +122,7 @@ function EditProfileModal({ profile, onClose, onSave }: EditProfileModalProps) {
             <input
               value={draft.country}
               onChange={(event) => setDraft((current) => ({ ...current, country: event.target.value }))}
-              className="mt-2 w-full rounded-3xl border border-white/10 bg-white/[0.07] px-4 py-3 text-sm normal-case tracking-normal text-white outline-none"
+              className="mt-2 w-full rounded-2xl border border-white/10 bg-zinc-950 px-4 py-3 text-sm normal-case tracking-normal text-white outline-none"
             />
           </label>
           <label className="text-xs font-bold uppercase tracking-[0.2em] text-frost/45">
@@ -132,12 +130,12 @@ function EditProfileModal({ profile, onClose, onSave }: EditProfileModalProps) {
             <input
               value={draft.interestsText}
               onChange={(event) => setDraft((current) => ({ ...current, interestsText: event.target.value }))}
-              className="mt-2 w-full rounded-3xl border border-white/10 bg-white/[0.07] px-4 py-3 text-sm normal-case tracking-normal text-white outline-none"
+              className="mt-2 w-full rounded-2xl border border-white/10 bg-zinc-950 px-4 py-3 text-sm normal-case tracking-normal text-white outline-none"
             />
           </label>
         </div>
 
-        <button type="submit" className="mt-5 w-full rounded-full bg-white px-5 py-3 text-sm font-bold text-void">
+        <button type="submit" className="mt-5 w-full rounded-full bg-white px-5 py-3 text-sm font-bold text-black">
           Save Profile
         </button>
       </form>
@@ -167,22 +165,20 @@ const badgeLabels = {
   verified: 'Verified'
 } satisfies Record<AppSettings['profileBadgeStyle'], string>;
 
-function profileVisualStyle(settings: AppSettings) {
-  const accent = profileAccentColors[settings.profileAccentColor];
-
+function profileVisualStyle() {
   return {
-    '--profile-accent': accent.accent,
-    '--profile-accent-soft': accent.soft
+    '--profile-accent': '#ffffff',
+    '--profile-accent-soft': 'rgba(255, 255, 255, 0.08)'
   } as CSSProperties;
 }
 
 function ProfileRow({ children, description, icon, title }: ProfileRowProps) {
   return (
     <div className="flex min-w-0 items-center gap-3 px-3 py-3.5">
-      <div className="grid h-10 w-10 shrink-0 place-items-center rounded-2xl bg-white/[0.07] text-frost/70">{icon}</div>
+      <div className="grid h-10 w-10 shrink-0 place-items-center rounded-full border border-white/10 text-zinc-400">{icon}</div>
       <div className="min-w-0 flex-1">
         <p className="truncate font-bold text-white">{title}</p>
-        <p className="mt-0.5 line-clamp-2 text-sm leading-5 text-frost/50">{description}</p>
+        <p className="mt-0.5 line-clamp-2 text-sm leading-5 text-zinc-500">{description}</p>
         {children}
       </div>
       <ChevronRight size={18} className="shrink-0 text-frost/25" />
@@ -241,7 +237,7 @@ export function ProfileScreen({ appSettings, globalProfile, globalSettings, onLo
   };
 
   return (
-    <section className="pb-6" style={profileVisualStyle(appSettings)}>
+    <section className="pb-6" style={profileVisualStyle()}>
       <ScreenHeader
         eyebrow="World ID"
         title="Profile"
@@ -267,7 +263,7 @@ export function ProfileScreen({ appSettings, globalProfile, globalSettings, onLo
             <div className="min-w-0 flex-1">
               <div className="flex min-w-0 items-center gap-2">
                 <h2 className="truncate text-2xl font-black text-white">{profile.username}</h2>
-                <BadgeCheck size={20} style={{ color: 'var(--profile-accent)' }} />
+            <BadgeCheck size={20} className="text-[#1d9bf0]" />
               </div>
               <p className="mt-1 flex min-w-0 items-center gap-1 text-sm text-frost/55">
                 <MapPin size={14} className="shrink-0" />
@@ -297,7 +293,7 @@ export function ProfileScreen({ appSettings, globalProfile, globalSettings, onLo
               <span
                 key={interest}
                 className="rounded-full px-3 py-1 text-xs font-semibold"
-                style={{ backgroundColor: 'var(--profile-accent-soft)', color: 'var(--profile-accent)' }}
+                style={{ backgroundColor: 'transparent', border: '1px solid rgba(255,255,255,0.1)', color: '#a1a1aa' }}
               >
                 {interest}
               </span>
@@ -316,20 +312,20 @@ export function ProfileScreen({ appSettings, globalProfile, globalSettings, onLo
           )}
 
           <div className="mt-4 grid grid-cols-2 gap-2">
-            <button type="button" onClick={() => setEditing(true)} className="rounded-full bg-white px-5 py-3 text-sm font-bold text-void">
+            <button type="button" onClick={() => setEditing(true)} className="rounded-full bg-white px-5 py-3 text-sm font-bold text-black">
               Edit profile
             </button>
             <button
               type="button"
               onClick={onOpenSettingsCenter}
-              className="rounded-full border border-white/10 bg-white/[0.07] px-5 py-3 text-sm font-bold text-white"
+              className="rounded-full border border-white/15 px-5 py-3 text-sm font-bold text-white"
             >
               Settings
             </button>
           </div>
 
           {onLogout && (
-            <button type="button" onClick={onLogout} className="mt-3 flex w-full items-center justify-center gap-2 rounded-full bg-white/[0.07] px-5 py-3 text-sm font-bold text-white">
+            <button type="button" onClick={onLogout} className="mt-3 flex w-full items-center justify-center gap-2 rounded-full border border-white/15 px-5 py-3 text-sm font-bold text-white">
               <LogOut size={17} />
               Logout
             </button>
@@ -338,7 +334,16 @@ export function ProfileScreen({ appSettings, globalProfile, globalSettings, onLo
           {profileStatus && <p className="mt-3 text-xs leading-5 text-frost/45">{profileStatus}</p>}
         </div>
 
-        <div className="mt-4 overflow-hidden rounded-[24px] border border-white/10 bg-white/[0.035]">
+        <div className="mt-4 grid grid-cols-3 border-b border-white/10 text-center">
+          {['Posts', 'Replies', 'Media'].map((tab, index) => (
+            <button key={tab} type="button" className={`relative min-h-11 text-sm font-bold ${index === 0 ? 'text-white' : 'text-zinc-500'}`}>
+              {tab}
+              {index === 0 && <span className="absolute bottom-0 left-1/2 h-1 w-10 -translate-x-1/2 rounded-full bg-[#1d9bf0]" />}
+            </button>
+          ))}
+        </div>
+
+        <div className="mt-4 overflow-hidden border-y border-white/10">
           <ProfileRow
             icon={<Globe2 size={19} />}
             title="World identity"
@@ -371,11 +376,11 @@ export function ProfileScreen({ appSettings, globalProfile, globalSettings, onLo
           />
         </div>
 
-        <div className="mt-4 overflow-hidden rounded-[24px] border border-white/10 bg-white/[0.035]">
+        <div className="mt-4 overflow-hidden border-y border-white/10">
           <ProfileRow
             icon={<Settings size={19} />}
-            title="Future modules"
-            description={`${futureModules.length} roadmap areas are reserved for later stages and kept outside the current social flow.`}
+            title="Settings and privacy"
+            description="Personalization, safety, notifications, language, and account controls."
           />
         </div>
       </div>

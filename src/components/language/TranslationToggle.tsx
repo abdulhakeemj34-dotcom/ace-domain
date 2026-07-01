@@ -24,9 +24,9 @@ export function TranslationToggle({
 }: TranslationToggleProps) {
   const [translated, setTranslated] = useState(false);
   const currentText = translated ? translatedText ?? mockTranslate(text) : text;
-  const muted = tone === 'light' ? 'text-void/55' : 'text-frost/45';
-  const bodyTone = tone === 'light' ? 'text-void/80' : 'text-frost/80';
-  const buttonTone = tone === 'light' ? 'bg-void/10 text-void' : 'bg-white/10 text-frost/70';
+  const muted = tone === 'light' ? 'text-black/55' : 'text-zinc-500';
+  const bodyTone = tone === 'light' ? 'text-black/80' : 'text-zinc-100';
+  const buttonTone = tone === 'light' ? 'bg-black/10 text-black' : 'border border-white/10 text-zinc-400';
 
   return (
     <div className={className} aria-live="polite">

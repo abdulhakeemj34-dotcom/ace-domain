@@ -113,7 +113,7 @@ export function NotificationsScreen() {
               type="button"
               onClick={() => setActiveFilter(filter.value)}
               className={`shrink-0 rounded-full px-4 py-2 text-sm font-bold transition ${
-                active ? 'bg-white text-void' : 'bg-white/[0.07] text-frost/60'
+                active ? 'bg-white text-black' : 'border border-white/10 text-zinc-500'
               }`}
             >
               {filter.label}
@@ -130,11 +130,11 @@ export function NotificationsScreen() {
             onClick={() => toggleRead(item)}
             className="flex w-full min-w-0 items-start gap-3 px-4 py-3.5 text-left transition hover:bg-white/[0.04]"
           >
-            <span className={`mt-1 h-2.5 w-2.5 shrink-0 rounded-full ${item.unread ? 'bg-cyan-300' : 'bg-white/20'}`} />
+            <span className={`mt-1 h-2.5 w-2.5 shrink-0 rounded-full ${item.unread ? 'bg-[#1d9bf0]' : 'bg-white/20'}`} />
             <span className="min-w-0 flex-1">
               <span className="flex min-w-0 items-center gap-2">
                 <span className="truncate font-bold text-white">{item.title}</span>
-                <span className="shrink-0 rounded-full bg-white/[0.07] px-2 py-0.5 text-[10px] font-bold uppercase tracking-[0.12em] text-frost/45">
+                <span className="shrink-0 rounded-full border border-white/10 px-2 py-0.5 text-[10px] font-bold uppercase tracking-[0.12em] text-zinc-500">
                   {categoryLabels[item.category]}
                 </span>
               </span>

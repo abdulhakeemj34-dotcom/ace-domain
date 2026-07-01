@@ -1,4 +1,4 @@
-import { Check, Compass, Sparkles } from 'lucide-react';
+import { Check, Compass, Hash } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
 import { communities as mockCommunities } from '../../app/data';
 import type { Community } from '../../app/types';
@@ -130,7 +130,7 @@ export function CommunitiesScreen() {
               key={filter.value}
               type="button"
               onClick={() => setActiveFilter(filter.value)}
-              className={`shrink-0 rounded-full px-4 py-2 text-sm font-bold transition ${active ? 'bg-white text-void' : 'bg-white/[0.07] text-frost/60'}`}
+              className={`shrink-0 rounded-full px-4 py-2 text-sm font-bold transition ${active ? 'bg-white text-black' : 'border border-white/10 text-zinc-500'}`}
             >
               {filter.label}
             </button>
@@ -150,16 +150,13 @@ export function CommunitiesScreen() {
                 className="flex min-w-0 flex-1 items-center gap-3 text-left"
                 aria-label={`View ${community.name} community`}
               >
-                <span
-                  className="grid h-11 w-11 shrink-0 place-items-center rounded-2xl border border-white/10 bg-white/[0.06]"
-                  style={{ color: community.accent }}
-                >
-                  <Sparkles size={18} />
+                <span className="grid h-11 w-11 shrink-0 place-items-center rounded-full border border-white/10 bg-zinc-950 text-zinc-400">
+                  <Hash size={18} />
                 </span>
                 <span className="min-w-0 flex-1">
                   <span className="flex min-w-0 items-center gap-2">
                     <span className="truncate font-bold text-white">{community.name}</span>
-                    {joined && <Check size={14} className="shrink-0 text-cyan-300" />}
+                    {joined && <Check size={14} className="shrink-0 text-[#1d9bf0]" />}
                   </span>
                   <span className="mt-0.5 line-clamp-1 text-sm leading-5 text-frost/55">{community.topic}</span>
                   <span className="mt-1 block truncate text-xs text-frost/40">
@@ -170,7 +167,7 @@ export function CommunitiesScreen() {
               <button
                 type="button"
                 onClick={() => toggleCommunity(community.id)}
-                className={`shrink-0 rounded-full px-3 py-2 text-xs font-bold transition ${joined ? 'bg-cyan-300/15 text-cyan-200' : 'bg-white text-void'}`}
+                className={`shrink-0 rounded-full px-3 py-2 text-xs font-bold transition ${joined ? 'border border-white/15 text-white' : 'bg-white text-black'}`}
                 aria-pressed={joined}
               >
                 {joined ? 'Joined' : 'Join'}

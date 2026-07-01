@@ -1,5 +1,4 @@
-import { Globe2, ShieldCheck, Zap } from 'lucide-react';
-import { Button } from '../../components/Button';
+import { ArrowRight } from 'lucide-react';
 import { AceDomainIcon } from '../../components/logo/AceDomainIcon';
 import { AceDomainLogo } from '../../components/logo/AceDomainLogo';
 
@@ -10,44 +9,47 @@ type WelcomeScreenProps = {
 
 export function WelcomeScreen({ onStart, onExploreDemo }: WelcomeScreenProps) {
   return (
-    <section className="flex min-h-screen flex-col px-5 py-8">
-      <div className="flex items-center justify-between">
-        <div>
-          <p className="text-xs font-semibold uppercase tracking-[0.32em] text-aurora">Ace Domain</p>
-          <h1 className="mt-2 text-4xl font-black leading-tight text-white">Meet the World.</h1>
+    <section className="flex min-h-screen flex-col bg-black px-5 pb-8 pt-8 text-white">
+      <header className="flex items-center justify-between">
+        <AceDomainIcon size="sm" withGlow={false} />
+        <button
+          type="button"
+          onClick={onExploreDemo}
+          className="rounded-full border border-white/15 px-4 py-2 text-sm font-bold text-white"
+        >
+          Explore
+        </button>
+      </header>
+
+      <div className="flex flex-1 flex-col justify-center">
+        <div className="mb-8">
+          <AceDomainLogo compact />
         </div>
-        <AceDomainIcon size="md" withGlow={false} />
-      </div>
-
-      <div className="relative my-10 flex flex-1 items-center justify-center">
-        <AceDomainLogo />
-      </div>
-
-      <div className="glass-panel rounded-[32px] p-5 animate-rise">
-        <h2 className="text-2xl font-bold text-white">Your premium social universe.</h2>
-        <p className="mt-3 text-sm leading-6 text-frost/70">
-          Chat, play, discover, and connect globally.
+        <p className="text-sm font-semibold uppercase tracking-[0.28em] text-zinc-500">Ace Domain</p>
+        <h1 className="mt-4 max-w-xs text-5xl font-black leading-[0.95] tracking-tight text-white">
+          Meet the world without the noise.
+        </h1>
+        <p className="mt-5 max-w-sm text-base leading-7 text-zinc-400">
+          A black, clean social space for chats, posts, communities, global discovery, and Ace AI.
         </p>
-        <div className="mt-5 grid grid-cols-3 gap-2">
-          {[
-            { icon: Zap, label: 'Fast' },
-            { icon: ShieldCheck, label: 'Trusted' },
-            { icon: Globe2, label: 'Global' }
-          ].map((item) => (
-            <div key={item.label} className="rounded-2xl bg-white/[0.06] p-3 text-center">
-              <item.icon className="mx-auto text-aurora" size={20} />
-              <p className="mt-2 text-xs font-semibold text-white">{item.label}</p>
-            </div>
-          ))}
-        </div>
-        <div className="mt-6 grid gap-3">
-          <Button onClick={onStart} className="w-full py-4">
-            Get Started
-          </Button>
-          <Button onClick={onExploreDemo} variant="secondary" className="w-full py-4">
-            Explore Demo
-          </Button>
-        </div>
+      </div>
+
+      <div className="grid gap-3">
+        <button
+          type="button"
+          onClick={onStart}
+          className="flex min-h-14 items-center justify-center gap-2 rounded-full bg-white px-5 text-base font-black text-black"
+        >
+          Get started
+          <ArrowRight size={18} />
+        </button>
+        <button
+          type="button"
+          onClick={onExploreDemo}
+          className="min-h-14 rounded-full border border-white/15 px-5 text-base font-bold text-white"
+        >
+          Continue without signup
+        </button>
       </div>
     </section>
   );

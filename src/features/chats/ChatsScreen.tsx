@@ -36,7 +36,7 @@ export function ChatsScreen({ onOpenChat }: ChatsScreenProps) {
           <button
             type="button"
             onClick={() => startThreadId && onOpenChat(startThreadId)}
-            className="grid h-11 w-11 place-items-center rounded-full bg-white text-void disabled:opacity-50"
+            className="grid h-11 w-11 place-items-center rounded-full bg-white text-black disabled:opacity-50"
             aria-label="Start new chat"
             disabled={!startThreadId}
           >
@@ -54,7 +54,7 @@ export function ChatsScreen({ onOpenChat }: ChatsScreenProps) {
               key={filter.value}
               type="button"
               onClick={() => setActiveFilter(filter.value)}
-              className={`shrink-0 rounded-full px-4 py-2 text-sm font-bold transition ${active ? 'bg-white text-void' : 'bg-white/[0.07] text-frost/60'}`}
+              className={`shrink-0 rounded-full px-4 py-2 text-sm font-bold transition ${active ? 'bg-white text-black' : 'border border-white/10 text-zinc-500'}`}
             >
               {filter.label}
             </button>
@@ -63,7 +63,7 @@ export function ChatsScreen({ onOpenChat }: ChatsScreenProps) {
       </div>
 
       {error && (
-        <div className="mx-4 mt-4 rounded-2xl border border-plasma/20 bg-plasma/10 p-3 text-sm text-plasma">
+        <div className="mx-4 mt-4 rounded-2xl border border-red-500/25 bg-red-500/10 p-3 text-sm text-red-200">
           <p>{error}</p>
           <button type="button" onClick={refresh} className="mt-2 rounded-full bg-white/10 px-3 py-1 text-xs font-bold text-white">
             Retry
@@ -91,14 +91,14 @@ export function ChatsScreen({ onOpenChat }: ChatsScreenProps) {
             <div className="min-w-0 flex-1">
               <div className="flex min-w-0 items-center gap-2">
                 <h2 className="truncate font-bold text-white">{chat.name}</h2>
-                {chat.kind === 'group' && <UsersRound size={14} className="shrink-0 text-cyan-300" />}
+                {chat.kind === 'group' && <UsersRound size={14} className="shrink-0 text-zinc-500" />}
               </div>
               <p className="line-clamp-1 break-words text-sm leading-5 text-frost/55 [overflow-wrap:anywhere]">{chat.message}</p>
             </div>
             <div className="shrink-0 text-right">
               <p className="text-xs text-frost/45">{chat.time}</p>
               {chat.unread > 0 && (
-                <span className="mt-2 inline-grid h-6 min-w-6 place-items-center rounded-full bg-cyan-300 px-2 text-xs font-bold text-void">
+                <span className="mt-2 inline-grid h-6 min-w-6 place-items-center rounded-full bg-[#1d9bf0] px-2 text-xs font-bold text-white">
                   {chat.unread}
                 </span>
               )}

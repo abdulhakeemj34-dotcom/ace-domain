@@ -4,9 +4,9 @@ type LanguageBadgeProps = {
 };
 
 const toneStyles = {
-  learning: 'border-signal/30 bg-signal/10 text-signal',
-  preferred: 'border-white/20 bg-white text-void',
-  spoken: 'border-aurora/30 bg-aurora/10 text-aurora'
+  learning: 'border-white/10 bg-transparent text-zinc-400',
+  preferred: 'border-white/20 bg-white text-black',
+  spoken: 'border-white/10 bg-transparent text-zinc-400'
 };
 
 export function LanguageBadge({ label, tone = 'spoken' }: LanguageBadgeProps) {

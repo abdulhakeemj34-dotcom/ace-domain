@@ -8,10 +8,10 @@ type ScreenHeaderProps = {
 
 export function ScreenHeader({ eyebrow, title, action }: ScreenHeaderProps) {
   return (
-    <header className="flex items-center justify-between gap-3 px-4 pb-2 pt-6">
+    <header className="sticky top-0 z-20 flex items-center justify-between gap-3 border-b border-white/10 bg-black/95 px-4 py-3 backdrop-blur-xl">
       <div className="min-w-0">
-        {eyebrow && <p className="truncate text-[11px] font-semibold uppercase tracking-[0.24em] text-aurora/80">{eyebrow}</p>}
-        <h1 className="mt-0.5 truncate text-[1.45rem] font-bold tracking-tight text-white">{title}</h1>
+        {eyebrow && <p className="truncate text-[11px] font-semibold text-zinc-500">{eyebrow}</p>}
+        <h1 className="truncate text-xl font-black tracking-tight text-white">{title}</h1>
       </div>
       {action && <div className="shrink-0">{action}</div>}
     </header>

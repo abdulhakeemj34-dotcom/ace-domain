@@ -1,5 +1,5 @@
 import { useState, type FormEvent } from 'react';
-import { ArrowLeft, Bot, Loader2, Send, Sparkles } from 'lucide-react';
+import { ArrowLeft, Bot, Loader2, Send } from 'lucide-react';
 import { sendAiChatMessage } from '../../services/aiChatService';
 
 type AiChatScreenProps = {
@@ -71,16 +71,16 @@ export function AiChatScreen({ onBack }: AiChatScreenProps) {
 
   return (
     <section className="flex min-h-screen flex-col">
-      <header className="sticky top-0 z-20 border-b border-white/10 bg-void/90 px-5 pb-4 pt-8 backdrop-blur-2xl">
+      <header className="sticky top-0 z-20 border-b border-white/10 bg-black/95 px-5 pb-4 pt-8 backdrop-blur-xl">
         <div className="flex items-center gap-3">
           <button type="button" onClick={onBack} className="grid h-11 w-11 place-items-center rounded-full bg-white/10 text-white" aria-label="Back to home">
             <ArrowLeft size={20} />
           </button>
-          <div className="grid h-12 w-12 place-items-center rounded-2xl ad-accent-bg ad-accent-ring">
+          <div className="grid h-12 w-12 place-items-center rounded-full border border-white/10 text-white">
             <Bot size={22} />
           </div>
           <div className="min-w-0 flex-1">
-            <p className="text-xs font-black uppercase tracking-[0.24em] text-[color:var(--ad-accent)]">Ace Domain</p>
+            <p className="text-xs font-black uppercase tracking-[0.24em] text-zinc-500">Ace Domain</p>
             <h1 className="truncate text-2xl font-black text-white">Ace AI</h1>
             <p className="truncate text-xs text-frost/50">AI assistant for culture, discovery, prompts, and social ideas.</p>
           </div>
@@ -89,10 +89,10 @@ export function AiChatScreen({ onBack }: AiChatScreenProps) {
 
       <div className="flex-1 space-y-4 px-5 py-5 pb-40">
         {messages.length === 0 && (
-          <div className="glass-panel rounded-[32px] p-5">
+          <div className="border-b border-white/10 pb-5">
             <div className="flex items-center gap-3">
-              <div className="grid h-12 w-12 place-items-center rounded-2xl" style={{ backgroundColor: 'var(--ad-accent-soft)', color: 'var(--ad-accent)' }}>
-                <Sparkles size={22} />
+              <div className="grid h-12 w-12 place-items-center rounded-full border border-white/10 text-white">
+                <Bot size={22} />
               </div>
               <div>
                 <h2 className="font-black text-white">Ask Ace AI</h2>
@@ -107,7 +107,7 @@ export function AiChatScreen({ onBack }: AiChatScreenProps) {
                   onClick={() => {
                     void sendMessage(undefined, prompt);
                   }}
-                  className="rounded-[24px] border border-white/10 bg-white/[0.06] px-4 py-3 text-left text-sm font-bold leading-6 text-white transition hover:border-white/20"
+                  className="rounded-2xl border border-white/10 px-4 py-3 text-left text-sm font-bold leading-6 text-white transition hover:bg-white/5"
                   aria-label={`Send suggested prompt: ${prompt}`}
                   disabled={isLoading}
                 >
@@ -124,12 +124,11 @@ export function AiChatScreen({ onBack }: AiChatScreenProps) {
           return (
             <div key={message.id} className={`flex ${mine ? 'justify-end' : 'justify-start'}`}>
               <div
-                className={`max-w-[82%] rounded-[24px] px-4 py-3 text-sm leading-6 shadow-glow ${
+                className={`max-w-[82%] rounded-[24px] px-4 py-3 text-sm leading-6 ${
                   mine
-                    ? 'rounded-br-md text-[color:var(--ad-accent-contrast)]'
-                    : 'rounded-bl-md border border-white/10 bg-white/[0.08] text-frost/85'
+                    ? 'rounded-br-md bg-white text-black'
+                    : 'rounded-bl-md border border-white/10 bg-zinc-900 text-zinc-100'
                 }`}
-                style={mine ? { background: 'linear-gradient(135deg, var(--ad-accent-strong), var(--ad-accent))' } : undefined}
               >
                 <p>{message.content}</p>
               </div>
@@ -139,15 +138,15 @@ export function AiChatScreen({ onBack }: AiChatScreenProps) {
 
         {isLoading && (
           <div className="flex justify-start" aria-live="polite">
-            <div className="flex items-center gap-2 rounded-[24px] rounded-bl-md border border-white/10 bg-white/[0.08] px-4 py-3 text-sm font-bold text-frost/70">
-              <Loader2 className="animate-spin text-[color:var(--ad-accent)]" size={17} />
+            <div className="flex items-center gap-2 rounded-[24px] rounded-bl-md border border-white/10 bg-zinc-900 px-4 py-3 text-sm font-bold text-zinc-400">
+              <Loader2 className="animate-spin text-zinc-400" size={17} />
               Ace AI is thinking...
             </div>
           </div>
         )}
 
         {error && (
-          <div className="rounded-[24px] border border-plasma/20 bg-plasma/10 p-4 text-sm leading-6 text-plasma" role="status">
+          <div className="rounded-[24px] border border-red-500/25 bg-red-500/10 p-4 text-sm leading-6 text-red-200" role="status">
             <p className="font-bold">Ace AI could not reply.</p>
             <p className="mt-1">{error}</p>
           </div>
@@ -155,7 +154,7 @@ export function AiChatScreen({ onBack }: AiChatScreenProps) {
       </div>
 
       <form
-        className="fixed bottom-[calc(6rem+env(safe-area-inset-bottom))] left-1/2 z-20 flex w-[calc(100%-1.5rem)] max-w-md -translate-x-1/2 items-center gap-2 rounded-[28px] border border-white/10 bg-obsidian/95 p-2 shadow-panel backdrop-blur-2xl"
+        className="fixed bottom-[calc(4.9rem+env(safe-area-inset-bottom))] left-1/2 z-20 flex w-[calc(100%-1rem)] max-w-md -translate-x-1/2 items-center gap-2 rounded-full border border-white/10 bg-black p-2"
         onSubmit={sendMessage}
       >
         <input
@@ -169,7 +168,7 @@ export function AiChatScreen({ onBack }: AiChatScreenProps) {
         <button
           type="submit"
           className="grid h-11 w-11 place-items-center rounded-full disabled:opacity-50"
-          style={{ background: 'linear-gradient(135deg, var(--ad-accent-strong), var(--ad-accent))', color: 'var(--ad-accent-contrast)' }}
+          style={{ background: '#ffffff', color: '#000000' }}
           aria-label="Send message to Ace AI"
           disabled={isLoading || !draft.trim()}
         >

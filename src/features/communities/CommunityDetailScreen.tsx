@@ -17,7 +17,7 @@ export function CommunityDetailScreen({ community, joined, onBack, onToggleJoin 
 
   return (
     <section className="animate-rise pb-8">
-      <header className="sticky top-0 z-20 border-b border-white/10 bg-void/90 px-4 pb-3 pt-6 backdrop-blur-2xl">
+      <header className="sticky top-0 z-20 border-b border-white/10 bg-black/95 px-4 pb-3 pt-6 backdrop-blur-xl">
         <div className="flex items-center gap-3">
           <button type="button" onClick={onBack} className="grid h-11 w-11 place-items-center rounded-full bg-white/10 text-white" aria-label="Back to communities">
             <ArrowLeft size={20} />
@@ -30,7 +30,7 @@ export function CommunityDetailScreen({ community, joined, onBack, onToggleJoin 
             type="button"
             onClick={onToggleJoin}
             className={`flex h-11 shrink-0 items-center gap-1.5 rounded-full px-4 text-sm font-bold transition ${
-              joined ? 'bg-cyan-300/15 text-cyan-200' : 'bg-white text-void'
+              joined ? 'border border-white/15 text-white' : 'bg-white text-black'
             }`}
             aria-pressed={joined}
           >
@@ -47,9 +47,9 @@ export function CommunityDetailScreen({ community, joined, onBack, onToggleJoin 
           translatedText={`Translation preview: ${community.description ?? community.topic}`}
         />
         <div className="mt-3 flex flex-wrap gap-2 text-xs font-bold text-frost/55">
-          <span className="rounded-full bg-white/[0.07] px-3 py-1">{community.members} members</span>
-          {community.online && <span className="rounded-full bg-white/[0.07] px-3 py-1">{community.online}</span>}
-          <span className="rounded-full px-3 py-1" style={{ backgroundColor: `${community.accent}20`, color: community.accent }}>
+          <span className="rounded-full border border-white/10 px-3 py-1">{community.members} members</span>
+          {community.online && <span className="rounded-full border border-white/10 px-3 py-1">{community.online}</span>}
+          <span className="rounded-full border border-white/10 px-3 py-1 text-zinc-400">
             {community.topic.split(',')[0]}
           </span>
         </div>
@@ -58,7 +58,7 @@ export function CommunityDetailScreen({ community, joined, onBack, onToggleJoin 
       <div className="border-b border-white/10 px-4 py-4">
         <div className="mb-3 flex items-center justify-between gap-3">
           <h2 className="font-bold text-white">Members</h2>
-          <UsersRound className="text-cyan-300" size={18} />
+          <UsersRound className="text-zinc-400" size={18} />
         </div>
         <div className="flex gap-3 overflow-x-auto [scrollbar-width:none]">
           {members.map((member) => (

@@ -37,8 +37,8 @@ export function WorldClockLabel({ compact = false, timeZone }: WorldClockLabelPr
   const parts = localParts(timeZone);
 
   return (
-    <span className={`inline-flex min-w-0 items-center gap-2 rounded-full bg-white/10 px-3 py-1 text-xs font-bold text-frost/70 ${compact ? 'max-w-full' : ''}`}>
-      <Clock3 size={13} className="shrink-0 text-aurora" />
+    <span className={`inline-flex min-w-0 items-center gap-2 rounded-full border border-white/10 bg-transparent px-3 py-1 text-xs font-bold text-zinc-400 ${compact ? 'max-w-full' : ''}`}>
+      <Clock3 size={13} className="shrink-0 text-zinc-500" />
       <span className="min-w-0 truncate">{parts.time} / {parts.status}</span>
     </span>
   );

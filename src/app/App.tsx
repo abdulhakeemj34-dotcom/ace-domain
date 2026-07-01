@@ -310,9 +310,9 @@ export default function App() {
   }, [appSettings.themePreset]);
 
   return (
-    <main className={`ad-app-shell relative min-h-screen overflow-hidden bg-void text-frost ${appModes}`} style={themeStyle}>
-      <div className="relative mx-auto flex min-h-screen w-full max-w-md flex-col">
-        <div className="flex-1 pb-[calc(6.5rem+env(safe-area-inset-bottom))]">{page}</div>
+    <main className={`ad-app-shell relative min-h-screen bg-black text-zinc-100 ${appModes}`} style={themeStyle}>
+      <div className="relative mx-auto flex min-h-screen w-full max-w-md flex-col bg-black">
+        <div className="flex-1 pb-[calc(5.25rem+env(safe-area-inset-bottom))]">{page}</div>
 
         {showNav && <BottomNavigation activeScreen={screen} onNavigate={setScreen} />}
 

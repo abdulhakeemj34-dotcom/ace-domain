@@ -31,9 +31,9 @@ export function GlobalOnboarding({ onComplete, onSkip }: GlobalOnboardingProps) 
   };
 
   return (
-    <div className="fixed inset-0 z-40 flex items-end justify-center overflow-y-auto bg-void/85 px-4 py-4 pb-[calc(1rem+env(safe-area-inset-bottom))] backdrop-blur-2xl sm:items-center">
+    <div className="fixed inset-0 z-40 flex items-end justify-center overflow-y-auto bg-black/85 px-4 py-4 pb-[calc(1rem+env(safe-area-inset-bottom))] backdrop-blur-xl sm:items-center">
       <form
-        className="max-h-[calc(100svh-2rem)] w-full max-w-md overflow-y-auto rounded-[34px] border border-white/10 bg-obsidian p-5 shadow-panel animate-rise"
+        className="max-h-[calc(100svh-2rem)] w-full max-w-md overflow-y-auto rounded-[30px] border border-white/10 bg-black p-5 animate-rise"
         onSubmit={(event) => {
           event.preventDefault();
           onComplete(profile);
@@ -41,7 +41,7 @@ export function GlobalOnboarding({ onComplete, onSkip }: GlobalOnboardingProps) 
       >
         <div className="flex items-start justify-between gap-4">
           <div>
-            <p className="text-xs font-bold uppercase tracking-[0.28em] text-aurora">Global setup</p>
+            <p className="text-xs font-bold uppercase tracking-[0.28em] text-zinc-500">Global setup</p>
             <h2 className="mt-2 text-2xl font-black text-white">Tune your world</h2>
             <p className="mt-2 text-sm leading-6 text-frost/60">
               Local-only setup for country, language, focus, and discovery preferences.
@@ -52,9 +52,9 @@ export function GlobalOnboarding({ onComplete, onSkip }: GlobalOnboardingProps) 
           </button>
         </div>
 
-        <div className="mt-5 rounded-[28px] border border-white/10 bg-white/[0.06] p-4">
+        <div className="mt-5 border-y border-white/10 py-4">
           <div className="flex items-center gap-3">
-            <div className="grid h-11 w-11 place-items-center rounded-2xl bg-white text-void">
+            <div className="grid h-11 w-11 place-items-center rounded-full bg-white text-black">
               <Globe2 size={21} />
             </div>
             <div>
@@ -67,7 +67,7 @@ export function GlobalOnboarding({ onComplete, onSkip }: GlobalOnboardingProps) 
             <select
               value={profile.country}
               onChange={(event) => updateCountry(event.target.value)}
-              className="mt-2 w-full rounded-3xl border border-white/10 bg-void px-4 py-3 text-sm normal-case tracking-normal text-white outline-none"
+              className="mt-2 w-full rounded-2xl border border-white/10 bg-zinc-950 px-4 py-3 text-sm normal-case tracking-normal text-white outline-none"
               aria-label="Choose country"
             >
               {countryProfiles.map((country) => (
@@ -80,7 +80,7 @@ export function GlobalOnboarding({ onComplete, onSkip }: GlobalOnboardingProps) 
             <select
               value={profile.appLanguage}
               onChange={(event) => setProfile((current) => ({ ...current, appLanguage: event.target.value }))}
-              className="mt-2 w-full rounded-3xl border border-white/10 bg-void px-4 py-3 text-sm normal-case tracking-normal text-white outline-none"
+              className="mt-2 w-full rounded-2xl border border-white/10 bg-zinc-950 px-4 py-3 text-sm normal-case tracking-normal text-white outline-none"
               aria-label="Choose preferred app language"
             >
               {languageOptions.map((language) => (
@@ -101,7 +101,7 @@ export function GlobalOnboarding({ onComplete, onSkip }: GlobalOnboardingProps) 
                     key={language}
                     type="button"
                     onClick={() => setProfile((current) => ({ ...current, languagesSpoken: toggleValue(current.languagesSpoken, language) }))}
-                    className={`rounded-full px-3 py-2 text-xs font-bold ${active ? 'bg-aurora text-void' : 'bg-white/10 text-frost/65'}`}
+                    className={`rounded-full px-3 py-2 text-xs font-bold ${active ? 'bg-white text-black' : 'border border-white/10 text-zinc-500'}`}
                   >
                     {language}
                   </button>
@@ -120,7 +120,7 @@ export function GlobalOnboarding({ onComplete, onSkip }: GlobalOnboardingProps) 
                     key={language}
                     type="button"
                     onClick={() => setProfile((current) => ({ ...current, languagesLearning: toggleValue(current.languagesLearning, language) }))}
-                    className={`rounded-full px-3 py-2 text-xs font-bold ${active ? 'bg-signal text-void' : 'bg-white/10 text-frost/65'}`}
+                    className={`rounded-full px-3 py-2 text-xs font-bold ${active ? 'bg-white text-black' : 'border border-white/10 text-zinc-500'}`}
                   >
                     {language}
                   </button>
@@ -139,7 +139,7 @@ export function GlobalOnboarding({ onComplete, onSkip }: GlobalOnboardingProps) 
                     key={focus}
                     type="button"
                     onClick={() => setProfile((current) => ({ ...current, focus: focus as GlobalFocus }))}
-                    className={`rounded-3xl px-3 py-3 text-xs font-bold ${active ? 'bg-white text-void' : 'bg-white/10 text-frost/65'}`}
+                    className={`rounded-2xl px-3 py-3 text-xs font-bold ${active ? 'bg-white text-black' : 'border border-white/10 text-zinc-500'}`}
                   >
                     {focus}
                   </button>
@@ -158,7 +158,7 @@ export function GlobalOnboarding({ onComplete, onSkip }: GlobalOnboardingProps) 
                     key={interest}
                     type="button"
                     onClick={() => setProfile((current) => ({ ...current, interests: toggleValue(current.interests, interest) }))}
-                    className={`rounded-full px-3 py-2 text-xs font-bold ${active ? 'bg-plasma/80 text-white' : 'bg-white/10 text-frost/65'}`}
+                    className={`rounded-full px-3 py-2 text-xs font-bold ${active ? 'bg-white text-black' : 'border border-white/10 text-zinc-500'}`}
                   >
                     {interest}
                   </button>
@@ -168,11 +168,11 @@ export function GlobalOnboarding({ onComplete, onSkip }: GlobalOnboardingProps) 
           </div>
         </div>
 
-        <div className="sticky bottom-0 -mx-5 mt-5 grid grid-cols-1 gap-3 border-t border-white/10 bg-obsidian/95 px-5 pb-1 pt-4 backdrop-blur-xl min-[360px]:grid-cols-2">
-          <button type="button" onClick={onSkip} className="rounded-full border border-white/10 bg-white/10 px-5 py-3 text-sm font-bold text-white">
+        <div className="sticky bottom-0 -mx-5 mt-5 grid grid-cols-1 gap-3 border-t border-white/10 bg-black/95 px-5 pb-1 pt-4 backdrop-blur-xl min-[360px]:grid-cols-2">
+          <button type="button" onClick={onSkip} className="rounded-full border border-white/15 px-5 py-3 text-sm font-bold text-white">
             Skip
           </button>
-          <button type="submit" className="rounded-full bg-white px-5 py-3 text-sm font-bold text-void">
+          <button type="submit" className="rounded-full bg-white px-5 py-3 text-sm font-bold text-black">
             Save Setup
           </button>
         </div>
