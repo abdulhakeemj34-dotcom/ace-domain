@@ -79,6 +79,16 @@ npx tsc -b --pretty false
 npm run build
 ```
 
+## GitHub Readiness
+
+Before creating a remote or pushing this project:
+
+- Confirm `git status` is clean.
+- Confirm `.env` is not tracked and `.env.example` contains placeholders only.
+- Keep generated `dist` output out of Git.
+- Run the release checks above.
+- Commit only intentional source, documentation, native project, and configuration changes.
+
 ## Scripts
 
 | Command | Purpose |
