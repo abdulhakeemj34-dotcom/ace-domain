@@ -50,13 +50,13 @@ export function CalendarScreen({ onBack }: CalendarScreenProps) {
         <button type="button" onClick={onBack} className="mb-4 grid h-11 w-11 place-items-center rounded-full bg-white/10 text-white" aria-label="Back to global discovery">
           <ArrowLeft size={20} />
         </button>
-        <div className="rounded-[34px] border border-white/10 bg-gradient-to-br from-signal/20 via-white/[0.06] to-plasma/10 p-5">
+        <div className="border-b border-white/10 pb-5">
           <div className="flex items-center gap-3">
-            <div className="grid h-12 w-12 place-items-center rounded-2xl bg-white text-void">
+            <div className="grid h-12 w-12 place-items-center rounded-full bg-white text-black">
               <CalendarDays size={23} />
             </div>
             <div>
-              <p className="text-xs font-bold uppercase tracking-[0.28em] text-aurora">Global calendar</p>
+              <p className="text-xs font-bold uppercase tracking-[0.28em] text-zinc-500">Global calendar</p>
               <h1 className="text-3xl font-black text-white">Events</h1>
             </div>
           </div>
@@ -75,7 +75,7 @@ export function CalendarScreen({ onBack }: CalendarScreenProps) {
                 key={filter}
                 type="button"
                 onClick={() => setActiveFilter(filter)}
-                className={`shrink-0 rounded-full px-4 py-2 text-xs font-bold ${active ? 'bg-white text-void' : 'bg-white/10 text-frost/65'}`}
+                className={`shrink-0 rounded-full px-4 py-2 text-xs font-bold ${active ? 'bg-white text-black' : 'border border-white/10 text-zinc-500'}`}
               >
                 {filter}
               </button>
@@ -87,10 +87,10 @@ export function CalendarScreen({ onBack }: CalendarScreenProps) {
           {visibleEvents.map((event) => {
             const state = eventStates[event.id] ?? { going: false, interested: false, reminder: false };
             return (
-              <article key={event.id} className="rounded-[30px] border border-white/10 bg-white/[0.06] p-4">
+              <article key={event.id} className="rounded-2xl border border-white/10 bg-black p-4">
                 <div className="flex items-start justify-between gap-3">
                   <div className="min-w-0">
-                    <span className="rounded-full bg-plasma/15 px-3 py-1 text-[11px] font-bold uppercase tracking-[0.16em] text-plasma">
+                    <span className="rounded-full border border-white/10 px-3 py-1 text-[11px] font-bold uppercase tracking-[0.16em] text-zinc-500">
                       {event.category}
                     </span>
                     <h2 className="mt-3 text-lg font-bold text-white">{event.title}</h2>
@@ -106,7 +106,7 @@ export function CalendarScreen({ onBack }: CalendarScreenProps) {
                   <button
                     type="button"
                     onClick={() => updateEvent(event.id, (current) => ({ ...current, interested: !current.interested }))}
-                    className={`rounded-2xl px-3 py-3 text-xs font-bold ${state.interested ? 'bg-aurora text-void' : 'bg-white/10 text-frost/65'}`}
+                    className={`rounded-full px-3 py-3 text-xs font-bold ${state.interested ? 'bg-white text-black' : 'border border-white/10 text-zinc-500'}`}
                     aria-label={`${state.interested ? 'Remove interest in' : 'Mark interested in'} ${event.title}`}
                   >
                     Interested
@@ -114,7 +114,7 @@ export function CalendarScreen({ onBack }: CalendarScreenProps) {
                   <button
                     type="button"
                     onClick={() => updateEvent(event.id, (current) => ({ ...current, going: !current.going }))}
-                    className={`flex items-center justify-center gap-1 rounded-2xl px-3 py-3 text-xs font-bold ${state.going ? 'bg-white text-void' : 'bg-white/10 text-frost/65'}`}
+                    className={`flex items-center justify-center gap-1 rounded-full px-3 py-3 text-xs font-bold ${state.going ? 'bg-white text-black' : 'border border-white/10 text-zinc-500'}`}
                     aria-label={`${state.going ? 'Stop going to' : 'Mark going to'} ${event.title}`}
                   >
                     {state.going && <Check size={13} />}
@@ -123,7 +123,7 @@ export function CalendarScreen({ onBack }: CalendarScreenProps) {
                   <button
                     type="button"
                     onClick={() => updateEvent(event.id, (current) => ({ ...current, reminder: !current.reminder }))}
-                    className={`flex items-center justify-center gap-1 rounded-2xl px-3 py-3 text-xs font-bold ${state.reminder ? 'bg-signal text-void' : 'bg-white/10 text-frost/65'}`}
+                    className={`flex items-center justify-center gap-1 rounded-full px-3 py-3 text-xs font-bold ${state.reminder ? 'bg-white text-black' : 'border border-white/10 text-zinc-500'}`}
                     aria-label={`${state.reminder ? 'Remove reminder for' : 'Add reminder for'} ${event.title}`}
                   >
                     <BellPlus size={13} />
@@ -134,7 +134,7 @@ export function CalendarScreen({ onBack }: CalendarScreenProps) {
             );
           })}
           {visibleEvents.length === 0 && (
-            <p className="rounded-[26px] border border-white/10 bg-white/[0.06] p-4 text-sm text-frost/55">
+            <p className="rounded-2xl border border-white/10 p-4 text-sm text-zinc-500">
               No local events in this category yet.
             </p>
           )}

@@ -22,18 +22,18 @@ function ToggleRow({ checked, description, icon: Icon = ShieldCheck, label, onCh
     <button
       type="button"
       onClick={onChange}
-      className="flex w-full items-center gap-3 rounded-[24px] border border-white/10 bg-white/[0.06] p-4 text-left"
+      className="flex w-full items-center gap-3 rounded-2xl border border-white/10 bg-black p-4 text-left"
       aria-pressed={checked}
     >
-      <div className={`grid h-11 w-11 shrink-0 place-items-center rounded-2xl ${checked ? 'bg-aurora text-void' : 'bg-white/10 text-frost/65'}`}>
+      <div className={`grid h-11 w-11 shrink-0 place-items-center rounded-full border border-white/10 ${checked ? 'bg-white text-black' : 'text-zinc-500'}`}>
         <Icon size={19} />
       </div>
       <div className="min-w-0 flex-1">
         <p className="font-bold text-white">{label}</p>
         <p className="mt-1 text-sm leading-5 text-frost/55">{description}</p>
       </div>
-      <span className={`h-7 w-12 shrink-0 rounded-full p-1 transition ${checked ? 'bg-aurora' : 'bg-white/15'}`}>
-        <span className={`block h-5 w-5 rounded-full bg-white transition ${checked ? 'translate-x-5' : ''}`} />
+      <span className={`h-7 w-12 shrink-0 rounded-full border border-white/10 p-1 transition ${checked ? 'bg-white' : 'bg-zinc-900'}`}>
+        <span className={`block h-5 w-5 rounded-full transition ${checked ? 'translate-x-5 bg-black' : 'bg-white'}`} />
       </span>
     </button>
   );
@@ -52,13 +52,13 @@ export function GlobalSettingsScreen({ onBack, onChange, settings }: GlobalSetti
         <button type="button" onClick={onBack} className="mb-4 grid h-11 w-11 place-items-center rounded-full bg-white/10 text-white" aria-label="Back to profile">
           <ArrowLeft size={20} />
         </button>
-        <div className="rounded-[34px] border border-white/10 bg-gradient-to-br from-aurora/15 via-white/[0.06] to-plasma/10 p-5">
+        <div className="border-b border-white/10 pb-5">
           <div className="flex items-center gap-3">
-            <div className="grid h-12 w-12 place-items-center rounded-2xl bg-white text-void">
+            <div className="grid h-12 w-12 place-items-center rounded-full bg-white text-black">
               <ShieldCheck size={23} />
             </div>
             <div>
-              <p className="text-xs font-bold uppercase tracking-[0.28em] text-aurora">Trust controls</p>
+              <p className="text-xs font-bold uppercase tracking-[0.28em] text-zinc-500">Trust controls</p>
               <h1 className="text-3xl font-black text-white">Global Safety</h1>
             </div>
           </div>
@@ -66,7 +66,7 @@ export function GlobalSettingsScreen({ onBack, onChange, settings }: GlobalSetti
             Local controls for safer global discovery, privacy, low-data use, and accessibility. Real moderation backend comes later.
           </p>
           {settings.lowDataMode && (
-            <span className="mt-4 inline-flex rounded-full bg-signal px-3 py-1 text-xs font-black text-void">Low-data mode active</span>
+            <span className="mt-4 inline-flex rounded-full bg-white px-3 py-1 text-xs font-black text-black">Low-data mode active</span>
           )}
         </div>
       </header>
@@ -77,12 +77,12 @@ export function GlobalSettingsScreen({ onBack, onChange, settings }: GlobalSetti
           body="Keep first conversations inside Ace Domain, avoid sending money or private codes, and report pressure, scams, or harassment."
         />
 
-        <div className="rounded-[30px] border border-white/10 bg-white/[0.06] p-4">
+        <div className="rounded-2xl border border-white/10 bg-black p-4">
           <h2 className="font-bold text-white">Who can message me</h2>
           <select
             value={settings.whoCanMessage}
             onChange={(event) => update({ whoCanMessage: event.target.value as GlobalSafetySettings['whoCanMessage'] })}
-            className="mt-3 w-full rounded-3xl border border-white/10 bg-void px-4 py-3 text-sm text-white outline-none"
+            className="mt-3 w-full rounded-2xl border border-white/10 bg-zinc-950 px-4 py-3 text-sm text-white outline-none"
             aria-label="Choose who can message me"
           >
             <option>Everyone</option>
@@ -133,7 +133,7 @@ export function GlobalSettingsScreen({ onBack, onChange, settings }: GlobalSetti
           <button
             type="button"
             onClick={() => setStatus('Block controls are ready locally and will sync with moderation services when available.')}
-            className="flex items-center justify-center gap-2 rounded-3xl bg-white/10 px-4 py-3 text-sm font-bold text-white"
+            className="flex items-center justify-center gap-2 rounded-full border border-white/15 px-4 py-3 text-sm font-bold text-white"
             aria-label="Open block user controls"
           >
             <Ban size={17} />
@@ -142,14 +142,14 @@ export function GlobalSettingsScreen({ onBack, onChange, settings }: GlobalSetti
           <button
             type="button"
             onClick={() => setStatus('Report controls are ready locally and will connect to moderation services when available.')}
-            className="flex items-center justify-center gap-2 rounded-3xl bg-plasma/15 px-4 py-3 text-sm font-bold text-plasma"
+            className="flex items-center justify-center gap-2 rounded-full border border-white/15 px-4 py-3 text-sm font-bold text-white"
             aria-label="Open report user controls"
           >
             <Flag size={17} />
             Report user
           </button>
         </div>
-        {status && <p className="rounded-3xl bg-white/[0.06] p-3 text-sm leading-6 text-frost/60">{status}</p>}
+        {status && <p className="rounded-2xl border border-white/10 p-3 text-sm leading-6 text-zinc-400">{status}</p>}
 
         <div>
           <h2 className="mb-3 text-sm font-bold uppercase tracking-[0.22em] text-frost/50">Low-data mode</h2>

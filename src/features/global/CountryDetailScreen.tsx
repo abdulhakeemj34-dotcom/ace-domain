@@ -22,38 +22,38 @@ export function CountryDetailScreen({ country, onBack }: CountryDetailScreenProp
         <button type="button" onClick={onBack} className="mb-4 grid h-11 w-11 place-items-center rounded-full bg-white/10 text-white" aria-label="Back to global discovery">
           <ArrowLeft size={20} />
         </button>
-        <div className="rounded-[34px] border border-white/10 bg-gradient-to-br from-white/[0.09] via-white/[0.05] to-aurora/[0.08] p-5">
+        <div className="border-b border-white/10 pb-5">
           <CountryBadge code={country.code} label={country.name} />
           <h1 className="mt-4 text-3xl font-black text-white">{country.region}</h1>
           <p className="mt-3 text-sm leading-6 text-frost/65">{country.greeting}</p>
           <div className="mt-4 flex flex-wrap gap-2">
             <WorldClockLabel timeZone={country.timeZone} />
-            <span className="rounded-full bg-white/10 px-3 py-1 text-xs font-bold text-frost/65">{country.peopleCount}</span>
+            <span className="rounded-full border border-white/10 px-3 py-1 text-xs font-bold text-zinc-500">{country.peopleCount}</span>
           </div>
         </div>
       </header>
 
       <div className="space-y-5 px-5">
-        <div className="rounded-[28px] border border-white/10 bg-white/[0.06] p-4">
+        <div className="rounded-2xl border border-white/10 bg-black p-4">
           <div className="flex items-center gap-3">
-            <div className="grid h-11 w-11 place-items-center rounded-2xl bg-aurora/15 text-aurora">
+            <div className="grid h-11 w-11 place-items-center rounded-full border border-white/10 text-zinc-400">
               <MapPinned size={20} />
             </div>
             <div>
               <h2 className="font-bold text-white">Local trends</h2>
-              <p className="text-sm text-frost/50">Discovery signals for culture, events, and local conversation starters.</p>
+              <p className="text-sm text-zinc-500">Discovery signals for culture, events, and local conversation starters.</p>
             </div>
           </div>
           <div className="mt-4 grid gap-3">
             {country.localTrends.map((trend) => (
-              <div key={trend} className="rounded-2xl bg-white/[0.06] px-3 py-2 text-sm font-bold text-white">
+              <div key={trend} className="rounded-2xl border border-white/10 px-3 py-2 text-sm font-bold text-white">
                 {trend}
               </div>
             ))}
           </div>
         </div>
 
-        <div className="rounded-[28px] border border-white/10 bg-white/[0.06] p-4">
+        <div className="rounded-2xl border border-white/10 bg-black p-4">
           <h2 className="font-bold text-white">Languages and interests</h2>
           <div className="mt-3 flex flex-wrap gap-2">
             {country.languages.map((language) => (
@@ -62,7 +62,7 @@ export function CountryDetailScreen({ country, onBack }: CountryDetailScreenProp
           </div>
           <div className="mt-4 flex flex-wrap gap-2">
             {country.popularInterests.map((interest) => (
-              <span key={interest} className="rounded-full bg-plasma/10 px-3 py-1 text-xs font-bold text-plasma">
+              <span key={interest} className="rounded-full border border-white/10 px-3 py-1 text-xs font-bold text-zinc-500">
                 {interest}
               </span>
             ))}

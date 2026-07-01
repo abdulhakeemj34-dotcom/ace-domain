@@ -40,7 +40,6 @@ import {
   languageOptions,
   messageDensityOptions,
   messagePrivacyOptions,
-  profileAccentColors,
   profileAccentOptions,
   profileBadgeStyleOptions,
   profileBannerOptions,
@@ -151,6 +150,15 @@ const avatarFrameCopy: Record<AvatarFrameStyle, string> = {
   orbit: 'Orbit'
 };
 
+const profileAccentCopy: Record<AppSettings['profileAccentColor'], string> = {
+  blue: 'Blue',
+  gold: 'Gold',
+  green: 'Green',
+  rose: 'Rose',
+  theme: 'Theme',
+  violet: 'Violet'
+};
+
 const displayLayoutCopy: Record<ProfileDisplayLayout, string> = {
   classic: 'Classic',
   gamer: 'Gamer',
@@ -179,13 +187,12 @@ function OptionButton({ active, description, label, onClick }: OptionButtonProps
       type="button"
       onClick={onClick}
       className={`rounded-[20px] border p-3 text-left transition duration-300 ${
-        active ? 'border-white/30 shadow-glow' : 'border-white/10 bg-white/[0.045] hover:border-white/20'
+        active ? 'border-white bg-white text-black' : 'border-white/10 bg-black text-white hover:border-white/20'
       }`}
-      style={active ? { backgroundColor: 'var(--ad-accent-soft)' } : undefined}
       aria-pressed={active}
     >
-      <span className="block text-sm font-black text-white">{label}</span>
-      {description && <span className="mt-1 block text-xs leading-5 text-frost/45">{description}</span>}
+      <span className={`block text-sm font-black ${active ? 'text-black' : 'text-white'}`}>{label}</span>
+      {description && <span className={`mt-1 block text-xs leading-5 ${active ? 'text-black/60' : 'text-zinc-500'}`}>{description}</span>}
     </button>
   );
 }
@@ -196,9 +203,8 @@ function SmallOptionButton({ active, label, onClick }: Omit<OptionButtonProps, '
       type="button"
       onClick={onClick}
       className={`rounded-full border px-3 py-2 text-xs font-black transition duration-300 ${
-        active ? 'border-white/30 shadow-glow' : 'border-white/10 bg-white/[0.05] text-frost/60'
+        active ? 'border-white bg-white text-black' : 'border-white/10 bg-black text-zinc-500'
       }`}
-      style={active ? { backgroundColor: 'var(--ad-accent-soft)', color: 'var(--ad-accent)' } : undefined}
       aria-pressed={active}
     >
       {label}
@@ -207,29 +213,28 @@ function SmallOptionButton({ active, label, onClick }: Omit<OptionButtonProps, '
 }
 
 function ProfilePreview({ settings }: { settings: AppSettings }) {
-  const accent = profileAccentColors[settings.profileAccentColor];
   const previewStyle = {
-    '--profile-accent': accent.accent,
-    '--profile-accent-soft': accent.soft
+    '--profile-accent': '#ffffff',
+    '--profile-accent-soft': 'rgba(255, 255, 255, 0.08)'
   } as CSSProperties;
 
   return (
     <div className={`profile-preview profile-banner-${settings.profileBannerPreset} profile-layout-${settings.profileDisplayLayout} rounded-[28px] border border-white/10 p-4`} style={previewStyle}>
       <div className="flex items-center gap-3">
-        <div className={`avatar-frame-${settings.avatarFrameStyle} grid h-14 w-14 shrink-0 place-items-center rounded-full bg-obsidian text-lg font-black text-white`}>
+        <div className={`avatar-frame-${settings.avatarFrameStyle} grid h-14 w-14 shrink-0 place-items-center rounded-full border border-white/10 bg-zinc-950 text-lg font-black text-white`}>
           AD
         </div>
         <div className="min-w-0 flex-1">
           <div className="flex items-center gap-2">
             <p className="truncate text-lg font-black text-white">Ace Explorer</p>
-            <BadgeCheck size={17} style={{ color: 'var(--profile-accent)' }} />
+            <BadgeCheck size={17} className="text-[#1d9bf0]" />
           </div>
           <p className="truncate text-xs text-frost/55">{badgeCopy[settings.profileBadgeStyle]} badge / {displayLayoutCopy[settings.profileDisplayLayout]} layout</p>
         </div>
       </div>
       <div className="mt-4 flex flex-wrap gap-2">
         {['Global', 'Gaming', 'Culture'].map((item) => (
-          <span key={item} className="rounded-full px-3 py-1 text-xs font-bold" style={{ backgroundColor: 'var(--profile-accent-soft)', color: 'var(--profile-accent)' }}>
+          <span key={item} className="rounded-full border border-white/10 px-3 py-1 text-xs font-bold text-zinc-500">
             {item}
           </span>
         ))}
@@ -398,7 +403,7 @@ export function SettingsCenterScreen({ onBack, onChange, onOpenGlobalSafety, set
             <p className="mb-3 text-xs font-black uppercase tracking-[0.22em] text-frost/40">Profile accent</p>
             <div className="flex flex-wrap gap-2">
               {profileAccentOptions.map((accent) => (
-                <SmallOptionButton key={accent} active={settings.profileAccentColor === accent} label={profileAccentColors[accent].label} onClick={() => update({ profileAccentColor: accent })} />
+                <SmallOptionButton key={accent} active={settings.profileAccentColor === accent} label={profileAccentCopy[accent]} onClick={() => update({ profileAccentColor: accent })} />
               ))}
             </div>
           </div>
@@ -472,7 +477,7 @@ export function SettingsCenterScreen({ onBack, onChange, onOpenGlobalSafety, set
             <button
               type="button"
               onClick={() => setSafetyStatus('Blocked user controls are ready in Global Safety.')}
-              className="rounded-3xl border border-white/10 bg-white/[0.06] px-4 py-3 text-sm font-bold text-white"
+              className="rounded-full border border-white/15 px-4 py-3 text-sm font-bold text-white"
               aria-label="Blocked users"
             >
               Blocked users
@@ -480,15 +485,15 @@ export function SettingsCenterScreen({ onBack, onChange, onOpenGlobalSafety, set
             <button
               type="button"
               onClick={() => setSafetyStatus('Report history controls are ready in Global Safety.')}
-              className="rounded-3xl border border-white/10 bg-white/[0.06] px-4 py-3 text-sm font-bold text-white"
+              className="rounded-full border border-white/15 px-4 py-3 text-sm font-bold text-white"
               aria-label="Report history"
             >
               Report history
             </button>
           </div>
-          {safetyStatus && <p className="rounded-3xl bg-white/[0.06] p-3 text-sm leading-6 text-frost/60">{safetyStatus}</p>}
+          {safetyStatus && <p className="rounded-2xl border border-white/10 p-3 text-sm leading-6 text-zinc-400">{safetyStatus}</p>}
           <SettingsRow label="Global safety page" description="Open the existing privacy, stranger messaging, and accessibility controls.">
-            <button type="button" onClick={onOpenGlobalSafety} className="rounded-full bg-white px-3 py-2 text-xs font-black text-void">
+            <button type="button" onClick={onOpenGlobalSafety} className="rounded-full bg-white px-3 py-2 text-xs font-black text-black">
               Open
             </button>
           </SettingsRow>

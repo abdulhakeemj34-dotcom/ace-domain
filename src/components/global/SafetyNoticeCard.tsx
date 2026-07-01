@@ -7,9 +7,9 @@ type SafetyNoticeCardProps = {
 
 export function SafetyNoticeCard({ body, title = 'Global safety reminder' }: SafetyNoticeCardProps) {
   return (
-    <aside className="rounded-[26px] border border-aurora/20 bg-aurora/[0.07] p-4">
+    <aside className="rounded-2xl border border-white/10 bg-black p-4">
       <div className="flex items-start gap-3">
-        <div className="grid h-10 w-10 shrink-0 place-items-center rounded-2xl bg-aurora/15 text-aurora">
+        <div className="grid h-10 w-10 shrink-0 place-items-center rounded-full border border-white/10 text-zinc-400">
           <ShieldCheck size={19} />
         </div>
         <div>

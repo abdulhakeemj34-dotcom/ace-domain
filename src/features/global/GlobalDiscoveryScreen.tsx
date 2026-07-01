@@ -39,7 +39,7 @@ const initialFilters: MatchFilters = {
 };
 
 function selectClass() {
-  return 'min-w-0 w-full rounded-3xl border border-white/10 bg-void px-3 py-3 text-sm text-white outline-none';
+  return 'min-w-0 w-full rounded-2xl border border-white/10 bg-zinc-950 px-3 py-3 text-sm text-white outline-none';
 }
 
 export function GlobalDiscoveryScreen({ onBack, onOpenCalendar, onStartChat }: GlobalDiscoveryScreenProps) {
@@ -89,13 +89,13 @@ export function GlobalDiscoveryScreen({ onBack, onOpenCalendar, onStartChat }: G
         <button type="button" onClick={onBack} className="mb-4 grid h-11 w-11 place-items-center rounded-full bg-white/10 text-white" aria-label="Back to home">
           <ArrowLeft size={20} />
         </button>
-        <div className="rounded-[34px] border border-white/10 bg-gradient-to-br from-aurora/20 via-white/[0.06] to-signal/10 p-5">
+        <div className="border-b border-white/10 pb-5">
           <div className="flex items-center gap-3">
-            <div className="grid h-12 w-12 place-items-center rounded-2xl bg-white text-void">
+            <div className="grid h-12 w-12 place-items-center rounded-full bg-white text-black">
               <Globe2 size={23} />
             </div>
             <div>
-              <p className="text-xs font-bold uppercase tracking-[0.28em] text-aurora">Meet the world</p>
+              <p className="text-xs font-bold uppercase tracking-[0.28em] text-zinc-500">Meet the world</p>
               <h1 className="text-3xl font-black text-white">Global Discovery</h1>
             </div>
           </div>
@@ -109,9 +109,9 @@ export function GlobalDiscoveryScreen({ onBack, onOpenCalendar, onStartChat }: G
       </header>
 
       <div className="space-y-5 px-5">
-        <div className="rounded-[30px] border border-white/10 bg-white/[0.06] p-4">
+        <div className="rounded-2xl border border-white/10 bg-black p-4">
           <div className="flex items-center gap-3">
-            <SlidersHorizontal size={20} className="text-aurora" />
+            <SlidersHorizontal size={20} className="text-zinc-500" />
             <div>
               <h2 className="font-bold text-white">Global Match filters</h2>
               <p className="text-sm text-frost/50">Filter people by country, language, interests, time zone, and social mode.</p>
@@ -140,7 +140,7 @@ export function GlobalDiscoveryScreen({ onBack, onOpenCalendar, onStartChat }: G
           <button
             type="button"
             onClick={() => setFilters((current) => ({ ...current, onlineOnly: !current.onlineOnly }))}
-            className={`mt-3 w-full rounded-full px-4 py-3 text-sm font-bold ${filters.onlineOnly ? 'bg-aurora text-void' : 'bg-white/10 text-frost/65'}`}
+            className={`mt-3 w-full rounded-full px-4 py-3 text-sm font-bold ${filters.onlineOnly ? 'bg-white text-black' : 'border border-white/10 text-zinc-500'}`}
           >
             {filters.onlineOnly ? 'Online now only' : 'Include offline people'}
           </button>
@@ -148,7 +148,7 @@ export function GlobalDiscoveryScreen({ onBack, onOpenCalendar, onStartChat }: G
             <button
               type="button"
               onClick={() => setFilters(initialFilters)}
-              className="mt-2 w-full rounded-full border border-white/10 bg-white/[0.06] px-4 py-3 text-sm font-bold text-frost/70"
+              className="mt-2 w-full rounded-full border border-white/10 px-4 py-3 text-sm font-bold text-zinc-400"
             >
               Clear filters
             </button>
@@ -157,7 +157,7 @@ export function GlobalDiscoveryScreen({ onBack, onOpenCalendar, onStartChat }: G
 
         <div className="grid gap-3">
           {filteredPeople.map((person) => (
-            <article key={person.id} className="rounded-[30px] border border-white/10 bg-white/[0.06] p-4">
+            <article key={person.id} className="rounded-2xl border border-white/10 bg-black p-4">
               <div className="flex items-start gap-3">
                 <Avatar label={person.avatar} active={person.onlineNow} />
                 <div className="min-w-0 flex-1">
@@ -178,12 +178,12 @@ export function GlobalDiscoveryScreen({ onBack, onOpenCalendar, onStartChat }: G
               </div>
               <div className="mt-3 flex flex-wrap gap-2">
                 {person.interests.map((interest) => (
-                  <span key={interest} className="rounded-full bg-plasma/10 px-3 py-1 text-xs font-bold text-plasma">{interest}</span>
+                  <span key={interest} className="rounded-full border border-white/10 px-3 py-1 text-xs font-bold text-zinc-500">{interest}</span>
                 ))}
               </div>
               <div className="mt-4 grid gap-2 rounded-2xl bg-white/[0.05] p-3 text-xs text-frost/55">
                 <p>Gamer type: <span className="font-bold text-white">{person.gamerType}</span></p>
-                <p>Safety: <span className="font-bold text-aurora">{person.messageSafety}</span></p>
+                <p>Safety: <span className="font-bold text-white">{person.messageSafety}</span></p>
               </div>
               <Button onClick={onStartChat} className="mt-4 w-full" aria-label={`Start chat with ${person.name}`}>
                 Start Chat
@@ -191,7 +191,7 @@ export function GlobalDiscoveryScreen({ onBack, onOpenCalendar, onStartChat }: G
             </article>
           ))}
           {filteredPeople.length === 0 && (
-            <p className="rounded-[26px] border border-white/10 bg-white/[0.06] p-4 text-sm text-frost/55">
+            <p className="rounded-2xl border border-white/10 p-4 text-sm text-zinc-500">
               No local matches fit these filters yet. Clear one filter and try again.
             </p>
           )}
