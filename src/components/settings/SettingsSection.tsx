@@ -10,7 +10,7 @@ type SettingsSectionProps = {
 
 export function SettingsSection({ children, description, eyebrow, icon, title }: SettingsSectionProps) {
   return (
-    <section className="rounded-[24px] border border-white/10 bg-white/[0.06] p-3.5 shadow-glow">
+    <section className="rounded-[24px] border border-white/[0.08] bg-white/[0.035] p-3.5">
       <div className="mb-3 flex items-start gap-2.5">
         {icon && (
           <div className="grid h-10 w-10 shrink-0 place-items-center rounded-2xl text-[color:var(--ad-accent)]" style={{ backgroundColor: 'var(--ad-accent-soft)' }}>

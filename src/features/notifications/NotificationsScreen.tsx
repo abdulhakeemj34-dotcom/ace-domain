@@ -1,8 +1,8 @@
-import { BellRing, CheckCheck } from 'lucide-react';
+import { CheckCheck } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
 import { notifications } from '../../app/data';
-import { ScreenHeader } from '../../components/ScreenHeader';
 import type { NotificationItem } from '../../app/types';
+import { ScreenHeader } from '../../components/ScreenHeader';
 import { getNotifications, markAllNotificationsRead, setNotificationRead } from '../../services/notificationService';
 
 type NotificationFilter = 'all' | 'unread' | NotificationItem['category'];
@@ -11,10 +11,17 @@ const filters: Array<{ label: string; value: NotificationFilter }> = [
   { label: 'All', value: 'all' },
   { label: 'Unread', value: 'unread' },
   { label: 'Social', value: 'social' },
-  { label: 'Messages', value: 'message' },
+  { label: 'Chats', value: 'message' },
   { label: 'Matches', value: 'match' },
-  { label: 'Communities', value: 'community' }
+  { label: 'Groups', value: 'community' }
 ];
+
+const categoryLabels: Record<NotificationItem['category'], string> = {
+  community: 'Group',
+  match: 'Match',
+  message: 'Chat',
+  social: 'Social'
+};
 
 export function NotificationsScreen() {
   const [items, setItems] = useState(notifications);
@@ -32,7 +39,7 @@ export function NotificationsScreen() {
       setItems(result.data);
 
       if (result.error) {
-        setSyncStatus('Using demo notifications until Supabase notifications are ready.');
+        setSyncStatus('Showing local notifications while live updates connect.');
       }
     });
 
@@ -59,7 +66,7 @@ export function NotificationsScreen() {
     setItems((current) => current.map((item) => ({ ...item, unread: false })));
     markAllNotificationsRead().then((result) => {
       if (result.usingFallback) {
-        setSyncStatus('Notifications marked locally. Supabase auth will sync reads later.');
+        setSyncStatus('Marked locally. Live sync will follow when available.');
       }
     });
   };
@@ -73,7 +80,7 @@ export function NotificationsScreen() {
     );
     setNotificationRead(item.id, !nextUnread).then((result) => {
       if (result.usingFallback) {
-        setSyncStatus('Notification state updated locally.');
+        setSyncStatus('Notification state saved locally.');
       }
     });
   };
@@ -81,84 +88,68 @@ export function NotificationsScreen() {
   return (
     <section className="animate-rise pb-6">
       <ScreenHeader
-        eyebrow="Signals"
+        eyebrow={`${unreadCount} unread`}
         title="Notifications"
         action={
           <button
             type="button"
             onClick={markAllRead}
-            className="grid h-11 w-11 place-items-center rounded-full bg-white/10 text-aurora"
+            className="grid h-11 w-11 place-items-center rounded-full bg-white/10 text-white"
             aria-label="Mark all notifications as read"
           >
             <CheckCheck size={20} />
           </button>
         }
       />
-      <div className="px-4 py-4">
-        <div className="glass-panel rounded-[24px] p-4">
-          <div className="flex items-start justify-between gap-4">
-            <div>
-              <BellRing className="text-aurora" size={28} />
-              <h2 className="mt-3 text-xl font-bold text-white">Your world is moving</h2>
-              <p className="mt-2 text-sm leading-6 text-frost/60">
-                Match alerts, community invites, chat updates, and social signals all land here.
-              </p>
-              {syncStatus && <p className="mt-3 text-xs leading-5 text-frost/45">{syncStatus}</p>}
-            </div>
-            <span className="rounded-full bg-plasma/15 px-3 py-1 text-xs font-bold text-plasma">{unreadCount} unread</span>
-          </div>
-        </div>
 
-        <div className="mt-4 flex gap-2 overflow-x-auto [scrollbar-width:none]">
-          {filters.map((filter) => {
-            const active = activeFilter === filter.value;
-            return (
-              <button
-                key={filter.value}
-                type="button"
-                onClick={() => setActiveFilter(filter.value)}
-                className={`shrink-0 rounded-full px-4 py-2 text-xs font-bold transition ${
-                  active ? 'bg-white text-void' : 'bg-white/10 text-frost/60'
-                }`}
-              >
-                {filter.label}
-              </button>
-            );
-          })}
-        </div>
+      {syncStatus && <p className="mx-4 mt-3 rounded-2xl bg-white/[0.05] px-3 py-2 text-xs leading-5 text-frost/55">{syncStatus}</p>}
 
-        <div className="mt-4 space-y-2.5">
-          {filteredItems.map((item) => (
+      <div className="mt-4 flex gap-2 overflow-x-auto px-4 [scrollbar-width:none]">
+        {filters.map((filter) => {
+          const active = activeFilter === filter.value;
+          return (
             <button
-              key={item.id}
+              key={filter.value}
               type="button"
-              onClick={() => toggleRead(item)}
-              className={`w-full rounded-[22px] border p-3.5 text-left transition ${
-                item.unread ? 'border-aurora/30 bg-aurora/[0.08]' : 'border-white/10 bg-white/[0.06]'
+              onClick={() => setActiveFilter(filter.value)}
+              className={`shrink-0 rounded-full px-4 py-2 text-sm font-bold transition ${
+                active ? 'bg-white text-void' : 'bg-white/[0.07] text-frost/60'
               }`}
             >
-              <div className="flex items-start justify-between gap-3">
-                <div className="min-w-0 flex-1">
-                  <div className="flex items-center gap-2">
-                    {item.unread && <span className="h-2 w-2 shrink-0 rounded-full bg-aurora" />}
-                    <h3 className="font-bold text-white">{item.title}</h3>
-                  </div>
-                  <p className="mt-1 text-sm leading-5 text-frost/60">{item.body}</p>
-                  <span className="mt-3 inline-flex rounded-full bg-white/10 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.18em] text-frost/45">
-                    {item.category}
-                  </span>
-                </div>
-                <span className="shrink-0 text-xs text-aurora">{item.time}</span>
-              </div>
+              {filter.label}
             </button>
-          ))}
+          );
+        })}
+      </div>
 
-          {filteredItems.length === 0 && (
-            <p className="rounded-[26px] border border-white/10 bg-white/[0.06] p-4 text-sm text-frost/55">
-              No notifications in this state yet.
-            </p>
-          )}
-        </div>
+      <div className="mt-3 divide-y divide-white/10">
+        {filteredItems.map((item) => (
+          <button
+            key={item.id}
+            type="button"
+            onClick={() => toggleRead(item)}
+            className="flex w-full min-w-0 items-start gap-3 px-4 py-3.5 text-left transition hover:bg-white/[0.04]"
+          >
+            <span className={`mt-1 h-2.5 w-2.5 shrink-0 rounded-full ${item.unread ? 'bg-cyan-300' : 'bg-white/20'}`} />
+            <span className="min-w-0 flex-1">
+              <span className="flex min-w-0 items-center gap-2">
+                <span className="truncate font-bold text-white">{item.title}</span>
+                <span className="shrink-0 rounded-full bg-white/[0.07] px-2 py-0.5 text-[10px] font-bold uppercase tracking-[0.12em] text-frost/45">
+                  {categoryLabels[item.category]}
+                </span>
+              </span>
+              <span className="mt-1 line-clamp-2 text-sm leading-5 text-frost/55">{item.body}</span>
+            </span>
+            <span className="shrink-0 text-xs text-frost/45">{item.time}</span>
+          </button>
+        ))}
+
+        {filteredItems.length === 0 && (
+          <div className="px-4 py-6 text-center">
+            <h2 className="font-bold text-white">Nothing here yet</h2>
+            <p className="mt-2 text-sm leading-6 text-frost/55">Notifications in this category will appear here.</p>
+          </div>
+        )}
       </div>
     </section>
   );

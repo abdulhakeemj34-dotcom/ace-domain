@@ -289,8 +289,8 @@ export function SettingsCenterScreen({ onBack, onChange, onOpenGlobalSafety, set
           description="Account controls stay frontend-safe in this stage. Backend auth and chat history are left untouched."
           icon={<UserRound size={20} />}
         >
-          <SettingsRow label="Account mode" description="Supabase auth remains connected when configured; demo mode still works without forcing backend writes.">
-            <span className="rounded-full bg-white/10 px-3 py-1 text-xs font-black text-frost/70">Demo-safe</span>
+          <SettingsRow label="Account mode" description="Supabase auth remains connected when configured; local fallback keeps the app usable without forcing backend writes.">
+            <span className="rounded-full bg-white/10 px-3 py-1 text-xs font-black text-frost/70">Local-safe</span>
           </SettingsRow>
           <SettingsRow label="Settings storage" description="Preferences save locally first, then sync to Supabase in the background when you are signed in.">
             <span className="rounded-full px-3 py-1 text-xs font-black ad-accent-bg">Local-first</span>
@@ -561,7 +561,7 @@ export function SettingsCenterScreen({ onBack, onChange, onOpenGlobalSafety, set
           <ToggleRow checked={settings.highContrast} description="Boost panel contrast for readability across dark and light shells." icon={<ShieldCheck size={18} />} label="High contrast" onChange={() => update({ highContrast: !settings.highContrast })} />
           <ToggleRow checked={settings.buttonLabels} description="Keep helpful labels visible on key controls." icon={<Type size={18} />} label="Button labels" onChange={() => update({ buttonLabels: !settings.buttonLabels })} />
           <ToggleRow checked={settings.compactMode} description="Tightens some local spacing on dense mobile screens." icon={<MonitorSmartphone size={18} />} label="Compact mode" onChange={() => update({ compactMode: !settings.compactMode })} />
-          <ToggleRow checked={settings.screenReaderLabels} description="Preserve explicit accessible labels on staged controls." icon={<Lock size={18} />} label="Screen-reader friendly labels" onChange={() => update({ screenReaderLabels: !settings.screenReaderLabels })} />
+          <ToggleRow checked={settings.screenReaderLabels} description="Keep explicit accessible labels on key controls." icon={<Lock size={18} />} label="Screen-reader friendly labels" onChange={() => update({ screenReaderLabels: !settings.screenReaderLabels })} />
           <div>
             <p className="mb-3 text-xs font-black uppercase tracking-[0.22em] text-frost/40">Animation intensity</p>
             <div className="grid grid-cols-3 gap-2">

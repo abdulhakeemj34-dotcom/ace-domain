@@ -141,8 +141,8 @@ export function ChatRoomScreen({ chatId, chatSettings, onBack }: ChatRoomScreenP
               ))}
             </div>
             <div className="min-w-0 flex-1">
-              <p className="truncate text-xs font-bold text-white">Group chat layout</p>
-              <p className="truncate text-xs text-frost/45">Member previews, live status, and game-ready room tools.</p>
+              <p className="truncate text-xs font-bold text-white">Room members</p>
+              <p className="truncate text-xs text-frost/45">Active people and shared chat tools.</p>
             </div>
             <UsersRound className="text-aurora" size={18} />
           </div>
@@ -217,7 +217,7 @@ export function ChatRoomScreen({ chatId, chatSettings, onBack }: ChatRoomScreenP
               ))}
             </div>
             <p className="mt-2 text-[10px] text-frost/45">
-              {isFallback ? 'Typing and presence UI prepared locally.' : isGroup ? 'The room is ready for typing signals.' : `${chat.name} typing signal ready.`}
+              {isFallback ? 'Typing status is available in this room.' : isGroup ? 'Someone may be typing soon.' : `${chat.name} may be typing soon.`}
             </p>
           </div>
         </div>
@@ -239,7 +239,7 @@ export function ChatRoomScreen({ chatId, chatSettings, onBack }: ChatRoomScreenP
           className="grid h-11 w-11 place-items-center rounded-full"
           style={{ backgroundColor: 'var(--ad-accent-soft)', color: 'var(--ad-accent)' }}
           aria-label="Open game options"
-          onClick={() => setRoomNotice('Mini-game room tools are ready for the next mobile layer.')}
+          onClick={() => setRoomNotice('Game room tools will open from here.')}
         >
           <Gamepad2 size={19} />
         </button>
@@ -247,7 +247,7 @@ export function ChatRoomScreen({ chatId, chatSettings, onBack }: ChatRoomScreenP
           type="button"
           className="grid h-11 w-11 place-items-center rounded-full bg-white/10 text-white"
           aria-label="Start voice message"
-          onClick={() => setRoomNotice('Voice message controls are staged locally.')}
+          onClick={() => setRoomNotice('Voice messages will open from here.')}
         >
           <Mic size={19} />
         </button>

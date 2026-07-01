@@ -1,5 +1,4 @@
 import { useCallback, useEffect, useMemo, useState, type CSSProperties } from 'react';
-import { Sparkles } from 'lucide-react';
 import { StartupSplash } from '../components/logo/StartupSplash';
 import { defaultGlobalProfile, defaultGlobalSettings, focusOptions } from '../data/mockGlobalData';
 import { AiChatScreen } from '../features/ai/AiChatScreen';
@@ -311,11 +310,7 @@ export default function App() {
   }, [appSettings.themePreset]);
 
   return (
-    <main className={`relative min-h-screen overflow-hidden bg-void text-frost ${appModes}`} style={themeStyle}>
-      <div className="orbital-grid pointer-events-none absolute inset-0" />
-      <div className="pointer-events-none absolute left-1/2 top-[-14rem] h-96 w-96 -translate-x-1/2 rounded-full bg-aurora/20 blur-3xl" />
-      <div className="pointer-events-none absolute bottom-20 right-[-7rem] h-72 w-72 rounded-full bg-plasma/20 blur-3xl" />
-
+    <main className={`ad-app-shell relative min-h-screen overflow-hidden bg-void text-frost ${appModes}`} style={themeStyle}>
       <div className="relative mx-auto flex min-h-screen w-full max-w-md flex-col">
         <div className="flex-1 pb-[calc(6.5rem+env(safe-area-inset-bottom))]">{page}</div>
 
@@ -331,7 +326,6 @@ export default function App() {
           </button>
         )}
 
-        <Sparkles className="pointer-events-none absolute right-6 top-8 animate-pulseGlow" size={20} style={{ color: 'var(--ad-accent)' }} />
       </div>
       {isAuthenticated && showGlobalOnboarding && !showSplash && (
         <GlobalOnboarding

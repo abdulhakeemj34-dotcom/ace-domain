@@ -16,8 +16,8 @@ type BottomNavigationProps = {
 
 export function BottomNavigation({ activeScreen, onNavigate }: BottomNavigationProps) {
   return (
-    <nav className="pointer-events-auto fixed bottom-[calc(0.75rem+env(safe-area-inset-bottom))] left-1/2 z-30 w-[calc(100%-1.5rem)] max-w-md -translate-x-1/2 select-none rounded-[28px] border border-white/10 bg-obsidian/90 px-2 py-2 shadow-panel backdrop-blur-2xl">
-      <div className="grid grid-cols-5 gap-1">
+    <nav className="pointer-events-auto fixed bottom-[calc(0.65rem+env(safe-area-inset-bottom))] left-1/2 z-30 w-[calc(100%-1.25rem)] max-w-md -translate-x-1/2 select-none rounded-[26px] border border-white/10 bg-[#080b12]/92 px-2 py-1.5 shadow-[0_18px_48px_rgba(0,0,0,0.48)] backdrop-blur-2xl">
+      <div className="grid grid-cols-5 gap-0.5">
         {navItems.map((item) => {
           const Icon = item.icon;
           const active =
@@ -30,13 +30,14 @@ export function BottomNavigation({ activeScreen, onNavigate }: BottomNavigationP
               key={item.screen}
               type="button"
               onClick={() => onNavigate(item.screen)}
-              className={`relative flex min-h-14 w-full min-w-0 touch-manipulation flex-col items-center justify-center gap-1 rounded-3xl text-[10px] transition duration-300 ${
-                active ? 'shadow-glow' : 'text-frost/60 hover:bg-white/10 hover:text-white'
+              className={`relative flex min-h-14 w-full min-w-0 touch-manipulation flex-col items-center justify-center gap-1 rounded-2xl text-[10px] font-bold transition duration-300 ${
+                active ? 'bg-white/12 text-white' : 'text-frost/55 hover:bg-white/8 hover:text-white'
               }`}
-              style={active ? { background: 'linear-gradient(135deg, var(--ad-accent), var(--ad-accent-strong))', color: 'var(--ad-accent-contrast)', boxShadow: '0 0 26px var(--ad-glow)' } : undefined}
               aria-label={`Open ${item.label}`}
             >
-              <Icon className="pointer-events-none shrink-0" size={20} strokeWidth={active ? 2.7 : 2.1} />
+              <span className={`pointer-events-none grid h-7 w-7 place-items-center rounded-full ${active ? 'bg-white text-void' : ''}`}>
+                <Icon className="shrink-0" size={19} strokeWidth={active ? 2.6 : 2.1} />
+              </span>
               <span className="pointer-events-none max-w-full truncate px-1">{item.label}</span>
             </button>
           );

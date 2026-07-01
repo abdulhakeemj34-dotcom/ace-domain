@@ -54,14 +54,14 @@ button {
 
   .glass-panel {
     border: 1px solid rgba(221, 231, 255, 0.11);
-    background: linear-gradient(145deg, rgba(16, 22, 45, 0.92), rgba(8, 11, 26, 0.84));
-    box-shadow: 0 24px 90px rgba(0, 0, 0, 0.35);
-    backdrop-filter: blur(22px);
+    background: rgba(12, 16, 27, 0.88);
+    box-shadow: 0 14px 42px rgba(0, 0, 0, 0.28);
+    backdrop-filter: blur(18px);
   }
 
   .appearance-premium-dark {
     background:
-      radial-gradient(circle at 50% -12rem, var(--ad-accent-soft), transparent 34rem),
+      linear-gradient(180deg, rgba(13, 18, 31, 0.72), transparent 16rem),
       #050713;
   }
 
@@ -88,7 +88,7 @@ button {
 
   .appearance-system {
     background:
-      radial-gradient(circle at 50% -12rem, var(--ad-accent-soft), transparent 34rem),
+      linear-gradient(180deg, rgba(13, 18, 31, 0.72), transparent 16rem),
       #050713;
   }
 
@@ -102,10 +102,21 @@ button {
 
   .orbital-grid {
     background-image:
-      linear-gradient(rgba(115, 251, 211, 0.08) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(115, 251, 211, 0.08) 1px, transparent 1px);
-    background-size: 42px 42px;
-    mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.8), transparent 80%);
+      linear-gradient(rgba(221, 231, 255, 0.025) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(221, 231, 255, 0.02) 1px, transparent 1px);
+    background-size: 56px 56px;
+    mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.22), transparent 62%);
+  }
+
+  .ad-app-shell::before {
+    content: "";
+    pointer-events: none;
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(circle at 50% -10rem, rgba(0, 178, 255, 0.09), transparent 24rem),
+      linear-gradient(180deg, rgba(2, 7, 18, 0.92), #050713 32rem);
+    z-index: 0;
   }
 
   .low-data-mode *,
