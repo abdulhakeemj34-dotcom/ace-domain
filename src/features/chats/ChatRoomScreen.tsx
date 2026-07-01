@@ -179,10 +179,10 @@ export function ChatRoomScreen({ chatId, chatSettings, onBack }: ChatRoomScreenP
 
           return (
             <div key={message.id} className={`flex ${mine ? 'justify-end' : 'justify-start'}`}>
-              <div className={`max-w-[78%] ${mine ? 'text-right' : 'text-left'}`}>
+              <div className={`min-w-0 max-w-[78%] ${mine ? 'text-right' : 'text-left'}`}>
                 {!mine && isGroup && <p className="mb-1 ml-2 text-[10px] font-bold uppercase tracking-[0.18em] text-aurora/80">{message.authorName}</p>}
                 <div
-                  className={`${bubbleShapeClass} ${densityClass} shadow-glow ${
+                  className={`${bubbleShapeClass} ${densityClass} break-words shadow-glow [overflow-wrap:anywhere] ${
                     mine
                       ? sentCornerClass
                       : `${receivedCornerClass} ${receivedBubbleClasses[personalization.receivedBubbleStyle]}`

@@ -33,13 +33,13 @@ export function ChatsScreen({ onOpenChat }: ChatsScreenProps) {
       />
       <SearchBar placeholder="Search chats or ask Ace AI for introductions..." />
       <div className="px-5 py-5">
-        <div className="mb-5 rounded-[30px] border border-white/10 bg-white/[0.06] p-4">
+        <div className="mb-5 overflow-hidden rounded-[30px] border border-white/10 bg-white/[0.06] p-4">
           <div className="flex items-center justify-between gap-3">
-            <div>
+            <div className="min-w-0">
               <h2 className="font-bold text-white">Group rooms</h2>
               <p className="mt-1 text-sm text-frost/55">Live rooms with members, previews, and quick jump-in.</p>
             </div>
-            <span className="rounded-full bg-aurora/15 px-3 py-1 text-xs font-bold text-aurora">
+            <span className="shrink-0 rounded-full bg-aurora/15 px-3 py-1 text-xs font-bold text-aurora">
               {usingFallback ? 'Demo' : 'Live'}
             </span>
           </div>
@@ -63,15 +63,15 @@ export function ChatsScreen({ onOpenChat }: ChatsScreenProps) {
                 key={chat.id}
                 type="button"
                 onClick={() => onOpenChat(chat.id)}
-                className="flex items-center gap-3 rounded-3xl bg-white/[0.06] p-3 text-left"
+                className="flex w-full min-w-0 items-center gap-3 overflow-hidden rounded-3xl bg-white/[0.06] p-3 text-left"
                 aria-label={`Open ${chat.name} group room`}
               >
                 <Avatar label={chat.avatar} active={chat.online} />
                 <div className="min-w-0 flex-1">
                   <h3 className="truncate text-sm font-bold text-white">{chat.name}</h3>
-                  <p className="truncate text-xs text-frost/50">{chat.members} members / {chat.message}</p>
+                  <p className="line-clamp-2 break-words text-xs leading-5 text-frost/50 [overflow-wrap:anywhere]">{chat.members} members / {chat.message}</p>
                 </div>
-                <div className="flex -space-x-2">
+                <div className="flex shrink-0 -space-x-2">
                   {(chat.avatars ?? []).map((avatar) => (
                     <span key={avatar} className="grid h-7 w-7 place-items-center rounded-full border border-obsidian bg-gradient-to-br from-aurora to-signal text-[10px] font-black text-void">
                       {avatar}
@@ -104,18 +104,18 @@ export function ChatsScreen({ onOpenChat }: ChatsScreenProps) {
               key={chat.id}
               type="button"
               onClick={() => onOpenChat(chat.id)}
-              className="glass-panel flex w-full items-center gap-3 rounded-[26px] p-4 text-left"
+              className="glass-panel flex w-full min-w-0 items-center gap-3 overflow-hidden rounded-[26px] p-4 text-left"
               aria-label={`Open ${chat.name} chat`}
             >
               <Avatar label={chat.avatar} active={chat.unread > 0} />
               <div className="min-w-0 flex-1">
-                <div className="flex items-center gap-2">
+                <div className="flex min-w-0 items-center gap-2">
                   <h2 className="truncate font-bold text-white">{chat.name}</h2>
-                  {chat.kind === 'group' && <UsersRound size={14} className="text-aurora" />}
+                  {chat.kind === 'group' && <UsersRound size={14} className="shrink-0 text-aurora" />}
                 </div>
-                <p className="truncate text-sm text-frost/55">{chat.message}</p>
+                <p className="line-clamp-2 break-words text-sm leading-5 text-frost/55 [overflow-wrap:anywhere]">{chat.message}</p>
               </div>
-              <div className="text-right">
+              <div className="shrink-0 text-right">
                 <p className="text-xs text-frost/45">{chat.time}</p>
                 {chat.unread > 0 && (
                   <span className="mt-2 inline-grid h-6 min-w-6 place-items-center rounded-full bg-aurora px-2 text-xs font-bold text-void">
