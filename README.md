@@ -28,6 +28,8 @@ The app is organized by product feature under `src/features`, shared UI under `s
 
 Future product modules are intentionally registered as planned architecture only: voice/video, translation expansion, full mini-games, creator economy, marketplace, food ordering, clothes shopping, ride booking, flights, hotels, wallet, payments, and banking features.
 
+Stage 10 visual identity planning is documented in `docs/visual-identity-plan.md`.
+
 Capacitor is configured with:
 
 - App name: `Ace Domain`
