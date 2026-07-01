@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="1920" viewBox="0 0 1080 1920" role="img" aria-labelledby="title desc">
+  <title id="title">Ace Domain splash source</title>
+  <desc id="desc">Portrait splash source with AD mark, Ace Domain name, Meet the World tagline, and connected globe horizon.</desc>
+  <defs>
+    <linearGradient id="splashBase" x1="0" x2="1080" y1="0" y2="1920" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#020712"/>
+      <stop offset=".48" stop-color="#061735"/>
+      <stop offset="1" stop-color="#020712"/>
+    </linearGradient>
+    <radialGradient id="splashGlow" cx="0" cy="0" r="1" gradientTransform="matrix(0 520 -520 0 540 560)" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#0D47FF" stop-opacity=".36"/>
+      <stop offset=".58" stop-color="#00B2FF" stop-opacity=".12"/>
+      <stop offset="1" stop-color="#020712" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="splashMark" x1="7" x2="119" y1="16" y2="63" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#0D47FF"/>
+      <stop offset=".48" stop-color="#008BFF"/>
+      <stop offset="1" stop-color="#00F0FF"/>
+    </linearGradient>
+    <linearGradient id="splashNode" x1="24" x2="48" y1="56" y2="32" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#00F0FF"/>
+      <stop offset="1" stop-color="#70F8FF"/>
+    </linearGradient>
+  </defs>
+  <rect width="1080" height="1920" fill="url(#splashBase)"/>
+  <rect width="1080" height="1920" fill="url(#splashGlow)"/>
+  <g opacity=".32" stroke="#00B2FF" stroke-width="2">
+    <path d="M120 1546c184-84 352-118 520-102 112 10 218 42 320 96" fill="none"/>
+    <path d="M60 1612c206-70 414-92 624-66 126 16 238 48 336 98" fill="none"/>
+    <path d="M184 1490 320 1580 514 1518 714 1612 902 1504" fill="none" opacity=".68"/>
+  </g>
+  <g fill="#00F0FF">
+    <circle cx="184" cy="1490" r="8" opacity=".78"/>
+    <circle cx="320" cy="1580" r="10" opacity=".9"/>
+    <circle cx="514" cy="1518" r="8" opacity=".74"/>
+    <circle cx="714" cy="1612" r="10" opacity=".86"/>
+    <circle cx="902" cy="1504" r="8" opacity=".78"/>
+  </g>
+  <g transform="translate(210 590)">
+    <rect x="0" y="0" width="660" height="660" rx="150" fill="#061735" opacity=".38"/>
+    <rect x="62" y="62" width="536" height="536" rx="128" fill="none" stroke="#00B2FF" stroke-opacity=".28" stroke-width="4"/>
+    <g transform="translate(122 180) scale(3.22)">
+      <path d="M6 66 31 13c1.8-3.8 4.4-5.7 8-5.7h10.8L79 66H61.7l-5.5-12.1H31.4L25.9 66H6Zm31.4-25.8h12.8L43.8 26l-6.4 14.2Z" fill="url(#splashMark)"/>
+      <path d="M65.4 7.3h27.2c18 0 31 12 31 29.4 0 17.1-13 29.3-31 29.3H56.2l9.2-14.2h26.2c9 0 15.2-6 15.2-15.1 0-9.2-6.2-15.1-15.2-15.1H74.5L65.4 7.3Z" fill="url(#splashMark)"/>
+      <path d="M29.6 58.4 43.7 38" stroke="url(#splashNode)" stroke-linecap="round" stroke-width="5"/>
+      <circle cx="29.6" cy="58.4" r="6.2" fill="url(#splashNode)"/>
+      <circle cx="43.7" cy="38" r="7" fill="url(#splashNode)"/>
+      <circle cx="93.5" cy="58.7" r="6.5" fill="#0D47FF"/>
+      <circle cx="93.5" cy="58.7" r="3.2" fill="#00B2FF" opacity=".85"/>
+    </g>
+  </g>
+  <text x="540" y="1292" fill="#FFFFFF" font-family="Inter, Space Grotesk, Arial, sans-serif" font-size="92" font-weight="800" text-anchor="middle" letter-spacing="-2">Ace Domain</text>
+  <text x="540" y="1372" fill="#00B2FF" font-family="Inter, Space Grotesk, Arial, sans-serif" font-size="30" font-weight="800" text-anchor="middle" letter-spacing="16">MEET THE WORLD</text>
+</svg>

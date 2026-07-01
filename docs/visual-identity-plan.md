@@ -4,6 +4,8 @@ Stage 10A defines the safe path for adding the next Ace Domain brand system with
 
 Stage 10B adds the source-ready brand asset folder and updates the reusable logo components toward the approved blue/cyan `AD` direction without changing app behavior.
 
+Stage 10D adds lightweight SVG masters and export notes for future native Android/iOS icon and splash generation without overwriting platform assets.
+
 ## Brand Direction
 
 - Premium, modern, mobile-first, and startup-quality.
@@ -63,6 +65,7 @@ Stage 10B adds the source-ready brand asset folder and updates the reusable logo
 ## Asset Locations
 
 - Source brand assets: `src/assets/brand/`
+- Native export notes: `docs/native-brand-assets.md`
 - Reusable logo components: `src/components/logo/`
 - Global brand tokens and animation helpers: `src/styles/index.css` and `tailwind.config.js`
 - App integration points: `src/app/App.tsx` and welcome/profile/about surfaces as needed
@@ -90,8 +93,9 @@ Stage 10B adds the source-ready brand asset folder and updates the reusable logo
 3. Update reusable logo components, then verify small-size readability.
 4. Update startup animation only after logo components are stable.
 5. Review welcome, profile, settings, and About branding surfaces.
-6. Generate native Android/iOS icon and splash assets from the approved mark.
-7. Run lint, TypeScript, production build, Capacitor sync, and a real mobile visual pass.
+6. Use the Stage 10D SVG masters to generate optimized native Android/iOS icon and splash assets.
+7. Verify native assets on emulator/device before overwriting platform catalogs.
+8. Run lint, TypeScript, production build, Capacitor sync, and a real mobile visual pass.
 
 ## Guardrails
 

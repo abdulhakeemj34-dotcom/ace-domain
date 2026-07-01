@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="432" height="432" viewBox="0 0 432 432" role="img" aria-labelledby="title desc">
+  <title id="title">Ace Domain Android adaptive icon foreground</title>
+  <desc id="desc">Transparent foreground layer with centered Ace Domain AD mark inside the adaptive icon safe zone.</desc>
+  <defs>
+    <linearGradient id="fgMark" x1="93" x2="339" y1="164" y2="268" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#0D47FF"/>
+      <stop offset=".48" stop-color="#008BFF"/>
+      <stop offset="1" stop-color="#00F0FF"/>
+    </linearGradient>
+    <linearGradient id="fgNode" x1="130" x2="184" y1="282" y2="214" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#00F0FF"/>
+      <stop offset="1" stop-color="#70F8FF"/>
+    </linearGradient>
+  </defs>
+  <g transform="translate(36 86)">
+    <path d="M31 205 103 52c5.7-12 14-17.3 24.5-17.3h31.4L243 205h-50.3l-16-34.8h-72.1L88.6 205H31Zm91-75h37.1L140.5 89 122 130Z" fill="url(#fgMark)"/>
+    <path d="M204.3 34.7h79c52.2 0 89.9 34.8 89.9 85.3 0 49.6-37.7 85-89.9 85H177.8l26.5-41.2h76c26 0 44.1-17.4 44.1-43.8 0-26.7-18-43.8-44-43.8h-49.7l-26.4-41.5Z" fill="url(#fgMark)"/>
+    <path d="M99.2 183 140 124" stroke="url(#fgNode)" stroke-linecap="round" stroke-width="14"/>
+    <circle cx="99.2" cy="183" r="18" fill="url(#fgNode)"/>
+    <circle cx="140" cy="124" r="20" fill="url(#fgNode)"/>
+    <circle cx="280.1" cy="184" r="19" fill="#0D47FF"/>
+    <circle cx="280.1" cy="184" r="9" fill="#00B2FF" opacity=".88"/>
+  </g>
+</svg>
