@@ -1,6 +1,6 @@
 # Ace Domain Backend Foundation
 
-Stage Three uses Supabase for auth, profile data, social posts, communities, chat tables, and notifications.
+Ace Domain uses Supabase for auth, profile data, social posts, communities, chat tables, notifications, and settings sync.
 
 ## Environment
 
@@ -60,7 +60,9 @@ The backend-only AI foundation lives at `api/ai-chat.ts`.
 - Method: `POST`
 - Model: `gpt-4o-mini`
 - Secret source: `process.env.OPENAI_API_KEY`
-- Frontend integration: not connected yet
+- Frontend integration: the Ace AI screen calls `/api/ai-chat`
+
+Ace AI is separate from Supabase user-to-user chat. The OpenAI key must stay backend-only, and user chat should continue through the Supabase chat service.
 
 Accepted request bodies:
 
