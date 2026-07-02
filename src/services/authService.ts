@@ -23,6 +23,7 @@ type AuthResult = {
   canUseDemoFallback?: boolean;
   error?: string;
   needsEmailConfirmation?: boolean;
+  profileWarning?: string;
   session: SupabaseSession | null;
   setupRequired?: boolean;
   user: SupabaseUser | null;
@@ -107,8 +108,10 @@ export async function signUpWithEmail({ displayName, email, password }: AuthCred
       storeSession(session);
     }
 
+    let profileWarning = '';
+
     if (user && session) {
-      await createProfileIfNeeded(
+      const profileResult = await createProfileIfNeeded(
         {
           displayName: displayName || user.email || 'Ace Explorer',
           id: user.id,
@@ -117,10 +120,15 @@ export async function signUpWithEmail({ displayName, email, password }: AuthCred
         },
         session.access_token
       );
+
+      if (profileResult.error) {
+        profileWarning = 'Account access worked, but profile sync is waiting on Supabase.';
+      }
     }
 
     return {
       needsEmailConfirmation: Boolean(user && !session),
+      profileWarning,
       session,
       user
     };
@@ -148,8 +156,10 @@ export async function loginWithEmail({ email, password }: AuthCredentials): Prom
     storeSession(session);
     const profile = await getCurrentProfile();
 
-    if (!profile.data && !profile.error) {
-      await createProfileIfNeeded(
+    let profileWarning = '';
+
+    if (!profile.data) {
+      const profileResult = await createProfileIfNeeded(
         {
           displayName: session.user.email || 'Ace Explorer',
           id: session.user.id,
@@ -158,9 +168,13 @@ export async function loginWithEmail({ email, password }: AuthCredentials): Prom
         },
         session.access_token
       );
+
+      if (profile.error || profileResult.error) {
+        profileWarning = 'Login worked, but profile sync is waiting on Supabase.';
+      }
     }
 
-    return { session, user: session.user };
+    return { profileWarning, session, user: session.user };
   } catch (error) {
     clearStoredSession();
     return authErrorResult(error, 'Login failed.');

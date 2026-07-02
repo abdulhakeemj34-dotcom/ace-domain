@@ -65,7 +65,7 @@ export function AuthScreen({ onComplete }: AuthScreenProps) {
         return;
       }
 
-      setStatus(mode === 'signup' ? 'Account created.' : 'Welcome back.');
+      setStatus(result.profileWarning || (mode === 'signup' ? 'Account created.' : 'Welcome back.'));
       onComplete();
     } catch {
       setError('Live authentication could not finish. You can continue in demo mode without creating a live account.');
