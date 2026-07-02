@@ -174,7 +174,11 @@ export async function getChatThreads(): Promise<ChatResult<Chat[]>> {
 
     return { data: rows.map(mapThread), usingFallback: false };
   } catch (error) {
-    return { data: [], error: error instanceof Error ? error.message : 'Chat thread load failed.', usingFallback: false };
+    return {
+      data: mockChats,
+      error: error instanceof Error ? error.message : 'Chat thread load failed.',
+      usingFallback: true
+    };
   }
 }
 
@@ -236,9 +240,9 @@ export async function getChatMessages(threadId: string): Promise<ChatResult<Chat
     return { data: rows.map((row) => mapMessage(row, session.user.id)), usingFallback: false };
   } catch (error) {
     return {
-      data: [],
+      data: chatMessagesByChatId[threadId] ?? chatMessagesByChatId.c1,
       error: error instanceof Error ? error.message : 'Chat message load failed.',
-      usingFallback: false
+      usingFallback: true
     };
   }
 }
