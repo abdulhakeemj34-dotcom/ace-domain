@@ -283,7 +283,7 @@ export async function sendChatMessage(threadId: string, content: string): Promis
 export function subscribeToChatMessages(threadId: string, handlers: RealtimeHandlers): RealtimeSubscription {
   const session = getStoredSession();
 
-  if (!supabaseConfig.isConfigured || !session || typeof WebSocket === 'undefined') {
+  if (!supabaseConfig.isConfigured || !session || isDemoThread(threadId) || typeof WebSocket === 'undefined') {
     handlers.onStatus?.('idle');
     return { unsubscribe: () => undefined };
   }
