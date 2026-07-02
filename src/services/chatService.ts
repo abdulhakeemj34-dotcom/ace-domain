@@ -168,8 +168,8 @@ export async function getChatThreads(): Promise<ChatResult<Chat[]>> {
       query: 'select=id,type,title,created_by,created_at,updated_at&order=updated_at.desc'
     });
 
-    if (!Array.isArray(rows)) {
-      return { data: [], usingFallback: false };
+    if (!Array.isArray(rows) || rows.length === 0) {
+      return { data: mockChats, usingFallback: true };
     }
 
     return { data: rows.map(mapThread), usingFallback: false };
@@ -234,7 +234,7 @@ export async function getChatMessages(threadId: string): Promise<ChatResult<Chat
     });
 
     if (!Array.isArray(rows)) {
-      return { data: [], usingFallback: false };
+      return { data: chatMessagesByChatId[threadId] ?? chatMessagesByChatId.c1, usingFallback: true };
     }
 
     return { data: rows.map((row) => mapMessage(row, session.user.id)), usingFallback: false };
