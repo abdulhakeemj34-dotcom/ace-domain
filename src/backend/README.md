@@ -36,6 +36,8 @@ The app remains mobile-first and demo-safe. If Supabase env keys are missing or 
 
 Settings are local-first. The app reads validated settings from localStorage immediately, then attempts to load `user_settings` for the authenticated Supabase user. If remote settings exist, they are sanitized, applied, and written back to localStorage. Local settings still work without login or Supabase, and failed remote saves do not block the UI.
 
+For the current live-backend readiness snapshot, see [`../../docs/supabase-readiness.md`](../../docs/supabase-readiness.md).
+
 ## Stage Seven Settings Sync
 
 `user_settings` stores each user's Stage 5 app settings as `jsonb`.
