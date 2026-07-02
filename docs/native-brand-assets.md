@@ -22,4 +22,5 @@ Stage 10D prepares source-ready Ace Domain brand files for future native Android
 - Keep source SVGs under `src/assets/brand/` as the single editable source set.
 - Do not commit large generated PNG sets until the final native icon/splash pass is approved.
 - Do not overwrite Android or iOS asset catalogs without a device/emulator verification pass.
+- Do not commit real `.env` secrets, API keys, `dist`, or other generated build output.
 - Keep the app name as `Ace Domain` and the tagline direction as `Meet the World`.
