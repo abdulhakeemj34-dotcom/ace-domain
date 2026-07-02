@@ -68,11 +68,24 @@ export function CommunityDetailScreen({ community, joined, onBack, onToggleJoin 
               <p className="truncate text-xs text-frost/45">{member.role}</p>
             </div>
           ))}
+          {members.length === 0 && (
+            <p className="text-sm leading-6 text-zinc-500">
+              Member previews will appear here when live community data is available.
+            </p>
+          )}
         </div>
       </div>
 
       <div className="divide-y divide-white/10">
         <h2 className="px-4 py-3 text-sm font-bold uppercase tracking-[0.22em] text-frost/45">Posts</h2>
+        {posts.length === 0 && (
+          <div className="px-4 py-6">
+            <h3 className="font-bold text-white">No posts here yet</h3>
+            <p className="mt-2 text-sm leading-6 text-zinc-500">
+              This room is ready for live posts once the community feed is connected.
+            </p>
+          </div>
+        )}
         {posts.map((post) => (
           <article key={post.id} className="px-4 py-4">
             <div className="flex items-center justify-between gap-3">
