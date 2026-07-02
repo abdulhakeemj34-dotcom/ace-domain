@@ -91,3 +91,27 @@ npm run build
 ```
 
 Use `npm run cap:sync` when native platform assets or Capacitor runtime behavior may be affected.
+
+## Stage 16 Live Test Status
+
+Stage 16 confirms the app is ready for real Supabase testing, but the live dashboard/account steps still require manual action in the Supabase project and the running app.
+
+Source-ready:
+
+- Local `.env` is supported for real `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY` values without committing secrets.
+- Auth can attempt real signup/login and keeps demo mode available for network failure or email rate limits.
+- Profile sync warnings remain non-blocking when profile rows cannot be created or loaded.
+- Settings remain local-first and only apply remote `user_settings` data when the payload is usable.
+- Feed and communities fall back to curated local data when live tables are missing, empty, or blocked by RLS.
+- Chat and notifications fall back safely when live tables are missing, empty, or blocked by RLS.
+- Demo chat threads stay local and do not open realtime subscriptions.
+- Ace AI stays separate from Supabase user-to-user chat.
+
+Manual checks still needed:
+
+1. Apply `src/backend/schema.sql` in the Supabase SQL Editor using `docs/stage-15-supabase-apply-checklist.md`.
+2. Create or log in with a test user through the app without sharing credentials in docs or chat.
+3. Confirm profile creation/loading either succeeds or shows the existing non-blocking profile sync warning.
+4. Change a setting while signed in, refresh the app, and confirm local settings are not overwritten by empty remote settings.
+5. Check Home, Communities, Chats, and Notifications after SQL is applied to confirm live rows appear when present and demo fallback remains when rows are empty.
+6. Keep `.env`, service-role keys, session tokens, and generated `dist` output out of Git.
