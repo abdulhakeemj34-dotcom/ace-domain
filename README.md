@@ -30,6 +30,8 @@ Future product modules are intentionally registered as planned architecture only
 
 Stage 10 visual identity planning is documented in `docs/visual-identity-plan.md`.
 
+Final release handoff notes are documented in `docs/release-handoff.md`.
+
 Capacitor is configured with:
 
 - App name: `Ace Domain`
