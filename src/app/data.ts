@@ -90,32 +90,88 @@ export const posts: Post[] = [
 ];
 
 export const chats: Chat[] = [
-  { id: 'c1', name: 'Global Founders', avatar: 'GF', message: 'Priya: The Paris room starts in 10.', time: 'Now', unread: 5, kind: 'group', online: true, members: 28, avatars: ['PR', 'AC', 'SC'] },
-  { id: 'c2', name: 'Maya Johnson', avatar: 'MJ', message: 'Send me your favorite beach spot.', time: '3m', unread: 2, kind: 'direct', online: true, country: 'Nigeria' },
-  { id: 'c3', name: 'Night Food Crew', avatar: 'NF', message: 'Ramen map is pinned.', time: '18m', unread: 0, kind: 'group', online: true, members: 143, avatars: ['ZO', 'KN', 'NF'] },
-  { id: 'c4', name: 'Noah Park', avatar: 'NP', message: 'Matched from Seoul, say hi?', time: '1h', unread: 1, kind: 'direct', online: false, country: 'South Korea' }
+  {
+    activity: '28 members / 9 active',
+    avatars: ['PR', 'AC', 'SC'],
+    avatar: 'GF',
+    id: 'c1',
+    kind: 'group',
+    members: 28,
+    message: 'Priya: Paris room starts in 10. Bring a startup intro and one culture question.',
+    name: 'Global Founders',
+    online: true,
+    pinned: true,
+    previewLabel: 'Room',
+    time: 'Now',
+    unread: 5
+  },
+  {
+    activity: 'Online from Lagos',
+    avatar: 'MJ',
+    country: 'Nigeria',
+    id: 'c2',
+    kind: 'direct',
+    message: 'Send me your favorite beach spot. I am building a weekend map for visitors.',
+    name: 'Maya Johnson',
+    online: true,
+    previewLabel: 'Match',
+    time: '3m',
+    unread: 2
+  },
+  {
+    activity: '143 members / ramen map pinned',
+    avatars: ['ZO', 'KN', 'NF'],
+    avatar: 'NF',
+    id: 'c3',
+    kind: 'group',
+    members: 143,
+    message: 'Kenji: Ramen map is pinned. Vote for the next city after Tokyo.',
+    muted: true,
+    name: 'Night Food Crew',
+    online: true,
+    previewLabel: 'Food',
+    time: '18m',
+    unread: 0
+  },
+  {
+    activity: 'Recently active from Seoul',
+    avatar: 'NP',
+    country: 'South Korea',
+    id: 'c4',
+    kind: 'direct',
+    message: 'Matched from Seoul. I saw we both like coding and football.',
+    name: 'Noah Park',
+    online: false,
+    previewLabel: 'Global Match',
+    time: '1h',
+    unread: 1
+  }
 ];
 
 export const chatMessagesByChatId: Record<string, ChatMessage[]> = {
   c1: [
     { id: 'm1', author: 'them', authorName: 'Priya', text: 'Welcome to the Global Founders room. People are joining from Paris, Lagos, and Seoul.', time: '8:14' },
     { id: 'm2', author: 'me', text: 'Perfect. I want to meet builders working on social apps and culture projects.', time: '8:15' },
-    { id: 'm3', author: 'them', authorName: 'Sofia', text: 'Tap the game button later too. We are testing casual rooms for quick icebreakers.', time: '8:16' }
+    { id: 'm3', author: 'them', authorName: 'Sofia', text: 'Drop your one-line intro. Then we pair people by city, stage, and what they can help with.', time: '8:16' },
+    { id: 'm13', author: 'them', authorName: 'Priya', text: 'Also, no pitch spam. Useful intros first, links after people ask.', time: '8:18' }
   ],
   c2: [
     { id: 'm4', author: 'them', authorName: 'Maya', text: 'Send me your favorite beach spot. I am building a weekend map.', time: '9:03' },
     { id: 'm5', author: 'me', text: 'Tarkwa Bay at golden hour. Go with music and snacks.', time: '9:05' },
-    { id: 'm6', author: 'them', authorName: 'Maya', text: 'Done. That sounds exactly like an Ace Domain meetup.', time: '9:06' }
+    { id: 'm6', author: 'them', authorName: 'Maya', text: 'Done. That sounds exactly like an Ace Domain meetup.', time: '9:06' },
+    { id: 'm14', author: 'them', authorName: 'Maya', text: 'If you come with two friends, I will add a food stop after.', time: '9:08' }
   ],
   c3: [
     { id: 'm7', author: 'them', authorName: 'Kenji', text: 'Ramen map is pinned. Vote for the next city after Tokyo.', time: '10:20' },
     { id: 'm8', author: 'me', text: 'Lagos street food next. Suya, puff-puff, and late-night spots.', time: '10:21' },
-    { id: 'm9', author: 'them', authorName: 'Zoe', text: 'That room would explode. I am in.', time: '10:22' }
+    { id: 'm9', author: 'them', authorName: 'Zoe', text: 'That room would explode. I am in.', time: '10:22' },
+    { id: 'm15', author: 'them', authorName: 'Kenji', text: 'Pinned a poll. Winner gets the next food crawl route.', time: '10:24' }
   ],
   c4: [
     { id: 'm10', author: 'them', authorName: 'Noah', text: 'Matched from Seoul. I saw we both like coding and football.', time: '11:01' },
     { id: 'm11', author: 'me', text: 'Nice. What are you building right now?', time: '11:03' },
-    { id: 'm12', author: 'them', authorName: 'Noah', text: 'A tiny game for language exchange rooms.', time: '11:05' }
+    { id: 'm12', author: 'them', authorName: 'Noah', text: 'A tiny game for language exchange rooms.', time: '11:05' },
+    { id: 'm16', author: 'me', text: 'That fits Ace Domain perfectly. Send me the first prompt when it is ready.', time: '11:07' }
   ]
 };
 

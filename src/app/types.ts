@@ -48,10 +48,14 @@ export type Chat = {
   time: string;
   unread: number;
   kind: 'direct' | 'group';
+  activity?: string;
   online?: boolean;
   members?: number;
   avatars?: string[];
   country?: string;
+  muted?: boolean;
+  pinned?: boolean;
+  previewLabel?: string;
 };
 
 export type ChatMessage = {

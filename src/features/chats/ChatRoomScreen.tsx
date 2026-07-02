@@ -1,5 +1,5 @@
 import { useState, type CSSProperties, type FormEvent } from 'react';
-import { ArrowLeft, Gamepad2, Mic, Send, UsersRound } from 'lucide-react';
+import { ArrowLeft, Gamepad2, Mic, Send, ShieldCheck, UsersRound } from 'lucide-react';
 import { chats as mockChats } from '../../app/data';
 import type { Chat } from '../../app/types';
 import { Avatar } from '../../components/Avatar';
@@ -76,6 +76,11 @@ export function ChatRoomScreen({ chatId, chatSettings, onBack }: ChatRoomScreenP
   const isGroup = chat.kind === 'group';
   const isFallback = threadsUsingFallback || messagesUsingFallback;
   const isSending = messages.some((message) => message.status === 'sending');
+  const participantLabel = isGroup
+    ? `${chat.members ?? 2} members`
+    : chat.online
+      ? 'Online now'
+      : 'Recently active';
 
   const sendMessage = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -125,7 +130,7 @@ export function ChatRoomScreen({ chatId, chatSettings, onBack }: ChatRoomScreenP
           <div className="min-w-0 flex-1">
             <h1 className="truncate text-lg font-bold text-white">{chat.name}</h1>
             <p className="truncate text-xs text-zinc-400">
-              {isGroup ? `${chat.members} members / ${chat.online ? 'live now' : 'quiet room'}` : `${chat.online ? 'Online' : 'Recently active'} / ${chat.country ?? 'Global'}`}
+              {chat.activity ?? (isGroup ? `${participantLabel} / ${chat.online ? 'live now' : 'quiet room'}` : `${participantLabel} / ${chat.country ?? 'Global'}`)}
             </p>
             <p className="mt-1 truncate text-[10px] font-bold uppercase tracking-[0.18em] text-frost/40">{realtimeLabel}</p>
           </div>
@@ -147,9 +152,22 @@ export function ChatRoomScreen({ chatId, chatSettings, onBack }: ChatRoomScreenP
             <UsersRound className="text-zinc-400" size={18} />
           </div>
         )}
+
+        <div className="mt-3 flex items-center gap-2 rounded-2xl border border-white/10 px-3 py-2">
+          <ShieldCheck size={16} className="shrink-0 text-zinc-500" />
+          <p className="min-w-0 flex-1 truncate text-xs text-zinc-500">
+            {isFallback ? 'Demo-safe conversation. Messages stay local when Supabase is unavailable.' : 'Live Supabase chat. Realtime stays separate from Ace AI.'}
+          </p>
+        </div>
       </header>
 
       <div className={`flex-1 ${messageStackClass} pb-36`}>
+        <div className="flex justify-center">
+          <span className="rounded-full border border-white/10 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.18em] text-zinc-500">
+            Today
+          </span>
+        </div>
+
         {error && (
           <div className="rounded-2xl border border-red-500/25 bg-red-500/10 p-4 text-sm text-red-200">
             <p>{error}</p>
@@ -179,8 +197,9 @@ export function ChatRoomScreen({ chatId, chatSettings, onBack }: ChatRoomScreenP
 
           return (
             <div key={message.id} className={`flex ${mine ? 'justify-end' : 'justify-start'}`}>
-              <div className={`min-w-0 max-w-[78%] ${mine ? 'text-right' : 'text-left'}`}>
-                {!mine && isGroup && <p className="mb-1 ml-2 text-[10px] font-bold uppercase tracking-[0.18em] text-zinc-500">{message.authorName}</p>}
+              {!mine && <Avatar label={(message.authorName ?? chat.avatar).slice(0, 2).toUpperCase()} size="sm" />}
+              <div className={`min-w-0 max-w-[78%] ${mine ? 'text-right' : 'ml-2 text-left'}`}>
+                {!mine && <p className="mb-1 ml-2 text-[10px] font-bold uppercase tracking-[0.18em] text-zinc-500">{isGroup ? message.authorName : chat.name}</p>}
                 <div
                   className={`${bubbleShapeClass} ${densityClass} break-words shadow-none [overflow-wrap:anywhere] ${
                     mine
@@ -253,7 +272,7 @@ export function ChatRoomScreen({ chatId, chatSettings, onBack }: ChatRoomScreenP
         </button>
         <input
           className="min-w-0 flex-1 bg-transparent text-sm text-white outline-none placeholder:text-frost/35"
-          placeholder="Message the world..."
+          placeholder={isGroup ? 'Message the room...' : `Message ${chat.name}...`}
           aria-label="Message input"
           autoComplete="off"
           value={draft}
