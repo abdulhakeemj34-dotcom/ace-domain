@@ -1,6 +1,24 @@
 # Ace Domain - Meet the World
 
-A mobile-first social networking app built with React, TypeScript, Vite, Tailwind CSS, and Capacitor.
+Ace Domain is a mobile-first global social app for chats, posts, communities, discovery, profile personalization, and Ace AI. The current product direction is a black-first, compact, modern social layout with a premium `AD` brand identity.
+
+## Current Status
+
+- Stage 8, Stage 9, Stage 10, and Stage 11 GitHub readiness work are complete.
+- The app has passed lint, TypeScript, and production build checks.
+- The project is configured for web plus Capacitor Android/iOS handoff.
+- Demo/local fallback remains available when Supabase or OpenAI services are unavailable.
+- Real secrets are intentionally excluded from Git.
+
+## Tech Stack
+
+- React
+- TypeScript
+- Vite
+- Tailwind CSS
+- Capacitor
+- Supabase foundation
+- Backend/serverless OpenAI endpoint foundation
 
 ## Requirements
 
@@ -28,9 +46,13 @@ The app is organized by product feature under `src/features`, shared UI under `s
 
 Future product modules are intentionally registered as planned architecture only: voice/video, translation expansion, full mini-games, creator economy, marketplace, food ordering, clothes shopping, ride booking, flights, hotels, wallet, payments, and banking features.
 
-Stage 10 visual identity planning is documented in `docs/visual-identity-plan.md`.
+## Professional Handoff
 
-Final release handoff notes are documented in `docs/release-handoff.md`.
+- Stage 10 visual identity planning is documented in `docs/visual-identity-plan.md`.
+- Final release handoff notes are documented in `docs/release-handoff.md`.
+- Native icon and splash export notes are documented in `docs/native-brand-assets.md`.
+
+## Capacitor Mobile Setup
 
 Capacitor is configured with:
 
@@ -46,6 +68,12 @@ Use `.env.example` as the template for local configuration. Real `.env` files ar
 - `OPENAI_API_KEY` is backend-only and must never be exposed as `VITE_OPENAI_API_KEY`.
 
 The app stays demo-safe when Supabase or OpenAI configuration is missing.
+
+## Known Limitations
+
+- Supabase email signup can temporarily rate-limit test accounts; the app shows a friendly fallback message and keeps demo mode available.
+- Ace AI requires a backend/serverless runtime with `OPENAI_API_KEY` configured and valid OpenAI quota.
+- A final real phone or emulator pass is recommended before public release builds.
 
 ## Quick Start
 
@@ -83,9 +111,9 @@ npx tsc -b --pretty false
 npm run build
 ```
 
-## GitHub Readiness
+## Repository Safety
 
-Before creating a remote or pushing this project:
+Before pushing future changes:
 
 - Confirm `git status` is clean.
 - Confirm `.env` is not tracked and `.env.example` contains placeholders only.

@@ -2,22 +2,24 @@
 
 ## Current Status
 
-Ace Domain - Meet the World is a mobile-first React, TypeScript, Vite, Tailwind CSS, and Capacitor app prepared for professional review and eventual GitHub sharing.
+Ace Domain - Meet the World is a mobile-first React, TypeScript, Vite, Tailwind CSS, and Capacitor app prepared for professional review and GitHub handoff.
 
 The current app is stable through Stage 10. The accepted product direction is a black-first, compact, modern mobile social layout with clean feed, messaging, communities, notifications, profile, settings, Global Discovery, Calendar, and Ace AI surfaces.
 
-Latest source checkpoints at the time of this handoff:
+Recent source checkpoints at the time of this handoff:
 
+- `3b4cf47 Stage 11B - Final device QA before GitHub`
 - `aca1825 Stage 11A - Final release handoff preparation`
 - `23305c5 Stage 10E - Final post redesign visual QA`
 - Stage 10F and Stage 10G completed with no code changes required.
-- Git was clean after the Stage 11A release handoff checkpoint.
+- Git was clean after the Stage 11B final device QA checkpoint.
 
 ## Completed Stage Summary
 
 - Stage 8: Product walkthrough, stability checks, mobile readiness, and final pre-release QA.
 - Stage 9: Professional cleanup, release packaging review, and GitHub readiness checklist.
 - Stage 10: Visual identity planning, branding components, native asset readiness, layout direction replacement, post-redesign QA, and final fallback verification.
+- Stage 11: Release handoff, final device QA, GitHub push preparation, and repository polish.
 
 ## Main Features
 
@@ -103,7 +105,7 @@ Then test on a real phone or emulator before public release.
 ## Known Limitations
 
 - Supabase email signup may temporarily return a rate-limit response. The app now shows a friendly message and keeps demo mode available, but real signup should be retested after the rate limit window clears.
-- The Codex desktop environment could confirm local availability and source-level navigation, but it could not complete a live in-app browser tap-through against the local Vite port during Stage 10G.
+- The Codex desktop environment could confirm local availability and source-level navigation, but it could not complete a live in-app browser tap-through against the local Vite port during Stage 10G/11B.
 - A final physical phone or emulator pass is still recommended before public GitHub/public release sharing.
 - OpenAI responses depend on the backend endpoint running with a valid `OPENAI_API_KEY` and sufficient OpenAI quota.
 
@@ -113,5 +115,5 @@ Then test on a real phone or emulator before public release.
 2. Run Ace Domain on a real phone or emulator.
 3. Retest live Supabase signup after the email rate limit clears.
 4. Confirm `.env` is untracked and `.env.example` remains placeholder-only.
-5. Create the GitHub remote only when ready.
-6. Push only after reviewing `git status` and the latest commit history.
+5. Review `git status` before each future commit or push.
+6. Keep repository polish documentation in sync with the latest public checkpoint.
