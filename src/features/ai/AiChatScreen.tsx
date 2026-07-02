@@ -1,5 +1,5 @@
 import { useState, type FormEvent } from 'react';
-import { ArrowLeft, Bot, Loader2, Send } from 'lucide-react';
+import { ArrowLeft, Bot, Loader2, Send, ShieldCheck, Sparkles, UsersRound } from 'lucide-react';
 import { sendAiChatMessage } from '../../services/aiChatService';
 
 type AiChatScreenProps = {
@@ -12,10 +12,41 @@ type AiMessage = {
   role: 'assistant' | 'user';
 };
 
+const aiUseCases = [
+  {
+    description: 'Turn a match, country, or shared interest into a natural first message.',
+    icon: <UsersRound size={18} />,
+    title: 'Better openers'
+  },
+  {
+    description: 'Find community ideas, story prompts, and respectful culture questions.',
+    icon: <Sparkles size={18} />,
+    title: 'Discovery help'
+  },
+  {
+    description: 'Ace AI is separate from private user chats and only replies to what you type here.',
+    icon: <ShieldCheck size={18} />,
+    title: 'Separate space'
+  }
+];
+
 const suggestedPrompts = [
-  'Suggest three ways to meet people worldwide on Ace Domain.',
-  'Give me a friendly opener for a global match.',
-  'Help me find community ideas around gaming and culture.'
+  {
+    label: 'Meet the world',
+    prompt: 'Suggest three practical ways to meet people worldwide on Ace Domain.'
+  },
+  {
+    label: 'Global opener',
+    prompt: 'Give me a friendly opener for a global match who likes music, games, and travel.'
+  },
+  {
+    label: 'Community idea',
+    prompt: 'Help me create a community idea around gaming, culture, and learning languages.'
+  },
+  {
+    label: 'Profile polish',
+    prompt: 'Rewrite my profile bio so it feels confident, friendly, and not too serious.'
+  }
 ];
 
 function createMessageId() {
@@ -82,7 +113,7 @@ export function AiChatScreen({ onBack }: AiChatScreenProps) {
           <div className="min-w-0 flex-1">
             <p className="text-xs font-black uppercase tracking-[0.24em] text-zinc-500">Ace Domain</p>
             <h1 className="truncate text-2xl font-black text-white">Ace AI</h1>
-            <p className="truncate text-xs text-frost/50">AI assistant for culture, discovery, prompts, and social ideas.</p>
+            <p className="truncate text-xs text-frost/50">Prompt help for social discovery, culture, and profile ideas.</p>
           </div>
         </div>
       </header>
@@ -96,22 +127,42 @@ export function AiChatScreen({ onBack }: AiChatScreenProps) {
               </div>
               <div>
                 <h2 className="font-black text-white">Ask Ace AI</h2>
-                <p className="mt-1 text-sm leading-6 text-frost/55">Start with a global social idea, a match opener, or a community prompt.</p>
+                <p className="mt-1 text-sm leading-6 text-frost/55">Use it as a quick creative layer for meeting people, not as your private chat inbox.</p>
               </div>
             </div>
-            <div className="mt-5 grid gap-3">
+
+            <div className="mt-5 grid gap-2">
+              {aiUseCases.map((useCase) => (
+                <div key={useCase.title} className="flex items-start gap-3 border-b border-white/10 py-3 last:border-b-0">
+                  <div className="mt-0.5 grid h-9 w-9 shrink-0 place-items-center rounded-full bg-white/10 text-white">{useCase.icon}</div>
+                  <div className="min-w-0">
+                    <p className="text-sm font-black text-white">{useCase.title}</p>
+                    <p className="mt-1 text-xs leading-5 text-zinc-500">{useCase.description}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <div className="mt-5 flex items-center justify-between gap-3">
+              <p className="text-xs font-black uppercase tracking-[0.22em] text-zinc-600">Start fast</p>
+              <span className="rounded-full border border-white/10 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.16em] text-zinc-500">
+                Local prompt
+              </span>
+            </div>
+            <div className="mt-3 grid gap-2">
               {suggestedPrompts.map((prompt) => (
                 <button
-                  key={prompt}
+                  key={prompt.label}
                   type="button"
                   onClick={() => {
-                    void sendMessage(undefined, prompt);
+                    void sendMessage(undefined, prompt.prompt);
                   }}
-                  className="rounded-2xl border border-white/10 px-4 py-3 text-left text-sm font-bold leading-6 text-white transition hover:bg-white/5"
-                  aria-label={`Send suggested prompt: ${prompt}`}
+                  className="rounded-2xl border border-white/10 px-4 py-3 text-left transition hover:bg-white/5"
+                  aria-label={`Send suggested prompt: ${prompt.prompt}`}
                   disabled={isLoading}
                 >
-                  {prompt}
+                  <span className="block text-sm font-black text-white">{prompt.label}</span>
+                  <span className="mt-1 block text-xs leading-5 text-zinc-500">{prompt.prompt}</span>
                 </button>
               ))}
             </div>
