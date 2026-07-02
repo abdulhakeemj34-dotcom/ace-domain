@@ -18,6 +18,10 @@ const stats = [
   { label: 'Groups', value: '36' }
 ];
 
+const profileTabs = ['Posts', 'Replies', 'World'] as const;
+
+type ProfileTab = (typeof profileTabs)[number];
+
 type ProfileState = {
   avatar: string;
   bio: string;
@@ -188,12 +192,43 @@ function ProfileRow({ children, description, icon, title }: ProfileRowProps) {
 
 export function ProfileScreen({ appSettings, globalProfile, globalSettings, onLogout, onOpenSettingsCenter }: ProfileScreenProps) {
   const [profile, setProfile] = useState(initialProfile);
+  const [activeTab, setActiveTab] = useState<ProfileTab>('Posts');
   const [editing, setEditing] = useState(false);
   const [profileStatus, setProfileStatus] = useState('');
   const profileCountry = countryProfiles.find((country) => country.name === globalProfile.country) ?? countryProfiles[0];
   const showCountry = !globalSettings.hideCountry && appSettings.showCountry;
   const showLocalTime = !globalSettings.hideLocalTime && appSettings.showLocalTime;
   const showLanguages = !globalSettings.hideLanguages && appSettings.showLanguages;
+  const profileHandle = profile.username.toLowerCase().replace(/[^a-z0-9]+/g, '_').replace(/^_+|_+$/g, '').slice(0, 24) || 'ace_explorer';
+  const profileSignals = [
+    { label: 'Mode', value: globalProfile.focus },
+    { label: 'Region', value: globalProfile.region },
+    { label: 'Badge', value: badgeLabels[appSettings.profileBadgeStyle] }
+  ];
+  const profilePostItems = [
+    {
+      eyebrow: 'Pinned',
+      body: `${profile.username} is building a cleaner global circle: meet people, trade culture, and keep the feed useful.`,
+      meta: `${profile.interests.slice(0, 2).join(' + ') || 'Global culture'} / ${globalProfile.region}`,
+      stats: '428 views'
+    },
+    {
+      eyebrow: 'Now',
+      body: 'Looking for people who like thoughtful chats, games, music drops, and new cities.',
+      meta: 'Open to Global Match',
+      stats: '36 saves'
+    }
+  ];
+  const profileReplyItems = [
+    {
+      body: 'Replying to a community thread about building safe friend groups across countries.',
+      meta: 'Culture Club / 12 replies'
+    },
+    {
+      body: 'Shared a quick opener for starting a respectful first chat with someone new.',
+      meta: 'Social skills / 8 likes'
+    }
+  ];
 
   useEffect(() => {
     let isMounted = true;
@@ -263,8 +298,9 @@ export function ProfileScreen({ appSettings, globalProfile, globalSettings, onLo
             <div className="min-w-0 flex-1">
               <div className="flex min-w-0 items-center gap-2">
                 <h2 className="truncate text-2xl font-black text-white">{profile.username}</h2>
-            <BadgeCheck size={20} className="text-[#1d9bf0]" />
+                <BadgeCheck size={20} className="text-[#1d9bf0]" />
               </div>
+              <p className="mt-1 truncate text-sm font-semibold text-zinc-500">@{profileHandle}</p>
               <p className="mt-1 flex min-w-0 items-center gap-1 text-sm text-frost/55">
                 <MapPin size={14} className="shrink-0" />
                 <span className="truncate">{profile.country}</span>
@@ -311,6 +347,15 @@ export function ProfileScreen({ appSettings, globalProfile, globalSettings, onLo
             </div>
           )}
 
+          <div className="mt-4 grid grid-cols-3 divide-x divide-white/10 border-y border-white/10 py-3">
+            {profileSignals.map((signal) => (
+              <div key={signal.label} className="min-w-0 px-2 text-center">
+                <p className="truncate text-[10px] font-black uppercase tracking-[0.18em] text-zinc-600">{signal.label}</p>
+                <p className="mt-1 truncate text-xs font-bold text-zinc-200">{signal.value}</p>
+              </div>
+            ))}
+          </div>
+
           <div className="mt-4 grid grid-cols-2 gap-2">
             <button type="button" onClick={() => setEditing(true)} className="rounded-full bg-white px-5 py-3 text-sm font-bold text-black">
               Edit profile
@@ -335,45 +380,81 @@ export function ProfileScreen({ appSettings, globalProfile, globalSettings, onLo
         </div>
 
         <div className="mt-4 grid grid-cols-3 border-b border-white/10 text-center">
-          {['Posts', 'Replies', 'Media'].map((tab, index) => (
-            <button key={tab} type="button" className={`relative min-h-11 text-sm font-bold ${index === 0 ? 'text-white' : 'text-zinc-500'}`}>
+          {profileTabs.map((tab) => (
+            <button
+              key={tab}
+              type="button"
+              onClick={() => setActiveTab(tab)}
+              className={`relative min-h-11 text-sm font-bold ${activeTab === tab ? 'text-white' : 'text-zinc-500'}`}
+              aria-pressed={activeTab === tab}
+            >
               {tab}
-              {index === 0 && <span className="absolute bottom-0 left-1/2 h-1 w-10 -translate-x-1/2 rounded-full bg-[#1d9bf0]" />}
+              {activeTab === tab && <span className="absolute bottom-0 left-1/2 h-1 w-10 -translate-x-1/2 rounded-full bg-[#1d9bf0]" />}
             </button>
           ))}
         </div>
 
-        <div className="mt-4 overflow-hidden border-y border-white/10">
-          <ProfileRow
-            icon={<Globe2 size={19} />}
-            title="World identity"
-            description={`${globalProfile.focus} / ${globalProfile.region}`}
-          >
-            <div className="mt-2 flex flex-wrap gap-2">
-              {showCountry && <CountryBadge code={profileCountry.code} label={globalProfile.country} />}
-              {showLocalTime && <WorldClockLabel timeZone={profileCountry.timeZone} />}
-              <LanguageBadge label={globalProfile.appLanguage} tone="preferred" />
+        <div className="mt-2 border-b border-white/10">
+          {activeTab === 'Posts' && (
+            <div>
+              {profilePostItems.map((item) => (
+                <article key={item.eyebrow} className="border-b border-white/10 py-4 last:border-b-0">
+                  <p className="text-[11px] font-black uppercase tracking-[0.2em] text-zinc-600">{item.eyebrow}</p>
+                  <p className="mt-2 text-sm font-semibold leading-6 text-zinc-100">{item.body}</p>
+                  <div className="mt-3 flex items-center justify-between gap-3 text-xs text-zinc-500">
+                    <span className="min-w-0 truncate">{item.meta}</span>
+                    <span className="shrink-0">{item.stats}</span>
+                  </div>
+                </article>
+              ))}
             </div>
-          </ProfileRow>
-
-          {showLanguages && (
-            <ProfileRow
-              icon={<Globe2 size={19} />}
-              title="Languages"
-              description={`Speaks ${globalProfile.languagesSpoken.join(', ')}. Learning ${globalProfile.languagesLearning.join(', ')}.`}
-            >
-              <div className="mt-2 flex flex-wrap gap-2">
-                {globalProfile.languagesSpoken.slice(0, 3).map((language) => <LanguageBadge key={language} label={language} />)}
-                {globalProfile.languagesLearning.slice(0, 2).map((language) => <LanguageBadge key={language} label={language} tone="learning" />)}
-              </div>
-            </ProfileRow>
           )}
 
-          <ProfileRow
-            icon={<BadgeCheck size={19} />}
-            title="Global Match visibility"
-            description={appSettings.showProfileInGlobalMatch ? 'Your profile can appear in discovery.' : 'Your profile is hidden from Global Match discovery.'}
-          />
+          {activeTab === 'Replies' && (
+            <div>
+              {profileReplyItems.map((item) => (
+                <article key={item.body} className="border-b border-white/10 py-4 last:border-b-0">
+                  <p className="text-sm font-semibold leading-6 text-zinc-100">{item.body}</p>
+                  <p className="mt-2 text-xs text-zinc-500">{item.meta}</p>
+                </article>
+              ))}
+            </div>
+          )}
+
+          {activeTab === 'World' && (
+            <div className="overflow-hidden">
+              <ProfileRow
+                icon={<Globe2 size={19} />}
+                title="World identity"
+                description={`${globalProfile.focus} / ${globalProfile.region}`}
+              >
+                <div className="mt-2 flex flex-wrap gap-2">
+                  {showCountry && <CountryBadge code={profileCountry.code} label={globalProfile.country} />}
+                  {showLocalTime && <WorldClockLabel timeZone={profileCountry.timeZone} />}
+                  <LanguageBadge label={globalProfile.appLanguage} tone="preferred" />
+                </div>
+              </ProfileRow>
+
+              {showLanguages && (
+                <ProfileRow
+                  icon={<Globe2 size={19} />}
+                  title="Languages"
+                  description={`Speaks ${globalProfile.languagesSpoken.join(', ')}. Learning ${globalProfile.languagesLearning.join(', ')}.`}
+                >
+                  <div className="mt-2 flex flex-wrap gap-2">
+                    {globalProfile.languagesSpoken.slice(0, 3).map((language) => <LanguageBadge key={language} label={language} />)}
+                    {globalProfile.languagesLearning.slice(0, 2).map((language) => <LanguageBadge key={language} label={language} tone="learning" />)}
+                  </div>
+                </ProfileRow>
+              )}
+
+              <ProfileRow
+                icon={<BadgeCheck size={19} />}
+                title="Global Match visibility"
+                description={appSettings.showProfileInGlobalMatch ? 'Your profile can appear in discovery.' : 'Your profile is hidden from Global Match discovery.'}
+              />
+            </div>
+          )}
         </div>
 
         <div className="mt-4 overflow-hidden border-y border-white/10">
