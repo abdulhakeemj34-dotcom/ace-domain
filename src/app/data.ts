@@ -13,11 +13,12 @@ import type {
 } from './types';
 
 export const stories: Story[] = [
-  { id: 's1', name: 'Maya', avatar: 'MA', location: 'Lagos', live: true, caption: 'Sunset from a rooftop culture mixer.' },
-  { id: 's2', name: 'Kenji', avatar: 'KN', location: 'Tokyo', caption: 'Late-night arcade run with new friends.' },
-  { id: 's3', name: 'Nora', avatar: 'NR', location: 'Oslo', caption: 'Snow walk and music exchange room.' },
-  { id: 's4', name: 'Amir', avatar: 'AM', location: 'Dubai', caption: 'Future city meetup is live.' },
-  { id: 's5', name: 'Zoe', avatar: 'ZO', location: 'Toronto', caption: 'Campus creators after class.' }
+  { id: 's1', name: 'Maya', avatar: 'MA', location: 'Lagos', live: true, caption: 'Rooftop culture mixer: music, food, and new friends checking in.' },
+  { id: 's2', name: 'Kenji', avatar: 'KN', location: 'Tokyo', caption: 'Late-night arcade run. The language-game room is meeting after.' },
+  { id: 's3', name: 'Nora', avatar: 'NR', location: 'Oslo', caption: 'Snow walk, playlist swap, and a tiny creator circle.' },
+  { id: 's4', name: 'Amir', avatar: 'AM', location: 'Dubai', caption: 'Future city meetup is live with founders and designers.' },
+  { id: 's5', name: 'Zoe', avatar: 'ZO', location: 'Toronto', caption: 'Campus creators after class: study sprint first, food crawl later.' },
+  { id: 's6', name: 'Diego', avatar: 'DS', location: 'Rio', caption: 'Beach football room is matching travelers and local players.' }
 ];
 
 export const posts: Post[] = [
@@ -28,8 +29,10 @@ export const posts: Post[] = [
     avatar: 'LM',
     region: 'Lisbon, Portugal',
     timestamp: '8 min',
-    body: 'Looking for founders, musicians, and night-market people in Seoul this week. Drop your favorite hidden places.',
+    context: 'Travel circle / Seoul this week',
+    body: 'Landing in Seoul tonight. Looking for founders, musicians, and night-market people who know the hidden places tourists miss.',
     interests: ['Travel', 'Startups', 'Music'],
+    replyPreview: 'Mina: Hongdae after 10PM, then the vinyl cafe near Hapjeong.',
     stats: { likes: '12.8K', comments: '418', shares: '86' }
   },
   {
@@ -39,8 +42,10 @@ export const posts: Post[] = [
     avatar: 'AC',
     region: 'Lagos, Nigeria',
     timestamp: '22 min',
-    body: 'New community idea: weekly global co-working rooms with skill swaps after each sprint. Who wants the first invite?',
+    context: 'Builder room / Product sprint',
+    body: 'New community idea: weekly global co-working rooms with skill swaps after each sprint. Ship for 45 minutes, then trade one useful thing you learned.',
     interests: ['Creators', 'Tech', 'Community'],
+    replyPreview: 'Zoe: Add a beginner table and I will bring campus creators.',
     stats: { likes: '8.4K', comments: '251', shares: '62' }
   },
   {
@@ -50,9 +55,37 @@ export const posts: Post[] = [
     avatar: 'SC',
     region: 'Singapore',
     timestamp: '41 min',
-    body: 'The AI search here found three language exchange groups and a ramen club in under ten seconds. Dangerous power.',
+    context: 'Discovery test / Food + language',
+    body: 'The AI search found three language exchange groups and a ramen club in under ten seconds. This is exactly how meeting the world should feel.',
     interests: ['Food', 'Language', 'AI'],
+    replyPreview: 'Kenji: Send the ramen one. Tokyo room is ready.',
     stats: { likes: '6.1K', comments: '143', shares: '51' }
+  },
+  {
+    id: 'p4',
+    author: 'Mina Park',
+    handle: '@minacodes',
+    avatar: 'MP',
+    region: 'Seoul, South Korea',
+    timestamp: '1h',
+    context: 'Mini-game lab / Language exchange',
+    body: 'Testing a one-minute flag quiz for language rooms. It starts as a game, then somehow everyone is teaching slang from their city.',
+    interests: ['Games', 'Language', 'Coding'],
+    replyPreview: 'Noah: Add football badges and Brazil will take over.',
+    stats: { likes: '4.9K', comments: '119', shares: '44' }
+  },
+  {
+    id: 'p5',
+    author: 'Aisha Noor',
+    handle: '@aishahosts',
+    avatar: 'AN',
+    region: 'Nairobi, Kenya',
+    timestamp: '2h',
+    context: 'Culture dinner / Creator invites',
+    body: 'Tonight’s prompt: bring one song, one street food, and one belief about your city that outsiders always misunderstand.',
+    interests: ['Food', 'Creators', 'Culture'],
+    replyPreview: 'Diego: Rio is showing up with funk, football, and beach stories.',
+    stats: { likes: '9.7K', comments: '302', shares: '73' }
   }
 ];
 
@@ -107,7 +140,8 @@ export const notifications: NotificationItem[] = [
 export const trendingConversations: TrendingConversation[] = [
   { id: 't1', title: 'Best street food cities', region: 'Global', pulse: '42K talking' },
   { id: 't2', title: 'Anime watch rooms tonight', region: 'Tokyo + Lagos', pulse: '18K live' },
-  { id: 't3', title: 'Campus founders meetup', region: 'Worldwide', pulse: '9K matching' }
+  { id: 't3', title: 'Campus founders meetup', region: 'Worldwide', pulse: '9K matching' },
+  { id: 't4', title: 'Language exchange icebreakers', region: 'Seoul + Nairobi', pulse: '6K joining' }
 ];
 
 export const miniGamePreviews: MiniGamePreview[] = [

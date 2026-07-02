@@ -31,6 +31,8 @@ export type Post = {
   timestamp: string;
   body: string;
   interests: string[];
+  context?: string;
+  replyPreview?: string;
   stats: {
     likes: string;
     comments: string;

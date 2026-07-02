@@ -28,7 +28,13 @@ type PostActionState = {
   shares: number;
 };
 
-const feedTabs = ['For you', 'Following', 'Global'] as const;
+const feedTabs = [
+  { label: 'For you', hint: 'Best updates from your world' },
+  { label: 'Following', hint: 'People and interests close to you' },
+  { label: 'Global', hint: 'Culture, cities, and matches worldwide' }
+] as const;
+
+type FeedTab = (typeof feedTabs)[number]['label'];
 
 function parseStat(value: string) {
   if (value.endsWith('K')) {
@@ -105,8 +111,10 @@ function StoryViewer({ story, onClose }: { story: Story; onClose: () => void }) 
 
 export function HomeScreen({ globalProfile, globalSettings, onOpenAiChat, onOpenCalendar, onOpenCommunities, onOpenGlobal, onStartChat }: HomeScreenProps) {
   const [activeStory, setActiveStory] = useState<Story | null>(null);
-  const [activeTab, setActiveTab] = useState<(typeof feedTabs)[number]>('For you');
+  const [activeTab, setActiveTab] = useState<FeedTab>('For you');
+  const [feedError, setFeedError] = useState('');
   const [feedPosts, setFeedPosts] = useState<Post[]>(mockPosts);
+  const [feedSource, setFeedSource] = useState<'demo' | 'live' | 'loading'>('loading');
   const [postActions, setPostActions] = useState<Record<string, PostActionState>>(() => buildInitialPostActions(mockPosts));
   const [searchQuery, setSearchQuery] = useState('');
 
@@ -120,6 +128,8 @@ export function HomeScreen({ globalProfile, globalSettings, onOpenAiChat, onOpen
 
       setFeedPosts(result.data);
       setPostActions(buildInitialPostActions(result.data));
+      setFeedError(result.error ?? '');
+      setFeedSource(result.usingFallback ? 'demo' : 'live');
     });
 
     return () => {
@@ -130,6 +140,21 @@ export function HomeScreen({ globalProfile, globalSettings, onOpenAiChat, onOpen
   const searchResults = useMemo(() => buildSmartSearchResults(searchQuery), [searchQuery]);
   const hasSearchQuery = searchQuery.trim().length > 0;
   const identityLabel = globalSettings.hideCountry ? globalProfile.focus : `${globalProfile.focus} / ${globalProfile.country}`;
+  const activeTabHint = feedTabs.find((tab) => tab.label === activeTab)?.hint ?? feedTabs[0].hint;
+
+  const visibleFeedPosts = useMemo(() => {
+    if (activeTab === 'Global') {
+      return feedPosts.filter((post) => post.region !== globalProfile.country && !post.region.includes(globalProfile.country));
+    }
+
+    if (activeTab === 'Following') {
+      const profileInterests = new Set(globalProfile.interests.map((interest) => interest.toLowerCase()));
+      const matchingPosts = feedPosts.filter((post) => post.interests.some((interest) => profileInterests.has(interest.toLowerCase())));
+      return matchingPosts.length > 0 ? matchingPosts : feedPosts.slice(0, 3);
+    }
+
+    return feedPosts;
+  }, [activeTab, feedPosts, globalProfile.country, globalProfile.interests]);
 
   const updatePost = (postId: string, updater: (current: PostActionState) => PostActionState) => {
     setPostActions((current) => ({ ...current, [postId]: updater(current[postId]) }));
@@ -161,19 +186,30 @@ export function HomeScreen({ globalProfile, globalSettings, onOpenAiChat, onOpen
         <div className="grid grid-cols-3">
           {feedTabs.map((tab) => (
             <button
-              key={tab}
+              key={tab.label}
               type="button"
-              onClick={() => setActiveTab(tab)}
-              className={`relative min-h-11 text-sm font-bold ${activeTab === tab ? 'text-white' : 'text-zinc-500'}`}
+              onClick={() => setActiveTab(tab.label)}
+              className={`relative min-h-11 text-sm font-bold ${activeTab === tab.label ? 'text-white' : 'text-zinc-500'}`}
             >
-              {tab}
-              {activeTab === tab && <span className="absolute bottom-0 left-1/2 h-1 w-10 -translate-x-1/2 rounded-full bg-[#1d9bf0]" />}
+              {tab.label}
+              {activeTab === tab.label && <span className="absolute bottom-0 left-1/2 h-1 w-10 -translate-x-1/2 rounded-full bg-[#1d9bf0]" />}
             </button>
           ))}
         </div>
       </header>
 
       <SearchBar placeholder="Search Ace Domain..." value={searchQuery} onChange={setSearchQuery} />
+
+      <section className="border-b border-white/10 px-4 py-3">
+        <button type="button" onClick={onOpenGlobal} className="flex w-full items-center gap-3 text-left" aria-label="Open global discovery from composer">
+          <Avatar label="AD" size="sm" active />
+          <span className="min-w-0 flex-1">
+            <span className="block text-sm font-bold text-white">What is happening around you?</span>
+            <span className="mt-0.5 block truncate text-xs text-zinc-500">Find people, prompts, and rooms connected to {globalProfile.focus.toLowerCase()}.</span>
+          </span>
+          <span className="shrink-0 rounded-full border border-white/15 px-3 py-1.5 text-xs font-bold text-white">Explore</span>
+        </button>
+      </section>
 
       {hasSearchQuery && (
         <div className="mt-3 border-y border-white/10">
@@ -199,6 +235,10 @@ export function HomeScreen({ globalProfile, globalSettings, onOpenAiChat, onOpen
       )}
 
       <div className="border-b border-white/10 px-4 py-3">
+        <div className="mb-3 flex items-center justify-between">
+          <h2 className="text-sm font-black text-white">Stories</h2>
+          <button type="button" onClick={onOpenGlobal} className="text-xs font-bold text-zinc-500">Discover</button>
+        </div>
         <div className="flex gap-4 overflow-x-auto [scrollbar-width:none]">
           {stories.map((story) => (
             <button
@@ -215,35 +255,53 @@ export function HomeScreen({ globalProfile, globalSettings, onOpenAiChat, onOpen
         </div>
       </div>
 
-      <section className="border-b border-white/10">
-        <button type="button" onClick={onOpenCommunities} className="flex w-full items-center gap-3 px-4 py-3 text-left">
-          <UsersRound size={20} className="text-zinc-400" />
-          <div className="min-w-0 flex-1">
-            <p className="truncate text-sm font-bold text-white">Communities</p>
-            <p className="truncate text-xs text-zinc-500">Open rooms, interests, and culture groups.</p>
+      <section className="border-b border-white/10 px-4 py-3">
+        <div className="flex items-center justify-between gap-3">
+          <div className="min-w-0">
+            <p className="text-sm font-black text-white">Happening now</p>
+            <p className="truncate text-xs text-zinc-500">{activeTabHint}</p>
           </div>
-        </button>
-        {trendingConversations.slice(0, 2).map((item) => (
-          <button key={item.id} type="button" onClick={onOpenGlobal} className="flex w-full items-center justify-between gap-3 px-4 py-2.5 text-left">
-            <div className="min-w-0">
-              <p className="truncate text-sm font-semibold text-zinc-200">{item.title}</p>
-              <p className="truncate text-xs text-zinc-500">{item.region}</p>
-            </div>
-            <span className="shrink-0 text-xs text-zinc-500">{item.pulse}</span>
+          <button type="button" onClick={onOpenCommunities} className="inline-flex shrink-0 items-center gap-1.5 rounded-full border border-white/10 px-3 py-1.5 text-xs font-bold text-zinc-300">
+            <UsersRound size={14} />
+            Rooms
           </button>
-        ))}
-        <button type="button" onClick={onStartChat} className="flex w-full items-center gap-3 px-4 py-3 text-left">
-          <Avatar label={globalMatches[0].avatar} active />
+        </div>
+        <div className="mt-3 flex gap-2 overflow-x-auto [scrollbar-width:none]">
+          {trendingConversations.map((item) => (
+            <button key={item.id} type="button" onClick={onOpenGlobal} className="min-w-[12rem] shrink-0 rounded-2xl border border-white/10 px-3 py-2 text-left">
+              <span className="block truncate text-sm font-bold text-white">{item.title}</span>
+              <span className="mt-0.5 block truncate text-xs text-zinc-500">{item.region} / {item.pulse}</span>
+            </button>
+          ))}
+        </div>
+        <button type="button" onClick={onStartChat} className="mt-3 flex w-full items-center gap-3 rounded-2xl border border-white/10 px-3 py-2.5 text-left">
+          <Avatar label={globalMatches[0].avatar} size="sm" active />
           <div className="min-w-0 flex-1">
-            <p className="truncate text-sm font-bold text-white">{globalMatches[0].name}</p>
+            <p className="truncate text-sm font-bold text-white">Global Match: {globalMatches[0].name}</p>
             <p className="truncate text-xs text-zinc-500">{globalMatches[0].country} / {globalMatches[0].vibe}</p>
           </div>
-          <span className="rounded-full border border-white/15 px-3 py-1 text-xs font-bold text-white">Chat</span>
+          <span className="rounded-full bg-white px-3 py-1 text-xs font-black text-black">Start</span>
         </button>
       </section>
 
+      <div className="border-b border-white/10 px-4 py-2.5">
+        <p className="text-xs font-semibold text-zinc-500">
+          {feedSource === 'loading' ? 'Refreshing feed...' : feedSource === 'demo' ? 'Local demo feed / ready without backend' : 'Live feed / Supabase connected'}
+          {feedError ? ` / ${feedError}` : ''}
+        </p>
+      </div>
+
       <div className="divide-y divide-white/10">
-        {feedPosts.map((post) => {
+        {visibleFeedPosts.length === 0 && (
+          <div className="px-4 py-8 text-center">
+            <h2 className="font-black text-white">No updates in this view yet</h2>
+            <p className="mx-auto mt-2 max-w-xs text-sm leading-6 text-zinc-500">Switch tabs or open Global Discovery to find people and conversations around your interests.</p>
+            <button type="button" onClick={onOpenGlobal} className="mt-4 rounded-full bg-white px-4 py-2 text-sm font-black text-black">
+              Explore people
+            </button>
+          </div>
+        )}
+        {visibleFeedPosts.map((post) => {
           const action =
             postActions[post.id] ?? {
               comments: parseStat(post.stats.comments),
@@ -260,11 +318,22 @@ export function HomeScreen({ globalProfile, globalSettings, onOpenAiChat, onOpen
                 <div className="min-w-0 flex-1">
                   <div className="flex min-w-0 items-center gap-1.5">
                     <h3 className="truncate font-bold text-white">{post.author}</h3>
-                    <span className="shrink-0 text-sm text-zinc-500">{post.handle}</span>
+                    <span className="min-w-0 truncate text-sm text-zinc-500">{post.handle}</span>
                     <span className="shrink-0 text-sm text-zinc-500">/ {post.timestamp}</span>
                   </div>
-                  <p className="truncate text-xs text-zinc-500">{post.region}</p>
+                  <p className="truncate text-xs text-zinc-500">{post.context ? `${post.context} / ${post.region}` : post.region}</p>
                   <TranslationToggle className="mt-2 text-[15px] leading-6" text={post.body} translatedText={`Translation preview: ${post.body}`} />
+                  {post.replyPreview && (
+                    <button
+                      type="button"
+                      onClick={() => updatePost(post.id, (current) => ({ ...current, comments: current.comments + 1 }))}
+                      className="mt-3 flex w-full items-start gap-2 rounded-2xl border border-white/10 px-3 py-2 text-left"
+                      aria-label={`View replies to ${post.author}'s post`}
+                    >
+                      <MessageCircle size={15} className="mt-0.5 shrink-0 text-zinc-500" />
+                      <span className="line-clamp-2 text-sm leading-5 text-zinc-400">{post.replyPreview}</span>
+                    </button>
+                  )}
                   <div className="mt-3 flex flex-wrap gap-2">
                     {post.interests.map((interest) => (
                       <span key={interest} className="rounded-full border border-white/10 px-3 py-1 text-xs font-semibold text-zinc-500">
@@ -313,7 +382,7 @@ export function HomeScreen({ globalProfile, globalSettings, onOpenAiChat, onOpen
         })}
         <div className="flex items-center justify-center gap-2 px-4 py-5 text-xs text-zinc-600">
           <Repeat2 size={14} />
-          You are caught up
+          You are caught up in {activeTab.toLowerCase()}
         </div>
       </div>
 
