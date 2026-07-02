@@ -29,7 +29,32 @@ async function readJson(response: Response): Promise<AiChatResponseBody | null> 
 }
 
 function safeError(value: unknown, fallback: string) {
-  return typeof value === 'string' && value.trim() ? value : fallback;
+  const message = typeof value === 'string' ? value.trim() : '';
+
+  if (!message) {
+    return fallback;
+  }
+
+  const normalized = message.toLowerCase();
+
+  if (
+    normalized.includes('openai_api_key') ||
+    normalized.includes('backend environment') ||
+    normalized.includes('api key')
+  ) {
+    return 'Ace AI is not fully configured on the backend yet. Please try again later.';
+  }
+
+  if (
+    normalized.includes('insufficient_quota') ||
+    normalized.includes('quota') ||
+    normalized.includes('rate limit') ||
+    normalized.includes('too many requests')
+  ) {
+    return 'Ace AI is temporarily limited right now. Please try again later.';
+  }
+
+  return message;
 }
 
 export async function sendAiChatMessage(message: string): Promise<AiChatResult> {
