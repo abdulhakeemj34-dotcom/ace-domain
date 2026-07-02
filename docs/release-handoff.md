@@ -6,11 +6,12 @@ Ace Domain - Meet the World is a mobile-first React, TypeScript, Vite, Tailwind 
 
 The current app is stable through Stage 10. The accepted product direction is a black-first, compact, modern mobile social layout with clean feed, messaging, communities, notifications, profile, settings, Global Discovery, Calendar, and Ace AI surfaces.
 
-Latest source checkpoint at the time of this handoff:
+Latest source checkpoints at the time of this handoff:
 
+- `aca1825 Stage 11A - Final release handoff preparation`
 - `23305c5 Stage 10E - Final post redesign visual QA`
 - Stage 10F and Stage 10G completed with no code changes required.
-- Git was clean after the final Stage 10 fallback verification.
+- Git was clean after the Stage 11A release handoff checkpoint.
 
 ## Completed Stage Summary
 
