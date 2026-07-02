@@ -103,6 +103,14 @@ function mapMessage(row: ChatMessageRow, currentUserId: string): ChatMessage {
   };
 }
 
+function fallbackMessages(threadId: string) {
+  return chatMessagesByChatId[threadId] ?? chatMessagesByChatId.c1;
+}
+
+function isDemoThread(threadId: string) {
+  return Boolean(chatMessagesByChatId[threadId]);
+}
+
 function parseRealtimeRow(payload: unknown): ChatMessageRow | null {
   if (!isRecord(payload)) {
     return null;
@@ -224,8 +232,8 @@ export async function createChatThread({ memberIds = [], title, type }: CreateCh
 export async function getChatMessages(threadId: string): Promise<ChatResult<ChatMessage[]>> {
   const session = getStoredSession();
 
-  if (!supabaseConfig.isConfigured || !session) {
-    return { data: chatMessagesByChatId[threadId] ?? chatMessagesByChatId.c1, usingFallback: true };
+  if (!supabaseConfig.isConfigured || !session || isDemoThread(threadId)) {
+    return { data: fallbackMessages(threadId), usingFallback: true };
   }
 
   try {
@@ -234,13 +242,13 @@ export async function getChatMessages(threadId: string): Promise<ChatResult<Chat
     });
 
     if (!Array.isArray(rows)) {
-      return { data: chatMessagesByChatId[threadId] ?? chatMessagesByChatId.c1, usingFallback: true };
+      return { data: fallbackMessages(threadId), usingFallback: true };
     }
 
     return { data: rows.map((row) => mapMessage(row, session.user.id)), usingFallback: false };
   } catch (error) {
     return {
-      data: chatMessagesByChatId[threadId] ?? chatMessagesByChatId.c1,
+      data: fallbackMessages(threadId),
       error: error instanceof Error ? error.message : 'Chat message load failed.',
       usingFallback: true
     };
@@ -250,7 +258,7 @@ export async function getChatMessages(threadId: string): Promise<ChatResult<Chat
 export async function sendChatMessage(threadId: string, content: string): Promise<ChatResult<ChatMessage | null>> {
   const session = getStoredSession();
 
-  if (!supabaseConfig.isConfigured || !session) {
+  if (!supabaseConfig.isConfigured || !session || isDemoThread(threadId)) {
     return { data: null, error: 'Live chat needs Supabase auth.', usingFallback: true };
   }
 
