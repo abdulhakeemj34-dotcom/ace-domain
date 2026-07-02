@@ -26,6 +26,33 @@ The canonical schema lives in `src/backend/schema.sql` and currently expects:
 
 RLS is enabled for all expected tables. User-owned writes should stay restricted to the authenticated user, while public reads remain limited to appropriate social surfaces such as profiles, posts, and communities.
 
+## Schema And Migration Readiness
+
+`src/backend/schema.sql` is the review source for future manual Supabase SQL Editor or migration-runner work. Stage 14C does not apply this SQL automatically.
+
+Before running SQL against a real Supabase project:
+
+- Confirm the target project is the correct Ace Domain project.
+- Review the full SQL file before execution.
+- Keep a database backup or recovery path for any project with real data.
+- Run schema changes manually from the Supabase dashboard or an approved migration workflow.
+- Do not run destructive resets, drops, or broad data deletes.
+- Do not use service-role keys in frontend code to bypass RLS.
+- Keep demo/local fallback available while live tables are verified.
+
+Current ownership expectations:
+
+- `profiles.id` maps to `auth.users.id`.
+- `posts.user_id` maps to the post owner.
+- `community_members.user_id` maps to the joined user.
+- `chat_threads.created_by` maps to the thread creator.
+- `chat_thread_members.user_id` maps to each member.
+- `chat_messages.sender_id` maps to the authenticated sender.
+- `notifications.user_id` maps to the notification owner.
+- `user_settings.user_id` maps to the settings owner.
+
+Live verification should start with auth/profile and settings before posts, communities, chats, and notifications.
+
 ## Live-Ready Areas
 
 - Auth service can call Supabase signup, login, profile refresh, and logout when configured.
