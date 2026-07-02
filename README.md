@@ -51,6 +51,7 @@ Future product modules are intentionally registered as planned architecture only
 - Stage 10 visual identity planning is documented in `docs/visual-identity-plan.md`.
 - Final release handoff notes are documented in `docs/release-handoff.md`.
 - Native icon and splash export notes are documented in [docs/native-brand-assets.md](docs/native-brand-assets.md).
+- Supabase setup requirements are documented in [docs/supabase-project-setup.md](docs/supabase-project-setup.md).
 
 ## Capacitor Mobile Setup
 
