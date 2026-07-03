@@ -150,6 +150,7 @@ function EditProfileModal({ profile, onClose, onSave }: EditProfileModalProps) {
 
 type ProfileScreenProps = {
   appSettings: AppSettings;
+  canSyncProfile: boolean;
   globalProfile: GlobalOnboardingProfile;
   globalSettings: GlobalSafetySettings;
   onOpenSettingsCenter: () => void;
@@ -193,11 +194,12 @@ function ProfileRow({ children, description, icon, title }: ProfileRowProps) {
   );
 }
 
-export function ProfileScreen({ appSettings, globalProfile, globalSettings, onLogout, onOpenSettingsCenter }: ProfileScreenProps) {
+export function ProfileScreen({ appSettings, canSyncProfile, globalProfile, globalSettings, onLogout, onOpenSettingsCenter }: ProfileScreenProps) {
   const [profile, setProfile] = useState(initialProfile);
   const [activeTab, setActiveTab] = useState<ProfileTab>('Posts');
   const [editing, setEditing] = useState(false);
   const [profileStatus, setProfileStatus] = useState('');
+  const visibleProfileStatus = profileStatus || (!canSyncProfile ? 'Profile is saved locally in demo mode.' : '');
   const profileCountry = countryProfiles.find((country) => country.name === globalProfile.country) ?? countryProfiles[0];
   const showCountry = !globalSettings.hideCountry && appSettings.showCountry;
   const showLocalTime = !globalSettings.hideLocalTime && appSettings.showLocalTime;
@@ -236,6 +238,12 @@ export function ProfileScreen({ appSettings, globalProfile, globalSettings, onLo
   useEffect(() => {
     let isMounted = true;
 
+    if (!canSyncProfile) {
+      return () => {
+        isMounted = false;
+      };
+    }
+
     getCurrentProfile().then((result) => {
       if (!isMounted) {
         return;
@@ -252,14 +260,14 @@ export function ProfileScreen({ appSettings, globalProfile, globalSettings, onLo
     return () => {
       isMounted = false;
     };
-  }, []);
+  }, [canSyncProfile]);
 
   const saveProfile = async (nextProfile: ProfileState) => {
     setProfile(nextProfile);
     setEditing(false);
 
-    if (!supabaseConfig.isConfigured) {
-      setProfileStatus('Profile saved locally. Add Supabase keys to sync it live.');
+    if (!canSyncProfile || !supabaseConfig.isConfigured) {
+      setProfileStatus(canSyncProfile ? 'Profile saved locally. Add Supabase keys to sync it live.' : 'Profile saved locally in demo mode.');
       return;
     }
 
@@ -379,7 +387,7 @@ export function ProfileScreen({ appSettings, globalProfile, globalSettings, onLo
             </button>
           )}
 
-          {profileStatus && <p className="mt-3 text-xs leading-5 text-frost/45">{profileStatus}</p>}
+          {visibleProfileStatus && <p className="mt-3 text-xs leading-5 text-frost/45">{visibleProfileStatus}</p>}
         </div>
 
         <div className="mt-4 grid grid-cols-3 border-b border-white/10 text-center">

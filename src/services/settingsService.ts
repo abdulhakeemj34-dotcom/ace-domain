@@ -1,7 +1,8 @@
 import { defaultAppSettings } from '../features/settings/defaultSettings';
 import { sanitizeAppSettings } from '../features/settings/settingsStorage';
 import type { AppSettings } from '../features/settings/settingsTypes';
-import { getStoredSession, supabaseConfig, supabaseRestRequest } from '../lib/supabase';
+import { supabaseConfig, supabaseRestRequest } from '../lib/supabase';
+import { getCurrentSession } from './authService';
 
 type UserSettingsRow = {
   settings: unknown;
@@ -38,13 +39,17 @@ function hasUsableSettingsPayload(value: unknown) {
 }
 
 export async function loadCurrentUserSettings(): Promise<SettingsSyncResult> {
-  const session = getStoredSession();
-
-  if (!supabaseConfig.isConfigured || !session) {
+  if (!supabaseConfig.isConfigured) {
     return { data: null, remoteExists: false, usingFallback: true };
   }
 
   try {
+    const session = await getCurrentSession();
+
+    if (!session) {
+      return { data: null, remoteExists: false, usingFallback: true };
+    }
+
     const rows = await supabaseRestRequest<UserSettingsRow[]>('user_settings', {
       accessToken: session.access_token,
       query: `user_id=eq.${encodeURIComponent(session.user.id)}&select=user_id,settings,settings_version,updated_at&limit=1`
@@ -76,15 +81,19 @@ export async function loadCurrentUserSettings(): Promise<SettingsSyncResult> {
 }
 
 export async function upsertCurrentUserSettings(settings: AppSettings): Promise<SettingsSyncResult> {
-  const session = getStoredSession();
-
-  if (!supabaseConfig.isConfigured || !session) {
+  if (!supabaseConfig.isConfigured) {
     return { data: null, remoteExists: false, usingFallback: true };
   }
 
   const sanitizedSettings = sanitizeAppSettings(settings);
 
   try {
+    const session = await getCurrentSession();
+
+    if (!session) {
+      return { data: null, remoteExists: false, usingFallback: true };
+    }
+
     const rows = await supabaseRestRequest<UserSettingsRow[]>('user_settings', {
       accessToken: session.access_token,
       body: {

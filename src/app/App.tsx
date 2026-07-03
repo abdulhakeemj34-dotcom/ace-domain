@@ -139,7 +139,12 @@ export default function App() {
   const isAuthenticated = authMode !== 'signed-out';
   const showNav = isAuthenticated && !['welcome', 'auth'].includes(screen);
 
-  const syncRemoteAppSettings = useCallback(async () => {
+  const syncRemoteAppSettings = useCallback(async (allowRemoteSync: boolean) => {
+    if (!allowRemoteSync) {
+      setSettingsSyncStatus('Saved locally');
+      return;
+    }
+
     const localSettings = readAppSettings();
     const localSavedAt = readAppSettingsSavedAt();
     setSettingsSyncStatus('Sync pending');
@@ -186,7 +191,7 @@ export default function App() {
       if (session) {
         setAuthMode('live');
         setScreen((current) => (['welcome', 'auth'].includes(current) ? 'home' : current));
-        void syncRemoteAppSettings();
+        void syncRemoteAppSettings(true);
       }
     }).finally(() => {
       if (isMounted) {
@@ -202,7 +207,7 @@ export default function App() {
       if ((event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED') && session) {
         setAuthMode('live');
         setScreen((current) => (['welcome', 'auth'].includes(current) ? 'home' : current));
-        void syncRemoteAppSettings();
+        void syncRemoteAppSettings(true);
       }
 
       if (event === 'SIGNED_OUT') {
@@ -220,11 +225,16 @@ export default function App() {
   const handleAppSettingsChange = useCallback((settings: AppSettings) => {
     setAppSettings(settings);
     writeAppSettings(settings);
+    if (authMode !== 'live') {
+      setSettingsSyncStatus('Saved locally');
+      return;
+    }
+
     setSettingsSyncStatus('Sync pending');
     void upsertCurrentUserSettings(settings).then((result) => {
       setSettingsSyncStatus(result.error || result.usingFallback ? 'Could not sync, saved on this device' : 'Synced');
     });
-  }, []);
+  }, [authMode]);
 
   const page = useMemo(() => {
     switch (screen) {
@@ -245,7 +255,7 @@ export default function App() {
               setAuthMode(mode);
               setScreen('home');
               if (mode === 'live') {
-                void syncRemoteAppSettings();
+                void syncRemoteAppSettings(true);
               } else {
                 setSettingsSyncStatus('Saved locally');
               }
@@ -309,6 +319,7 @@ export default function App() {
             appSettings={appSettings}
             globalProfile={globalProfile}
             globalSettings={globalSettings}
+            canSyncProfile={authMode === 'live'}
             onOpenSettingsCenter={() => setScreen('settingsCenter')}
             onLogout={() => {
               logout().then(() => {
@@ -335,7 +346,7 @@ export default function App() {
           />
         );
     }
-  }, [activeChatId, appSettings, globalProfile, globalSettings, handleAppSettingsChange, screen, settingsSyncStatus, syncRemoteAppSettings]);
+  }, [activeChatId, appSettings, authMode, globalProfile, globalSettings, handleAppSettingsChange, screen, settingsSyncStatus, syncRemoteAppSettings]);
 
   const appModes = [
     `appearance-${appSettings.appearanceMode}`,
