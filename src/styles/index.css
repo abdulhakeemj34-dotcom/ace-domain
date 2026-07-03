@@ -10,6 +10,11 @@
   --ad-accent-soft: rgba(255, 255, 255, 0.08);
   --ad-accent-strong: #ffffff;
   --ad-glow: rgba(255, 255, 255, 0.12);
+  --ad-shell-max-width: 28rem;
+  --ad-safe-top: env(safe-area-inset-top, 0px);
+  --ad-safe-bottom: env(safe-area-inset-bottom, 0px);
+  --ad-bottom-nav-height: calc(4.85rem + var(--ad-safe-bottom));
+  --ad-floating-composer-bottom: calc(var(--ad-bottom-nav-height) + 0.35rem);
   font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -23,13 +28,40 @@
 
 html {
   background: #000000;
+  min-height: 100%;
+  overflow-x: clip;
 }
 
 body {
   margin: 0;
   min-width: 320px;
   min-height: 100vh;
-  overflow-x: hidden;
+  overflow-x: clip;
+  overscroll-behavior-y: none;
+  touch-action: manipulation;
+}
+
+body,
+#root {
+  width: 100%;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+@supports (min-height: 100dvh) {
+  body,
+  #root {
+    min-height: 100dvh;
+  }
+}
+
+img,
+svg,
+video,
+canvas {
+  max-width: 100%;
 }
 
 button,
@@ -40,9 +72,51 @@ textarea {
 
 button {
   -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+input,
+textarea,
+select {
+  min-width: 0;
 }
 
 @layer utilities {
+  .ad-mobile-frame {
+    min-height: 100vh;
+    min-height: 100dvh;
+    max-width: min(var(--ad-shell-max-width), 100vw);
+    overflow-x: clip;
+  }
+
+  .ad-screen-content {
+    padding-bottom: var(--ad-bottom-nav-height);
+  }
+
+  .ad-bottom-nav {
+    padding-bottom: calc(0.45rem + var(--ad-safe-bottom));
+  }
+
+  .ad-floating-composer {
+    bottom: var(--ad-floating-composer-bottom);
+  }
+
+  .ad-scroll-x {
+    overflow-x: auto;
+    overscroll-behavior-inline: contain;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+
+  .ad-scroll-x::-webkit-scrollbar {
+    display: none;
+  }
+
+  .ad-safe-break {
+    overflow-wrap: anywhere;
+    word-break: break-word;
+  }
+
   .ad-accent-bg {
     background: #ffffff;
     color: var(--ad-accent-contrast);

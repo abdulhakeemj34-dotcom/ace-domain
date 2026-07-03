@@ -16,7 +16,7 @@ type BottomNavigationProps = {
 
 export function BottomNavigation({ activeScreen, onNavigate }: BottomNavigationProps) {
   return (
-    <nav className="pointer-events-auto fixed bottom-0 left-1/2 z-30 w-full max-w-md -translate-x-1/2 select-none border-t border-white/10 bg-black/95 px-2 pb-[calc(0.45rem+env(safe-area-inset-bottom))] pt-1.5 backdrop-blur-xl">
+    <nav className="ad-bottom-nav pointer-events-auto fixed bottom-0 left-1/2 z-30 w-full max-w-[min(var(--ad-shell-max-width),100vw)] -translate-x-1/2 select-none border-t border-white/10 bg-black/95 px-2 pt-1.5 backdrop-blur-xl">
       <div className="grid grid-cols-5">
         {navItems.map((item) => {
           const Icon = item.icon;

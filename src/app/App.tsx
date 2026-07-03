@@ -333,8 +333,8 @@ export default function App() {
 
   return (
     <main className={`ad-app-shell relative min-h-screen bg-black text-zinc-100 ${appModes}`} style={themeStyle}>
-      <div className="relative mx-auto flex min-h-screen w-full max-w-md flex-col bg-black">
-        <div className="flex-1 pb-[calc(5.25rem+env(safe-area-inset-bottom))]">{page}</div>
+      <div className="ad-mobile-frame relative mx-auto flex w-full flex-col bg-black">
+        <div className="ad-screen-content flex-1">{page}</div>
 
         {showNav && <BottomNavigation activeScreen={screen} onNavigate={setScreen} />}
 
