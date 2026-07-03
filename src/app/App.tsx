@@ -130,6 +130,7 @@ export default function App() {
   const [isAuthRestoring, setIsAuthRestoring] = useState(true);
   const [showSplash, setShowSplash] = useState(true);
   const [activeChatId, setActiveChatId] = useState('c1');
+  const [calendarReturnScreen, setCalendarReturnScreen] = useState<AppScreen>('global');
   const [appSettings, setAppSettings] = useState<AppSettings>(readAppSettings);
   const [settingsSyncStatus, setSettingsSyncStatus] = useState('Saved on this device');
   const [globalProfile, setGlobalProfile] = useState<GlobalOnboardingProfile>(readGlobalProfile);
@@ -279,7 +280,10 @@ export default function App() {
         return (
           <GlobalDiscoveryScreen
             onBack={() => setScreen('home')}
-            onOpenCalendar={() => setScreen('calendar')}
+            onOpenCalendar={() => {
+              setCalendarReturnScreen('global');
+              setScreen('calendar');
+            }}
             onStartChat={() => {
               setActiveChatId('c4');
               setScreen('chatRoom');
@@ -287,7 +291,7 @@ export default function App() {
           />
         );
       case 'calendar':
-        return <CalendarScreen onBack={() => setScreen('global')} />;
+        return <CalendarScreen onBack={() => setScreen(calendarReturnScreen)} />;
       case 'communities':
         return <CommunitiesScreen />;
       case 'notifications':
@@ -338,7 +342,10 @@ export default function App() {
             onOpenAiChat={() => setScreen('aiChat')}
             onOpenCommunities={() => setScreen('communities')}
             onOpenGlobal={() => setScreen('global')}
-            onOpenCalendar={() => setScreen('calendar')}
+            onOpenCalendar={() => {
+              setCalendarReturnScreen('home');
+              setScreen('calendar');
+            }}
             onStartChat={() => {
               setActiveChatId('c4');
               setScreen('chatRoom');
@@ -346,7 +353,7 @@ export default function App() {
           />
         );
     }
-  }, [activeChatId, appSettings, authMode, globalProfile, globalSettings, handleAppSettingsChange, screen, settingsSyncStatus, syncRemoteAppSettings]);
+  }, [activeChatId, appSettings, authMode, calendarReturnScreen, globalProfile, globalSettings, handleAppSettingsChange, screen, settingsSyncStatus, syncRemoteAppSettings]);
 
   const appModes = [
     `appearance-${appSettings.appearanceMode}`,
