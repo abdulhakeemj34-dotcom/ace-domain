@@ -23,6 +23,7 @@ import {
 import type { AppSettings, LanguageName } from './settingsTypes';
 
 export const APP_SETTINGS_STORAGE_KEY = 'ace-domain.app-settings';
+const APP_SETTINGS_META_STORAGE_KEY = 'ace-domain.app-settings-meta';
 
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === 'object' && value !== null && !Array.isArray(value);
@@ -148,7 +149,35 @@ export function writeAppSettings(settings: AppSettings) {
 
   try {
     storage.setItem(APP_SETTINGS_STORAGE_KEY, JSON.stringify(sanitizeAppSettings(settings)));
+    storage.setItem(APP_SETTINGS_META_STORAGE_KEY, JSON.stringify({ updatedAt: new Date().toISOString() }));
   } catch {
     // Settings remain active in memory when storage is unavailable.
+  }
+}
+
+export function readAppSettingsSavedAt() {
+  const storage = getStorage();
+
+  if (!storage) {
+    return null;
+  }
+
+  try {
+    const stored = storage.getItem(APP_SETTINGS_META_STORAGE_KEY);
+
+    if (!stored) {
+      return null;
+    }
+
+    const parsed: unknown = JSON.parse(stored);
+
+    if (!isRecord(parsed) || typeof parsed.updatedAt !== 'string') {
+      return null;
+    }
+
+    const timestamp = new Date(parsed.updatedAt).getTime();
+    return Number.isFinite(timestamp) ? timestamp : null;
+  } catch {
+    return null;
   }
 }

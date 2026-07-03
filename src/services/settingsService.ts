@@ -14,6 +14,7 @@ type SettingsSyncResult = {
   data: AppSettings | null;
   error?: string;
   remoteExists: boolean;
+  updatedAt?: string;
   usingFallback: boolean;
 };
 
@@ -27,8 +28,13 @@ function hasUsableSettingsPayload(value: unknown) {
   }
 
   const validKeys = new Set(Object.keys(defaultAppSettings));
+  const usableKeys = Object.entries(value).filter(([key, settingValue]) => (
+    validKeys.has(key) &&
+    settingValue !== null &&
+    settingValue !== undefined
+  ));
 
-  return Object.keys(value).some((key) => validKeys.has(key));
+  return usableKeys.length >= 3;
 }
 
 export async function loadCurrentUserSettings(): Promise<SettingsSyncResult> {
@@ -56,6 +62,7 @@ export async function loadCurrentUserSettings(): Promise<SettingsSyncResult> {
     return {
       data: sanitizeAppSettings(row.settings),
       remoteExists: true,
+      updatedAt: row.updated_at,
       usingFallback: false
     };
   } catch (error) {
@@ -93,6 +100,7 @@ export async function upsertCurrentUserSettings(settings: AppSettings): Promise<
     return {
       data: rows[0] ? sanitizeAppSettings(rows[0].settings) : sanitizedSettings,
       remoteExists: true,
+      updatedAt: rows[0]?.updated_at,
       usingFallback: false
     };
   } catch (error) {

@@ -73,6 +73,7 @@ type SettingsCenterScreenProps = {
   onChange: (settings: AppSettings) => void;
   onOpenGlobalSafety: () => void;
   settings: AppSettings;
+  syncStatus: string;
 };
 
 type OptionButtonProps = {
@@ -243,7 +244,7 @@ function ProfilePreview({ settings }: { settings: AppSettings }) {
   );
 }
 
-export function SettingsCenterScreen({ onBack, onChange, onOpenGlobalSafety, settings }: SettingsCenterScreenProps) {
+export function SettingsCenterScreen({ onBack, onChange, onOpenGlobalSafety, settings, syncStatus }: SettingsCenterScreenProps) {
   const selectedTheme = themePresets[settings.themePreset];
   const [safetyStatus, setSafetyStatus] = useState('');
 
@@ -284,6 +285,10 @@ export function SettingsCenterScreen({ onBack, onChange, onOpenGlobalSafety, set
             <p className="mt-2 text-xl font-black text-white">{selectedTheme.name}</p>
             <p className="mt-1 text-sm leading-6 text-frost/50">{selectedTheme.description}</p>
           </div>
+          <div className="mt-3 flex items-center justify-between gap-3 rounded-[18px] border border-white/10 bg-black px-3 py-2">
+            <span className="text-xs font-bold text-zinc-500">Settings status</span>
+            <span className="max-w-[11rem] shrink-0 rounded-full bg-white/10 px-3 py-1 text-center text-xs font-black leading-4 text-white">{syncStatus}</span>
+          </div>
         </div>
       </header>
 
@@ -298,7 +303,7 @@ export function SettingsCenterScreen({ onBack, onChange, onOpenGlobalSafety, set
             <span className="rounded-full bg-white/10 px-3 py-1 text-xs font-black text-frost/70">Local-safe</span>
           </SettingsRow>
           <SettingsRow label="Settings storage" description="Preferences save locally first, then sync to Supabase in the background when you are signed in.">
-            <span className="rounded-full px-3 py-1 text-xs font-black ad-accent-bg">Local-first</span>
+            <span className="block max-w-[8.5rem] rounded-full px-3 py-1 text-center text-xs font-black leading-4 ad-accent-bg">{syncStatus}</span>
           </SettingsRow>
         </SettingsSection>
 

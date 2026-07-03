@@ -15,7 +15,7 @@ import { ProfileScreen } from '../features/profile/ProfileScreen';
 import { GlobalSettingsScreen } from '../features/settings/GlobalSettingsScreen';
 import { SettingsCenterScreen } from '../features/settings/SettingsCenterScreen';
 import { themePresets } from '../features/settings/defaultSettings';
-import { readAppSettings, writeAppSettings } from '../features/settings/settingsStorage';
+import { readAppSettings, readAppSettingsSavedAt, writeAppSettings } from '../features/settings/settingsStorage';
 import { WelcomeScreen } from '../features/welcome/WelcomeScreen';
 import { BottomNavigation } from '../navigation/BottomNavigation';
 import { getCurrentSession, logout } from '../services/authService';
@@ -128,6 +128,7 @@ export default function App() {
   const [showSplash, setShowSplash] = useState(true);
   const [activeChatId, setActiveChatId] = useState('c1');
   const [appSettings, setAppSettings] = useState<AppSettings>(readAppSettings);
+  const [settingsSyncStatus, setSettingsSyncStatus] = useState('Saved locally');
   const [globalProfile, setGlobalProfile] = useState<GlobalOnboardingProfile>(readGlobalProfile);
   const [globalSettings, setGlobalSettings] = useState<GlobalSafetySettings>(readGlobalSettings);
   const [showGlobalOnboarding, setShowGlobalOnboarding] = useState(() => !hasStoredFlag(GLOBAL_ONBOARDING_KEY));
@@ -135,17 +136,34 @@ export default function App() {
   const showNav = isAuthenticated && !['welcome', 'auth'].includes(screen);
 
   const syncRemoteAppSettings = useCallback(async () => {
+    const localSettings = readAppSettings();
+    const localSavedAt = readAppSettingsSavedAt();
+    setSettingsSyncStatus('Sync pending');
     const result = await loadCurrentUserSettings();
 
     if (result.data) {
-      setAppSettings(result.data);
-      writeAppSettings(result.data);
+      const remoteSavedAt = result.updatedAt ? new Date(result.updatedAt).getTime() : null;
+      const remoteIsNewerOrEqual = !localSavedAt || !remoteSavedAt || remoteSavedAt >= localSavedAt;
+
+      if (remoteIsNewerOrEqual) {
+        setAppSettings(result.data);
+        writeAppSettings(result.data);
+        setSettingsSyncStatus('Synced');
+        return;
+      }
+
+      const saveResult = await upsertCurrentUserSettings(localSettings);
+      setSettingsSyncStatus(saveResult.error || saveResult.usingFallback ? 'Could not sync, saved on this device' : 'Synced');
       return;
     }
 
     if (!result.usingFallback) {
-      void upsertCurrentUserSettings(readAppSettings());
+      const saveResult = await upsertCurrentUserSettings(localSettings);
+      setSettingsSyncStatus(saveResult.error || saveResult.usingFallback ? 'Could not sync, saved on this device' : 'Synced');
+      return;
     }
+
+    setSettingsSyncStatus(result.error ? 'Could not sync, saved on this device' : 'Saved locally');
   }, []);
 
   useEffect(() => {
@@ -174,7 +192,10 @@ export default function App() {
   const handleAppSettingsChange = useCallback((settings: AppSettings) => {
     setAppSettings(settings);
     writeAppSettings(settings);
-    void upsertCurrentUserSettings(settings);
+    setSettingsSyncStatus('Sync pending');
+    void upsertCurrentUserSettings(settings).then((result) => {
+      setSettingsSyncStatus(result.error || result.usingFallback ? 'Could not sync, saved on this device' : 'Synced');
+    });
   }, []);
 
   const page = useMemo(() => {
@@ -244,6 +265,7 @@ export default function App() {
         return (
           <SettingsCenterScreen
             settings={appSettings}
+            syncStatus={settingsSyncStatus}
             onChange={handleAppSettingsChange}
             onBack={() => setScreen('profile')}
             onOpenGlobalSafety={() => setScreen('settings')}
@@ -281,7 +303,7 @@ export default function App() {
           />
         );
     }
-  }, [activeChatId, appSettings, globalProfile, globalSettings, handleAppSettingsChange, screen, syncRemoteAppSettings]);
+  }, [activeChatId, appSettings, globalProfile, globalSettings, handleAppSettingsChange, screen, settingsSyncStatus, syncRemoteAppSettings]);
 
   const appModes = [
     `appearance-${appSettings.appearanceMode}`,
