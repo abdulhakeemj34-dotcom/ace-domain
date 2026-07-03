@@ -74,10 +74,10 @@ export async function getNotifications(): Promise<NotificationResult> {
     }
 
     return { data: rows.map(mapNotification), usingFallback: false };
-  } catch (error) {
+  } catch {
     return {
       data: mockNotifications,
-      error: error instanceof Error ? error.message : 'Notification load failed.',
+      error: 'Live notifications are unavailable. Showing local activity.',
       usingFallback: true
     };
   }
@@ -97,8 +97,8 @@ export async function setNotificationRead(notificationId: string, isRead: boolea
       query: `id=eq.${encodeURIComponent(notificationId)}&user_id=eq.${encodeURIComponent(session.user.id)}`
     });
     return { ok: true, usingFallback: false };
-  } catch (error) {
-    return { error: error instanceof Error ? error.message : 'Notification update failed.', ok: false, usingFallback: true };
+  } catch {
+    return { error: 'Notification state could not sync right now.', ok: false, usingFallback: true };
   }
 }
 
@@ -116,7 +116,7 @@ export async function markAllNotificationsRead() {
       query: `user_id=eq.${encodeURIComponent(session.user.id)}`
     });
     return { ok: true, usingFallback: false };
-  } catch (error) {
-    return { error: error instanceof Error ? error.message : 'Notifications update failed.', ok: false, usingFallback: true };
+  } catch {
+    return { error: 'Notification state could not sync right now.', ok: false, usingFallback: true };
   }
 }

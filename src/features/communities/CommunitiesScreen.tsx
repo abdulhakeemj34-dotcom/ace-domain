@@ -47,11 +47,27 @@ export function CommunitiesScreen() {
   const [joinedCommunities, setJoinedCommunities] = useState<Record<string, boolean>>({ co1: true, co7: true });
   const [syncStatus, setSyncStatus] = useState('');
   const [activeFilter, setActiveFilter] = useState<CommunityFilter>('all');
+  const [searchQuery, setSearchQuery] = useState('');
 
   const selectedCommunity = communityList.find((community) => community.id === selectedCommunityId);
   const filteredCommunities = useMemo(
-    () => communityList.filter((community) => communityMatchesFilter(community, activeFilter, joinedCommunities)),
-    [activeFilter, communityList, joinedCommunities]
+    () => {
+      const query = searchQuery.trim().toLowerCase();
+
+      return communityList.filter((community) => {
+        const matchesFilter = communityMatchesFilter(community, activeFilter, joinedCommunities);
+        const matchesSearch = !query || [
+          community.name,
+          community.topic,
+          community.description,
+          community.members,
+          community.online
+        ].filter(Boolean).some((value) => value?.toLowerCase().includes(query));
+
+        return matchesFilter && matchesSearch;
+      });
+    },
+    [activeFilter, communityList, joinedCommunities, searchQuery]
   );
 
   useEffect(() => {
@@ -118,7 +134,7 @@ export function CommunitiesScreen() {
           </button>
         }
       />
-      <SearchBar placeholder="Search groups, rooms, and topics..." />
+      <SearchBar placeholder="Search groups, rooms, and topics..." value={searchQuery} onChange={setSearchQuery} />
 
       {syncStatus && <p className="mx-4 mt-3 rounded-2xl bg-white/[0.05] px-3 py-2 text-xs leading-5 text-frost/55">{syncStatus}</p>}
 
@@ -179,7 +195,12 @@ export function CommunitiesScreen() {
         {filteredCommunities.length === 0 && (
           <div className="px-4 py-6 text-center">
             <h2 className="font-bold text-white">No communities found</h2>
-            <p className="mt-2 text-sm leading-6 text-frost/55">Try another tab or search for a different interest.</p>
+            <p className="mt-2 text-sm leading-6 text-frost/55">Try another tab, clear search, or search for a different interest.</p>
+            {searchQuery && (
+              <button type="button" onClick={() => setSearchQuery('')} className="mt-4 rounded-full bg-white px-4 py-2 text-sm font-black text-black">
+                Clear search
+              </button>
+            )}
           </div>
         )}
       </div>

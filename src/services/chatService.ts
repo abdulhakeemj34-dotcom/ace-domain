@@ -181,10 +181,10 @@ export async function getChatThreads(): Promise<ChatResult<Chat[]>> {
     }
 
     return { data: rows.map(mapThread), usingFallback: false };
-  } catch (error) {
+  } catch {
     return {
       data: mockChats,
-      error: error instanceof Error ? error.message : 'Chat thread load failed.',
+      error: 'Live chat list is unavailable. Showing demo inbox.',
       usingFallback: true
     };
   }
@@ -224,8 +224,8 @@ export async function createChatThread({ memberIds = [], title, type }: CreateCh
     });
 
     return { data: mapThread(thread), usingFallback: false };
-  } catch (error) {
-    return { data: null, error: error instanceof Error ? error.message : 'Chat thread creation failed.', usingFallback: false };
+  } catch {
+    return { data: null, error: 'Live chat room could not be created right now.', usingFallback: false };
   }
 }
 
@@ -246,10 +246,10 @@ export async function getChatMessages(threadId: string): Promise<ChatResult<Chat
     }
 
     return { data: rows.map((row) => mapMessage(row, session.user.id)), usingFallback: false };
-  } catch (error) {
+  } catch {
     return {
       data: fallbackMessages(threadId),
-      error: error instanceof Error ? error.message : 'Chat message load failed.',
+      error: 'Live messages are unavailable. Showing local chat fallback.',
       usingFallback: true
     };
   }
@@ -275,8 +275,8 @@ export async function sendChatMessage(threadId: string, content: string): Promis
     });
     const row = rows[0];
     return { data: row ? mapMessage(row, session.user.id) : null, usingFallback: false };
-  } catch (error) {
-    return { data: null, error: error instanceof Error ? error.message : 'Message send failed.', usingFallback: false };
+  } catch {
+    return { data: null, error: 'Message could not be sent to live chat right now.', usingFallback: false };
   }
 }
 

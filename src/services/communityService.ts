@@ -70,10 +70,10 @@ export async function getCommunities(): Promise<CommunityListResult> {
     }
 
     return { data: rows.map(mapCommunity), usingFallback: false };
-  } catch (error) {
+  } catch {
     return {
       data: mockCommunities,
-      error: error instanceof Error ? error.message : 'Community load failed.',
+      error: 'Live communities are unavailable. Showing local rooms.',
       usingFallback: true
     };
   }
@@ -94,8 +94,8 @@ export async function joinCommunity(communityId: string) {
       query: 'on_conflict=community_id,user_id'
     });
     return { ok: true, usingFallback: false };
-  } catch (error) {
-    return { error: error instanceof Error ? error.message : 'Join failed.', ok: false, usingFallback: true };
+  } catch {
+    return { error: 'Community membership could not sync right now.', ok: false, usingFallback: true };
   }
 }
 
@@ -112,7 +112,7 @@ export async function leaveCommunity(communityId: string) {
       query: `community_id=eq.${encodeURIComponent(communityId)}&user_id=eq.${encodeURIComponent(session.user.id)}`
     });
     return { ok: true, usingFallback: false };
-  } catch (error) {
-    return { error: error instanceof Error ? error.message : 'Leave failed.', ok: false, usingFallback: true };
+  } catch {
+    return { error: 'Community membership could not sync right now.', ok: false, usingFallback: true };
   }
 }

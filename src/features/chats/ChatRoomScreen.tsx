@@ -255,18 +255,18 @@ export function ChatRoomScreen({ chatId, chatSettings, onBack }: ChatRoomScreenP
       >
         <button
           type="button"
-          className="grid h-11 w-11 place-items-center rounded-full"
+          className="grid h-11 w-11 cursor-not-allowed place-items-center rounded-full opacity-50"
           style={{ backgroundColor: 'rgba(255,255,255,0.08)', color: '#ffffff' }}
-          aria-label="Open game options"
-          onClick={() => setRoomNotice('Game room tools will open from here.')}
+          aria-label="Game room tools coming soon"
+          disabled
         >
           <Gamepad2 size={19} />
         </button>
         <button
           type="button"
-          className="grid h-11 w-11 place-items-center rounded-full bg-white/10 text-white"
-          aria-label="Start voice message"
-          onClick={() => setRoomNotice('Voice messages will open from here.')}
+          className="grid h-11 w-11 cursor-not-allowed place-items-center rounded-full bg-white/10 text-white opacity-50"
+          aria-label="Voice messages coming soon"
+          disabled
         >
           <Mic size={19} />
         </button>

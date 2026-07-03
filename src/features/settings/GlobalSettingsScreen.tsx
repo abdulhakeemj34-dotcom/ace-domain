@@ -1,5 +1,4 @@
 import { ArrowLeft, Ban, EyeOff, Flag, Gauge, MessageCircle, ShieldCheck, Type } from 'lucide-react';
-import { useState } from 'react';
 import { SafetyNoticeCard } from '../../components/global/SafetyNoticeCard';
 import type { GlobalSafetySettings } from '../../types/global';
 
@@ -40,8 +39,6 @@ function ToggleRow({ checked, description, icon: Icon = ShieldCheck, label, onCh
 }
 
 export function GlobalSettingsScreen({ onBack, onChange, settings }: GlobalSettingsScreenProps) {
-  const [status, setStatus] = useState('');
-
   const update = (patch: Partial<GlobalSafetySettings>) => {
     onChange({ ...settings, ...patch });
   };
@@ -132,24 +129,26 @@ export function GlobalSettingsScreen({ onBack, onChange, settings }: GlobalSetti
         <div className="grid grid-cols-1 gap-3 min-[360px]:grid-cols-2">
           <button
             type="button"
-            onClick={() => setStatus('Block controls are ready locally and will sync with moderation services when available.')}
-            className="flex items-center justify-center gap-2 rounded-full border border-white/15 px-4 py-3 text-sm font-bold text-white"
+            disabled
+            className="flex cursor-not-allowed items-center justify-center gap-2 rounded-full border border-white/10 px-4 py-3 text-sm font-bold text-zinc-500"
             aria-label="Open block user controls"
           >
             <Ban size={17} />
-            Block user
+            Block user / Coming soon
           </button>
           <button
             type="button"
-            onClick={() => setStatus('Report controls are ready locally and will connect to moderation services when available.')}
-            className="flex items-center justify-center gap-2 rounded-full border border-white/15 px-4 py-3 text-sm font-bold text-white"
+            disabled
+            className="flex cursor-not-allowed items-center justify-center gap-2 rounded-full border border-white/10 px-4 py-3 text-sm font-bold text-zinc-500"
             aria-label="Open report user controls"
           >
             <Flag size={17} />
-            Report user
+            Report user / Coming soon
           </button>
         </div>
-        {status && <p className="rounded-2xl border border-white/10 p-3 text-sm leading-6 text-zinc-400">{status}</p>}
+        <p className="rounded-2xl border border-white/10 p-3 text-sm leading-6 text-zinc-500">
+          Blocking, reports, and moderation history need a live moderation backend before they become active.
+        </p>
 
         <div>
           <h2 className="mb-3 text-sm font-bold uppercase tracking-[0.22em] text-frost/50">Low-data mode</h2>

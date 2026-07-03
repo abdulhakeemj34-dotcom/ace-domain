@@ -111,10 +111,10 @@ export async function getFeedPosts(): Promise<PostListResult> {
     }
 
     return { data: rows.map(mapPost), usingFallback: false };
-  } catch (error) {
+  } catch {
     return {
       data: mockPosts,
-      error: error instanceof Error ? error.message : 'Post load failed.',
+      error: 'Live feed is unavailable. Showing local demo feed.',
       usingFallback: true
     };
   }
@@ -134,7 +134,7 @@ export async function createPost(userId: string, content: string) {
 
     const row = rows[0];
     return { data: row && isRecord(row) ? mapPost(row) : null, usingFallback: false };
-  } catch (error) {
-    return { data: null, error: error instanceof Error ? error.message : 'Post creation failed.', usingFallback: true };
+  } catch {
+    return { data: null, error: 'Post could not be created right now.', usingFallback: true };
   }
 }
