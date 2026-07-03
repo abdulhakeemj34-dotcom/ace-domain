@@ -10,6 +10,7 @@ import { countryProfiles } from '../../data/mockGlobalData';
 import { supabaseConfig } from '../../lib/supabase';
 import { getCurrentProfile, profileDisplayName, updateCurrentProfile, type BackendProfile } from '../../services/profileService';
 import type { GlobalOnboardingProfile, GlobalSafetySettings } from '../../types/global';
+import { profileAccentColors } from '../settings/defaultSettings';
 import type { AppSettings } from '../settings/settingsTypes';
 
 const stats = [
@@ -169,10 +170,12 @@ const badgeLabels = {
   verified: 'Verified'
 } satisfies Record<AppSettings['profileBadgeStyle'], string>;
 
-function profileVisualStyle() {
+function profileVisualStyle(settings: AppSettings) {
+  const accent = profileAccentColors[settings.profileAccentColor];
+
   return {
-    '--profile-accent': '#ffffff',
-    '--profile-accent-soft': 'rgba(255, 255, 255, 0.08)'
+    '--profile-accent': accent.accent,
+    '--profile-accent-soft': accent.soft
   } as CSSProperties;
 }
 
@@ -272,7 +275,7 @@ export function ProfileScreen({ appSettings, globalProfile, globalSettings, onLo
   };
 
   return (
-    <section className="pb-6" style={profileVisualStyle()}>
+    <section className="pb-6" style={profileVisualStyle(appSettings)}>
       <ScreenHeader
         eyebrow="World ID"
         title="Profile"
@@ -290,7 +293,7 @@ export function ProfileScreen({ appSettings, globalProfile, globalSettings, onLo
       />
 
       <div className="px-4 pt-3">
-        <div className="border-b border-white/10 pb-5">
+        <div className={`profile-preview profile-banner-${appSettings.profileBannerPreset} profile-layout-${appSettings.profileDisplayLayout} border-b border-white/10 p-3 pb-5`}>
           <div className="flex items-start gap-4">
             <div className={`avatar-frame-${appSettings.avatarFrameStyle} w-fit rounded-full`}>
               <Avatar label={profile.avatar} size="lg" active={appSettings.showOnlineStatus} />

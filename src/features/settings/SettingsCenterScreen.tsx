@@ -1,4 +1,4 @@
-import { useState, type CSSProperties } from 'react';
+import { type CSSProperties } from 'react';
 import {
   ArrowLeft,
   AtSign,
@@ -41,6 +41,7 @@ import {
   messageDensityOptions,
   messagePrivacyOptions,
   profileAccentOptions,
+  profileAccentColors,
   profileBadgeStyleOptions,
   profileBannerOptions,
   profileDisplayLayoutOptions,
@@ -79,6 +80,7 @@ type SettingsCenterScreenProps = {
 type OptionButtonProps = {
   active: boolean;
   description?: string;
+  disabled?: boolean;
   label: string;
   onClick: () => void;
 };
@@ -181,19 +183,25 @@ const animationIntensityCopy: Record<AnimationIntensity, string> = {
 };
 
 const comingLater = ['Marketplace', 'Food', 'Rides', 'Flights', 'Wallet', 'Creator tools'];
+const activeAppearanceModes = new Set<AppearanceMode>(['premium-dark', 'dark']);
 
-function OptionButton({ active, description, label, onClick }: OptionButtonProps) {
+function OptionButton({ active, description, disabled = false, label, onClick }: OptionButtonProps) {
   return (
     <button
       type="button"
       onClick={onClick}
+      disabled={disabled}
       className={`rounded-[20px] border p-3 text-left transition duration-300 ${
-        active ? 'border-white bg-white text-black' : 'border-white/10 bg-black text-white hover:border-white/20'
+        disabled
+          ? 'cursor-not-allowed border-white/10 bg-black text-zinc-600 opacity-60'
+          : active
+          ? 'border-white bg-white text-black'
+          : 'border-white/10 bg-black text-white hover:border-white/20'
       }`}
       aria-pressed={active}
     >
-      <span className={`block text-sm font-black ${active ? 'text-black' : 'text-white'}`}>{label}</span>
-      {description && <span className={`mt-1 block text-xs leading-5 ${active ? 'text-black/60' : 'text-zinc-500'}`}>{description}</span>}
+      <span className={`block text-sm font-black ${disabled ? 'text-zinc-500' : active ? 'text-black' : 'text-white'}`}>{label}</span>
+      {description && <span className={`mt-1 block text-xs leading-5 ${disabled ? 'text-zinc-600' : active ? 'text-black/60' : 'text-zinc-500'}`}>{description}</span>}
     </button>
   );
 }
@@ -214,9 +222,10 @@ function SmallOptionButton({ active, label, onClick }: Omit<OptionButtonProps, '
 }
 
 function ProfilePreview({ settings }: { settings: AppSettings }) {
+  const accent = profileAccentColors[settings.profileAccentColor];
   const previewStyle = {
-    '--profile-accent': '#ffffff',
-    '--profile-accent-soft': 'rgba(255, 255, 255, 0.08)'
+    '--profile-accent': accent.accent,
+    '--profile-accent-soft': accent.soft
   } as CSSProperties;
 
   return (
@@ -246,7 +255,6 @@ function ProfilePreview({ settings }: { settings: AppSettings }) {
 
 export function SettingsCenterScreen({ onBack, onChange, onOpenGlobalSafety, settings, syncStatus }: SettingsCenterScreenProps) {
   const selectedTheme = themePresets[settings.themePreset];
-  const [safetyStatus, setSafetyStatus] = useState('');
 
   const update = (patch: Partial<AppSettings>) => {
     onChange({ ...settings, ...patch });
@@ -314,15 +322,19 @@ export function SettingsCenterScreen({ onBack, onChange, onOpenGlobalSafety, set
           icon={<Palette size={20} />}
         >
           <div className="grid grid-cols-1 gap-3 min-[360px]:grid-cols-2">
-            {appearanceModes.map((mode) => (
-              <OptionButton
-                key={mode}
-                active={settings.appearanceMode === mode}
-                label={appearanceCopy[mode].label}
-                description={appearanceCopy[mode].description}
-                onClick={() => update({ appearanceMode: mode })}
-              />
-            ))}
+            {appearanceModes.map((mode) => {
+              const isAvailable = activeAppearanceModes.has(mode);
+              return (
+                <OptionButton
+                  key={mode}
+                  active={settings.appearanceMode === mode}
+                  disabled={!isAvailable}
+                  label={appearanceCopy[mode].label}
+                  description={isAvailable ? appearanceCopy[mode].description : 'Coming soon. Ace Domain is black-first in this build.'}
+                  onClick={() => update({ appearanceMode: mode })}
+                />
+              );
+            })}
           </div>
           <ToggleRow
             checked={settings.reducedGlow}
@@ -481,22 +493,21 @@ export function SettingsCenterScreen({ onBack, onChange, onOpenGlobalSafety, set
           <div className="grid grid-cols-1 gap-3 min-[360px]:grid-cols-2">
             <button
               type="button"
-              onClick={() => setSafetyStatus('Blocked user controls are ready in Global Safety.')}
-              className="rounded-full border border-white/15 px-4 py-3 text-sm font-bold text-white"
+              disabled
+              className="cursor-not-allowed rounded-full border border-white/10 px-4 py-3 text-sm font-bold text-zinc-500"
               aria-label="Blocked users"
             >
-              Blocked users
+              Blocked users / Coming soon
             </button>
             <button
               type="button"
-              onClick={() => setSafetyStatus('Report history controls are ready in Global Safety.')}
-              className="rounded-full border border-white/15 px-4 py-3 text-sm font-bold text-white"
+              disabled
+              className="cursor-not-allowed rounded-full border border-white/10 px-4 py-3 text-sm font-bold text-zinc-500"
               aria-label="Report history"
             >
-              Report history
+              Report history / Coming soon
             </button>
           </div>
-          {safetyStatus && <p className="rounded-2xl border border-white/10 p-3 text-sm leading-6 text-zinc-400">{safetyStatus}</p>}
           <SettingsRow label="Global safety page" description="Open the existing privacy, stranger messaging, and accessibility controls.">
             <button type="button" onClick={onOpenGlobalSafety} className="rounded-full bg-white px-3 py-2 text-xs font-black text-black">
               Open

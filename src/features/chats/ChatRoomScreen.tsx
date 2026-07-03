@@ -56,11 +56,11 @@ const receivedBubbleClasses = {
 } satisfies Record<ReceivedBubbleStyle, string>;
 
 const sentBubbleStyles: Record<SentBubbleTone, CSSProperties> = {
-  blue: { background: '#ffffff', boxShadow: 'none', color: '#000000' },
-  gold: { background: '#ffffff', boxShadow: 'none', color: '#000000' },
-  silver: { background: '#ffffff', boxShadow: 'none', color: '#000000' },
-  theme: { background: '#ffffff', boxShadow: 'none', color: '#000000' },
-  violet: { background: '#ffffff', boxShadow: 'none', color: '#000000' }
+  blue: { background: '#1d9bf0', boxShadow: 'none', color: '#ffffff' },
+  gold: { background: '#f4c95d', boxShadow: 'none', color: '#090909' },
+  silver: { background: '#e5e7eb', boxShadow: 'none', color: '#090909' },
+  theme: { background: 'var(--ad-accent)', boxShadow: 'none', color: 'var(--ad-accent-contrast)' },
+  violet: { background: '#7c3aed', boxShadow: 'none', color: '#ffffff' }
 };
 
 function getChatPersonalization(settings?: ChatPersonalizationSettings): ChatPersonalizationSettings {
