@@ -198,7 +198,7 @@ export function AiChatScreen({ onBack }: AiChatScreenProps) {
 
         {error && (
           <div className="rounded-[24px] border border-red-500/25 bg-red-500/10 p-4 text-sm leading-6 text-red-200" role="status">
-            <p className="font-bold">Ace AI could not reply.</p>
+            <p className="font-bold">Ace AI is unavailable.</p>
             <p className="mt-1">{error}</p>
           </div>
         )}

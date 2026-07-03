@@ -103,12 +103,12 @@ export function ChatsScreen({ onOpenChat }: ChatsScreenProps) {
       )}
 
       <div className="mt-3 divide-y divide-white/10">
-        {isLoading && threads.length === 0 && <div className="px-4 py-4 text-sm text-frost/55">Loading chat rooms...</div>}
+        {isLoading && threads.length === 0 && <div className="px-4 py-4 text-sm text-frost/55">Loading chats...</div>}
         {!isLoading && filteredThreads.length === 0 && (
           <div className="px-4 py-6 text-center">
             <Search className="mx-auto text-zinc-600" size={22} />
-            <h2 className="mt-3 font-bold text-white">No chats match this view</h2>
-            <p className="mt-2 text-sm leading-6 text-frost/55">Try another filter or clear search. Demo conversations stay available without Supabase.</p>
+            <h2 className="mt-3 font-bold text-white">No chats found</h2>
+            <p className="mt-2 text-sm leading-6 text-frost/55">Try another filter or clear search. Demo chats stay available without Supabase.</p>
             {searchQuery && (
               <button type="button" onClick={() => setSearchQuery('')} className="mt-4 rounded-full bg-white px-4 py-2 text-sm font-black text-black">
                 Clear search

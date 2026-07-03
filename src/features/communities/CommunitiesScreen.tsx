@@ -195,7 +195,7 @@ export function CommunitiesScreen() {
         {filteredCommunities.length === 0 && (
           <div className="px-4 py-6 text-center">
             <h2 className="font-bold text-white">No communities found</h2>
-            <p className="mt-2 text-sm leading-6 text-frost/55">Try another tab, clear search, or search for a different interest.</p>
+        <p className="mt-2 text-sm leading-6 text-frost/55">Try another tab, clear search, or search a different interest.</p>
             {searchQuery && (
               <button type="button" onClick={() => setSearchQuery('')} className="mt-4 rounded-full bg-white px-4 py-2 text-sm font-black text-black">
                 Clear search

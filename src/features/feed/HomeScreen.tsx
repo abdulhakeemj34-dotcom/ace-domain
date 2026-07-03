@@ -286,7 +286,7 @@ export function HomeScreen({ globalProfile, globalSettings, onOpenAiChat, onOpen
 
       <div className="border-b border-white/10 px-4 py-2.5">
         <p className="text-xs font-semibold text-zinc-500">
-          {feedSource === 'loading' ? 'Refreshing feed...' : feedSource === 'demo' ? 'Local demo feed / ready without backend' : 'Live feed / Supabase connected'}
+          {feedSource === 'loading' ? 'Refreshing feed...' : feedSource === 'demo' ? 'Local demo feed ready' : 'Live feed connected'}
           {feedError ? ` / ${feedError}` : ''}
         </p>
       </div>

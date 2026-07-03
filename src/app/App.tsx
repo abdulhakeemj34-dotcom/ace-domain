@@ -131,7 +131,7 @@ export default function App() {
   const [showSplash, setShowSplash] = useState(true);
   const [activeChatId, setActiveChatId] = useState('c1');
   const [appSettings, setAppSettings] = useState<AppSettings>(readAppSettings);
-  const [settingsSyncStatus, setSettingsSyncStatus] = useState('Saved locally');
+  const [settingsSyncStatus, setSettingsSyncStatus] = useState('Saved on this device');
   const [globalProfile, setGlobalProfile] = useState<GlobalOnboardingProfile>(readGlobalProfile);
   const [globalSettings, setGlobalSettings] = useState<GlobalSafetySettings>(readGlobalSettings);
   const [showGlobalOnboarding, setShowGlobalOnboarding] = useState(() => !hasStoredFlag(GLOBAL_ONBOARDING_KEY));
@@ -141,13 +141,13 @@ export default function App() {
 
   const syncRemoteAppSettings = useCallback(async (allowRemoteSync: boolean) => {
     if (!allowRemoteSync) {
-      setSettingsSyncStatus('Saved locally');
+      setSettingsSyncStatus('Saved on this device');
       return;
     }
 
     const localSettings = readAppSettings();
     const localSavedAt = readAppSettingsSavedAt();
-    setSettingsSyncStatus('Sync pending');
+    setSettingsSyncStatus('Saving...');
     const result = await loadCurrentUserSettings();
 
     if (result.data) {
@@ -157,22 +157,22 @@ export default function App() {
       if (remoteIsNewerOrEqual) {
         setAppSettings(result.data);
         writeAppSettings(result.data);
-        setSettingsSyncStatus('Synced');
+        setSettingsSyncStatus('Synced to account');
         return;
       }
 
       const saveResult = await upsertCurrentUserSettings(localSettings);
-      setSettingsSyncStatus(saveResult.error || saveResult.usingFallback ? 'Could not sync, saved on this device' : 'Synced');
+      setSettingsSyncStatus(saveResult.error || saveResult.usingFallback ? 'Saved on this device' : 'Synced to account');
       return;
     }
 
     if (!result.usingFallback) {
       const saveResult = await upsertCurrentUserSettings(localSettings);
-      setSettingsSyncStatus(saveResult.error || saveResult.usingFallback ? 'Could not sync, saved on this device' : 'Synced');
+      setSettingsSyncStatus(saveResult.error || saveResult.usingFallback ? 'Saved on this device' : 'Synced to account');
       return;
     }
 
-    setSettingsSyncStatus(result.error ? 'Could not sync, saved on this device' : 'Saved locally');
+    setSettingsSyncStatus('Saved on this device');
   }, []);
 
   useEffect(() => {
@@ -226,13 +226,13 @@ export default function App() {
     setAppSettings(settings);
     writeAppSettings(settings);
     if (authMode !== 'live') {
-      setSettingsSyncStatus('Saved locally');
+      setSettingsSyncStatus('Saved on this device');
       return;
     }
 
-    setSettingsSyncStatus('Sync pending');
+    setSettingsSyncStatus('Saving...');
     void upsertCurrentUserSettings(settings).then((result) => {
-      setSettingsSyncStatus(result.error || result.usingFallback ? 'Could not sync, saved on this device' : 'Synced');
+      setSettingsSyncStatus(result.error || result.usingFallback ? 'Saved on this device' : 'Synced to account');
     });
   }, [authMode]);
 
@@ -257,7 +257,7 @@ export default function App() {
               if (mode === 'live') {
                 void syncRemoteAppSettings(true);
               } else {
-                setSettingsSyncStatus('Saved locally');
+                setSettingsSyncStatus('Saved on this device');
               }
             }}
           />

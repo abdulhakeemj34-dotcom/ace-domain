@@ -135,7 +135,7 @@ export function CalendarScreen({ onBack }: CalendarScreenProps) {
           })}
           {visibleEvents.length === 0 && (
             <p className="rounded-2xl border border-white/10 p-4 text-sm text-zinc-500">
-              No local events in this category yet.
+              No events in this category yet.
             </p>
           )}
         </div>

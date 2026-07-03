@@ -146,8 +146,8 @@ export function NotificationsScreen() {
 
         {filteredItems.length === 0 && (
           <div className="px-4 py-6 text-center">
-            <h2 className="font-bold text-white">Nothing here yet</h2>
-            <p className="mt-2 text-sm leading-6 text-frost/55">Notifications in this category will appear here.</p>
+            <h2 className="font-bold text-white">No activity here yet</h2>
+            <p className="mt-2 text-sm leading-6 text-frost/55">New updates in this category will appear here.</p>
           </div>
         )}
       </div>
