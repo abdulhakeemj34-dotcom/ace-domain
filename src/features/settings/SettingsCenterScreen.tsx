@@ -647,6 +647,18 @@ export function SettingsCenterScreen({ onBack, onChange, onOpenGlobalSafety, set
           <SettingsRow label="Tagline" description="Meet the World" />
           <SettingsRow label="Mission" description="Ace Domain is a global social app for chatting, culture, gaming, discovery, and connection." />
           <SettingsRow label="Version" description="Mobile foundation" />
+          <SettingsRow label="Support" description="Coming soon. A monitored support inbox is required before store submission.">
+            <span className="rounded-full border border-white/10 px-3 py-1 text-xs font-black text-zinc-500">Coming soon</span>
+          </SettingsRow>
+          <SettingsRow label="Privacy Policy" description="Draft ready in docs. Public policy URL is not live yet.">
+            <span className="rounded-full border border-white/10 px-3 py-1 text-xs font-black text-zinc-500">Draft</span>
+          </SettingsRow>
+          <SettingsRow label="Terms & Safety" description="Draft community safety terms are prepared for final legal review.">
+            <span className="rounded-full border border-white/10 px-3 py-1 text-xs font-black text-zinc-500">Draft</span>
+          </SettingsRow>
+          <SettingsRow label="Account deletion" description="Coming soon. Until a safe backend flow exists, deletion must be handled through verified support.">
+            <span className="rounded-full border border-white/10 px-3 py-1 text-xs font-black text-zinc-500">Coming soon</span>
+          </SettingsRow>
           <div>
             <p className="mb-3 text-xs font-black uppercase tracking-[0.22em] text-frost/40">Coming later</p>
             <div className="flex flex-wrap gap-2">
