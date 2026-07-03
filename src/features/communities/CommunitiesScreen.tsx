@@ -138,7 +138,7 @@ export function CommunitiesScreen() {
 
       {syncStatus && <p className="mx-4 mt-3 rounded-2xl bg-white/[0.05] px-3 py-2 text-xs leading-5 text-frost/55">{syncStatus}</p>}
 
-      <div className="mt-4 flex gap-2 overflow-x-auto px-4 [scrollbar-width:none]">
+      <div className="ad-scroll-x mt-4 flex gap-2 px-4">
         {filters.map((filter) => {
           const active = activeFilter === filter.value;
           return (
@@ -183,7 +183,7 @@ export function CommunitiesScreen() {
               <button
                 type="button"
                 onClick={() => toggleCommunity(community.id)}
-                className={`shrink-0 rounded-full px-3 py-2 text-xs font-bold transition ${joined ? 'border border-white/15 text-white' : 'bg-white text-black'}`}
+                className={`max-w-[5.75rem] shrink-0 truncate rounded-full px-3 py-2 text-xs font-bold transition ${joined ? 'border border-white/15 text-white' : 'bg-white text-black'}`}
                 aria-pressed={joined}
               >
                 {joined ? 'Joined' : 'Join'}

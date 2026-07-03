@@ -18,13 +18,13 @@ export function CountryDetailScreen({ country, onBack }: CountryDetailScreenProp
 
   return (
     <section className="animate-rise pb-8">
-      <header className="px-5 pb-4 pt-8">
+      <header className="ad-safe-header-loose px-5 pb-4">
         <button type="button" onClick={onBack} className="mb-4 grid h-11 w-11 place-items-center rounded-full bg-white/10 text-white" aria-label="Back to global discovery">
           <ArrowLeft size={20} />
         </button>
         <div className="border-b border-white/10 pb-5">
           <CountryBadge code={country.code} label={country.name} />
-          <h1 className="mt-4 text-3xl font-black text-white">{country.region}</h1>
+          <h1 className="ad-safe-break mt-4 text-3xl font-black text-white">{country.region}</h1>
           <p className="mt-3 text-sm leading-6 text-frost/65">{country.greeting}</p>
           <div className="mt-4 flex flex-wrap gap-2">
             <WorldClockLabel timeZone={country.timeZone} />
@@ -39,7 +39,7 @@ export function CountryDetailScreen({ country, onBack }: CountryDetailScreenProp
             <div className="grid h-11 w-11 place-items-center rounded-full border border-white/10 text-zinc-400">
               <MapPinned size={20} />
             </div>
-            <div>
+            <div className="min-w-0">
               <h2 className="font-bold text-white">Local trends</h2>
               <p className="text-sm text-zinc-500">Discovery signals for culture, events, and local conversation starters.</p>
             </div>

@@ -271,7 +271,7 @@ export function SettingsCenterScreen({ onBack, onChange, onOpenGlobalSafety, set
 
   return (
     <section className="animate-rise pb-8">
-      <header className="px-4 pb-3 pt-6">
+      <header className="ad-safe-header px-4 pb-3">
         <button type="button" onClick={onBack} className="mb-3 grid h-11 w-11 place-items-center rounded-full bg-white/10 text-white" aria-label="Back to profile">
           <ArrowLeft size={20} />
         </button>
@@ -293,9 +293,9 @@ export function SettingsCenterScreen({ onBack, onChange, onOpenGlobalSafety, set
             <p className="mt-2 text-xl font-black text-white">{selectedTheme.name}</p>
             <p className="mt-1 text-sm leading-6 text-frost/50">{selectedTheme.description}</p>
           </div>
-          <div className="mt-3 flex items-center justify-between gap-3 rounded-[18px] border border-white/10 bg-black px-3 py-2">
+          <div className="mt-3 flex flex-wrap items-center justify-between gap-2 rounded-[18px] border border-white/10 bg-black px-3 py-2">
             <span className="text-xs font-bold text-zinc-500">Settings status</span>
-            <span className="max-w-[11rem] shrink-0 rounded-full bg-white/10 px-3 py-1 text-center text-xs font-black leading-4 text-white">{syncStatus}</span>
+            <span className="min-w-0 max-w-full rounded-full bg-white/10 px-3 py-1 text-center text-xs font-black leading-4 text-white">{syncStatus}</span>
           </div>
         </div>
       </header>
@@ -365,7 +365,7 @@ export function SettingsCenterScreen({ onBack, onChange, onOpenGlobalSafety, set
           </div>
           <div>
             <p className="mb-3 text-xs font-black uppercase tracking-[0.22em] text-frost/40">Received bubble style</p>
-            <div className="grid grid-cols-3 gap-2">
+            <div className="grid grid-cols-1 gap-2 min-[360px]:grid-cols-3">
               {receivedBubbleStyleOptions.map((style) => (
                 <OptionButton key={style} active={settings.receivedBubbleStyle === style} label={receivedStyleCopy[style]} onClick={() => update({ receivedBubbleStyle: style })} />
               ))}
@@ -561,7 +561,7 @@ export function SettingsCenterScreen({ onBack, onChange, onOpenGlobalSafety, set
               ))}
             </div>
           </div>
-          <div className="grid grid-cols-3 gap-2">
+          <div className="grid grid-cols-1 gap-2 min-[360px]:grid-cols-3">
             {regionalFormatOptions.map((format) => (
               <OptionButton key={format} active={settings.regionalFormat === format} label={regionalCopy[format]} onClick={() => update({ regionalFormat: format })} />
             ))}
@@ -585,7 +585,7 @@ export function SettingsCenterScreen({ onBack, onChange, onOpenGlobalSafety, set
           <ToggleRow checked={settings.screenReaderLabels} description="Keep explicit accessible labels on key controls." icon={<Lock size={18} />} label="Screen-reader friendly labels" onChange={() => update({ screenReaderLabels: !settings.screenReaderLabels })} />
           <div>
             <p className="mb-3 text-xs font-black uppercase tracking-[0.22em] text-frost/40">Animation intensity</p>
-            <div className="grid grid-cols-3 gap-2">
+            <div className="grid grid-cols-1 gap-2 min-[360px]:grid-cols-3">
               {animationIntensityOptions.map((intensity) => (
                 <OptionButton key={intensity} active={settings.animationIntensity === intensity} label={animationIntensityCopy[intensity]} onClick={() => update({ animationIntensity: intensity })} />
               ))}

@@ -78,7 +78,7 @@ function StoryViewer({ story, onClose }: { story: Story; onClose: () => void }) 
             </div>
           ))}
         </div>
-        <div className="relative min-h-[480px] overflow-hidden rounded-[28px] border border-white/10 bg-zinc-950 p-5">
+        <div className="relative min-h-[420px] overflow-hidden rounded-[28px] border border-white/10 bg-zinc-950 p-5">
           <button
             type="button"
             onClick={onClose}
@@ -239,7 +239,7 @@ export function HomeScreen({ globalProfile, globalSettings, onOpenAiChat, onOpen
           <h2 className="text-sm font-black text-white">Stories</h2>
           <button type="button" onClick={onOpenGlobal} className="text-xs font-bold text-zinc-500">Discover</button>
         </div>
-        <div className="flex gap-4 overflow-x-auto [scrollbar-width:none]">
+        <div className="ad-scroll-x flex gap-4">
           {stories.map((story) => (
             <button
               key={story.id}
@@ -266,9 +266,9 @@ export function HomeScreen({ globalProfile, globalSettings, onOpenAiChat, onOpen
             Rooms
           </button>
         </div>
-        <div className="mt-3 flex gap-2 overflow-x-auto [scrollbar-width:none]">
+        <div className="ad-scroll-x mt-3 flex gap-2">
           {trendingConversations.map((item) => (
-            <button key={item.id} type="button" onClick={onOpenGlobal} className="min-w-[12rem] shrink-0 rounded-2xl border border-white/10 px-3 py-2 text-left">
+            <button key={item.id} type="button" onClick={onOpenGlobal} className="min-w-[11rem] max-w-[75vw] shrink-0 rounded-2xl border border-white/10 px-3 py-2 text-left">
               <span className="block truncate text-sm font-bold text-white">{item.title}</span>
               <span className="mt-0.5 block truncate text-xs text-zinc-500">{item.region} / {item.pulse}</span>
             </button>
@@ -280,7 +280,7 @@ export function HomeScreen({ globalProfile, globalSettings, onOpenAiChat, onOpen
             <p className="truncate text-sm font-bold text-white">Global Match: {globalMatches[0].name}</p>
             <p className="truncate text-xs text-zinc-500">{globalMatches[0].country} / {globalMatches[0].vibe}</p>
           </div>
-          <span className="rounded-full bg-white px-3 py-1 text-xs font-black text-black">Start</span>
+          <span className="shrink-0 rounded-full bg-white px-3 py-1 text-xs font-black text-black">Start</span>
         </button>
       </section>
 
@@ -322,7 +322,7 @@ export function HomeScreen({ globalProfile, globalSettings, onOpenAiChat, onOpen
                     <span className="shrink-0 text-sm text-zinc-500">/ {post.timestamp}</span>
                   </div>
                   <p className="truncate text-xs text-zinc-500">{post.context ? `${post.context} / ${post.region}` : post.region}</p>
-                  <TranslationToggle className="mt-2 text-[15px] leading-6" text={post.body} translatedText={`Translation preview: ${post.body}`} />
+                  <TranslationToggle className="ad-safe-break mt-2 text-[15px] leading-6" text={post.body} translatedText={`Translation preview: ${post.body}`} />
                   {post.replyPreview && (
                     <button
                       type="button"

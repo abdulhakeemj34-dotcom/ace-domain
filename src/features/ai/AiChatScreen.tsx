@@ -101,9 +101,9 @@ export function AiChatScreen({ onBack }: AiChatScreenProps) {
   };
 
   return (
-    <section className="flex min-h-screen flex-col">
-      <header className="sticky top-0 z-20 border-b border-white/10 bg-black/95 px-5 pb-4 pt-8 backdrop-blur-xl">
-        <div className="flex items-center gap-3">
+    <section className="flex min-h-[100dvh] flex-col">
+      <header className="ad-safe-header-loose sticky top-0 z-20 border-b border-white/10 bg-black/95 px-5 pb-4 backdrop-blur-xl">
+        <div className="flex min-w-0 items-center gap-3">
           <button type="button" onClick={onBack} className="grid h-11 w-11 place-items-center rounded-full bg-white/10 text-white" aria-label="Back to home">
             <ArrowLeft size={20} />
           </button>
@@ -118,14 +118,14 @@ export function AiChatScreen({ onBack }: AiChatScreenProps) {
         </div>
       </header>
 
-      <div className="flex-1 space-y-4 px-5 py-5 pb-40">
+      <div className="flex-1 space-y-4 px-5 py-5 pb-[calc(var(--ad-bottom-nav-height)+5.5rem)]">
         {messages.length === 0 && (
           <div className="border-b border-white/10 pb-5">
             <div className="flex items-center gap-3">
               <div className="grid h-12 w-12 place-items-center rounded-full border border-white/10 text-white">
                 <Bot size={22} />
               </div>
-              <div>
+              <div className="min-w-0">
                 <h2 className="font-black text-white">Ask Ace AI</h2>
                 <p className="mt-1 text-sm leading-6 text-frost/55">Use it as a quick creative layer for meeting people, not as your private chat inbox.</p>
               </div>
@@ -175,7 +175,7 @@ export function AiChatScreen({ onBack }: AiChatScreenProps) {
           return (
             <div key={message.id} className={`flex ${mine ? 'justify-end' : 'justify-start'}`}>
               <div
-                className={`max-w-[82%] rounded-[24px] px-4 py-3 text-sm leading-6 ${
+                className={`ad-safe-break max-w-[82%] rounded-[24px] px-4 py-3 text-sm leading-6 ${
                   mine
                     ? 'rounded-br-md bg-white text-black'
                     : 'rounded-bl-md border border-white/10 bg-zinc-900 text-zinc-100'
@@ -205,7 +205,7 @@ export function AiChatScreen({ onBack }: AiChatScreenProps) {
       </div>
 
       <form
-        className="fixed bottom-[calc(4.9rem+env(safe-area-inset-bottom))] left-1/2 z-20 flex w-[calc(100%-1rem)] max-w-md -translate-x-1/2 items-center gap-2 rounded-full border border-white/10 bg-black p-2"
+        className="ad-floating-composer fixed left-1/2 z-20 flex w-[calc(100%-1rem)] max-w-md -translate-x-1/2 items-center gap-2 rounded-full border border-white/10 bg-black p-2"
         onSubmit={sendMessage}
       >
         <input

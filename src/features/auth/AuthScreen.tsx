@@ -77,7 +77,7 @@ export function AuthScreen({ onComplete }: AuthScreenProps) {
   };
 
   return (
-    <section className="flex min-h-screen flex-col bg-black px-5 pb-8 pt-16 text-white">
+    <section className="flex min-h-[100dvh] flex-col overflow-y-auto bg-black px-5 pb-8 pt-16 text-white">
       <div className="mb-10 flex items-center gap-3">
         <AceDomainIcon size="sm" withGlow={false} />
         <div>
@@ -86,12 +86,12 @@ export function AuthScreen({ onComplete }: AuthScreenProps) {
         </div>
       </div>
 
-      <div className="mb-8">
+      <div className="mb-8 min-w-0">
         <p className="text-sm font-semibold uppercase tracking-[0.24em] text-zinc-500">Access</p>
         <h1 className="mt-3 text-4xl font-black tracking-tight text-white">
           {mode === 'signup' ? 'Create your account.' : 'Log in.'}
         </h1>
-        <p className="mt-3 max-w-sm text-sm leading-6 text-zinc-400">
+        <p className="ad-safe-break mt-3 max-w-sm text-sm leading-6 text-zinc-400">
           Sign up with a display name and email. Log in with that email and password, or continue locally when live auth is unavailable.
         </p>
       </div>

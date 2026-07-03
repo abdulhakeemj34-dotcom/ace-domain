@@ -120,8 +120,8 @@ export function ChatRoomScreen({ chatId, chatSettings, onBack }: ChatRoomScreenP
   const wallpaperClass = `chat-wallpaper-${personalization.chatWallpaper}`;
 
   return (
-    <section className={`flex min-h-screen flex-col ${wallpaperClass}`}>
-      <header className="sticky top-0 z-20 border-b border-white/10 bg-black/95 px-4 pb-3 pt-6 backdrop-blur-xl">
+    <section className={`flex min-h-[100dvh] flex-col ${wallpaperClass}`}>
+      <header className="ad-safe-header sticky top-0 z-20 border-b border-white/10 bg-black/95 px-4 pb-3 backdrop-blur-xl">
         <div className="flex items-center gap-3">
           <button type="button" onClick={onBack} className="grid h-11 w-11 place-items-center rounded-full bg-white/10 text-white" aria-label="Back to chats">
             <ArrowLeft size={20} />
@@ -147,7 +147,7 @@ export function ChatRoomScreen({ chatId, chatSettings, onBack }: ChatRoomScreenP
             </div>
             <div className="min-w-0 flex-1">
               <p className="truncate text-xs font-bold text-white">Room members</p>
-              <p className="truncate text-xs text-frost/45">Active people and shared chat tools.</p>
+              <p className="line-clamp-1 text-xs text-frost/45">Active people and shared chat tools.</p>
             </div>
             <UsersRound className="text-zinc-400" size={18} />
           </div>
@@ -161,7 +161,7 @@ export function ChatRoomScreen({ chatId, chatSettings, onBack }: ChatRoomScreenP
         </div>
       </header>
 
-      <div className={`flex-1 ${messageStackClass} pb-36`}>
+      <div className={`flex-1 ${messageStackClass} pb-[calc(var(--ad-bottom-nav-height)+5.25rem)]`}>
         <div className="flex justify-center">
           <span className="rounded-full border border-white/10 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.18em] text-zinc-500">
             Today
@@ -198,7 +198,7 @@ export function ChatRoomScreen({ chatId, chatSettings, onBack }: ChatRoomScreenP
           return (
             <div key={message.id} className={`flex ${mine ? 'justify-end' : 'justify-start'}`}>
               {!mine && <Avatar label={(message.authorName ?? chat.avatar).slice(0, 2).toUpperCase()} size="sm" />}
-              <div className={`min-w-0 max-w-[78%] ${mine ? 'text-right' : 'ml-2 text-left'}`}>
+              <div className={`min-w-0 max-w-[82%] ${mine ? 'text-right' : 'ml-2 text-left'}`}>
                 {!mine && <p className="mb-1 ml-2 text-[10px] font-bold uppercase tracking-[0.18em] text-zinc-500">{isGroup ? message.authorName : chat.name}</p>}
                 <div
                   className={`${bubbleShapeClass} ${densityClass} break-words shadow-none [overflow-wrap:anywhere] ${
@@ -250,7 +250,7 @@ export function ChatRoomScreen({ chatId, chatSettings, onBack }: ChatRoomScreenP
       </div>
 
       <form
-        className="fixed bottom-[calc(4.9rem+env(safe-area-inset-bottom))] left-1/2 z-20 flex w-[calc(100%-1rem)] max-w-md -translate-x-1/2 items-center gap-2 rounded-full border border-white/10 bg-black p-1.5"
+        className="ad-floating-composer fixed left-1/2 z-20 flex w-[calc(100%-1rem)] max-w-md -translate-x-1/2 items-center gap-1.5 rounded-full border border-white/10 bg-black p-1.5"
         onSubmit={sendMessage}
       >
         <button

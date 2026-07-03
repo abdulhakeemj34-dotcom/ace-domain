@@ -9,7 +9,7 @@ type WelcomeScreenProps = {
 
 export function WelcomeScreen({ onStart, onExploreDemo }: WelcomeScreenProps) {
   return (
-    <section className="flex min-h-screen flex-col bg-black px-5 pb-8 pt-8 text-white">
+    <section className="flex min-h-[100dvh] flex-col overflow-y-auto bg-black px-5 pb-8 pt-8 text-white">
       <header className="flex items-center justify-between">
         <AceDomainIcon size="sm" withGlow={false} />
         <button
@@ -21,7 +21,7 @@ export function WelcomeScreen({ onStart, onExploreDemo }: WelcomeScreenProps) {
         </button>
       </header>
 
-      <div className="flex flex-1 flex-col justify-center">
+      <div className="flex flex-1 flex-col justify-center py-8">
         <div className="mb-8">
           <AceDomainLogo compact />
         </div>

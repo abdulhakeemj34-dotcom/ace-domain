@@ -85,7 +85,7 @@ export function GlobalDiscoveryScreen({ onBack, onOpenCalendar, onStartChat }: G
 
   return (
     <section className="animate-rise pb-8">
-      <header className="px-5 pb-4 pt-8">
+      <header className="ad-safe-header-loose px-5 pb-4">
         <button type="button" onClick={onBack} className="mb-4 grid h-11 w-11 place-items-center rounded-full bg-white/10 text-white" aria-label="Back to home">
           <ArrowLeft size={20} />
         </button>
@@ -94,9 +94,9 @@ export function GlobalDiscoveryScreen({ onBack, onOpenCalendar, onStartChat }: G
             <div className="grid h-12 w-12 place-items-center rounded-full bg-white text-black">
               <Globe2 size={23} />
             </div>
-            <div>
+            <div className="min-w-0">
               <p className="text-xs font-bold uppercase tracking-[0.28em] text-zinc-500">Meet the world</p>
-              <h1 className="text-3xl font-black text-white">Global Discovery</h1>
+              <h1 className="truncate text-3xl font-black text-white">Global Discovery</h1>
             </div>
           </div>
           <p className="mt-4 text-sm leading-6 text-frost/65">
@@ -112,7 +112,7 @@ export function GlobalDiscoveryScreen({ onBack, onOpenCalendar, onStartChat }: G
         <div className="rounded-2xl border border-white/10 bg-black p-4">
           <div className="flex items-center gap-3">
             <SlidersHorizontal size={20} className="text-zinc-500" />
-            <div>
+            <div className="min-w-0">
               <h2 className="font-bold text-white">Global Match filters</h2>
               <p className="text-sm text-frost/50">Filter people by country, language, interests, time zone, and social mode.</p>
             </div>

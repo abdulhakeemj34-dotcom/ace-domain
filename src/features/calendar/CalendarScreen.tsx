@@ -46,7 +46,7 @@ export function CalendarScreen({ onBack }: CalendarScreenProps) {
 
   return (
     <section className="animate-rise pb-8">
-      <header className="px-5 pb-4 pt-8">
+      <header className="ad-safe-header-loose px-5 pb-4">
         <button type="button" onClick={onBack} className="mb-4 grid h-11 w-11 place-items-center rounded-full bg-white/10 text-white" aria-label="Back to global discovery">
           <ArrowLeft size={20} />
         </button>
@@ -55,9 +55,9 @@ export function CalendarScreen({ onBack }: CalendarScreenProps) {
             <div className="grid h-12 w-12 place-items-center rounded-full bg-white text-black">
               <CalendarDays size={23} />
             </div>
-            <div>
+            <div className="min-w-0">
               <p className="text-xs font-bold uppercase tracking-[0.28em] text-zinc-500">Global calendar</p>
-              <h1 className="text-3xl font-black text-white">Events</h1>
+              <h1 className="truncate text-3xl font-black text-white">Events</h1>
             </div>
           </div>
           <p className="mt-4 text-sm leading-6 text-frost/65">
@@ -67,7 +67,7 @@ export function CalendarScreen({ onBack }: CalendarScreenProps) {
       </header>
 
       <div className="px-5">
-        <div className="flex gap-2 overflow-x-auto [scrollbar-width:none]">
+        <div className="ad-scroll-x flex gap-2">
           {filters.map((filter) => {
             const active = activeFilter === filter;
             return (

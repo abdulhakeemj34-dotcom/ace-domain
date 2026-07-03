@@ -21,7 +21,7 @@ function ToggleRow({ checked, description, icon: Icon = ShieldCheck, label, onCh
     <button
       type="button"
       onClick={onChange}
-      className="flex w-full items-center gap-3 rounded-2xl border border-white/10 bg-black p-4 text-left"
+      className="flex w-full min-w-0 items-center gap-3 rounded-2xl border border-white/10 bg-black p-4 text-left"
       aria-pressed={checked}
     >
       <div className={`grid h-11 w-11 shrink-0 place-items-center rounded-full border border-white/10 ${checked ? 'bg-white text-black' : 'text-zinc-500'}`}>
@@ -45,7 +45,7 @@ export function GlobalSettingsScreen({ onBack, onChange, settings }: GlobalSetti
 
   return (
     <section className="animate-rise pb-8">
-      <header className="px-5 pb-4 pt-8">
+      <header className="ad-safe-header-loose px-5 pb-4">
         <button type="button" onClick={onBack} className="mb-4 grid h-11 w-11 place-items-center rounded-full bg-white/10 text-white" aria-label="Back to profile">
           <ArrowLeft size={20} />
         </button>
@@ -54,9 +54,9 @@ export function GlobalSettingsScreen({ onBack, onChange, settings }: GlobalSetti
             <div className="grid h-12 w-12 place-items-center rounded-full bg-white text-black">
               <ShieldCheck size={23} />
             </div>
-            <div>
+            <div className="min-w-0">
               <p className="text-xs font-bold uppercase tracking-[0.28em] text-zinc-500">Trust controls</p>
-              <h1 className="text-3xl font-black text-white">Global Safety</h1>
+              <h1 className="truncate text-3xl font-black text-white">Global Safety</h1>
             </div>
           </div>
           <p className="mt-4 text-sm leading-6 text-frost/65">

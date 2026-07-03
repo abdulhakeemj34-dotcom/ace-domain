@@ -332,7 +332,7 @@ export default function App() {
   }, [appSettings.themePreset]);
 
   return (
-    <main className={`ad-app-shell relative min-h-screen bg-black text-zinc-100 ${appModes}`} style={themeStyle}>
+    <main className={`ad-app-shell relative min-h-[100dvh] bg-black text-zinc-100 ${appModes}`} style={themeStyle}>
       <div className="ad-mobile-frame relative mx-auto flex w-full flex-col bg-black">
         <div className="ad-screen-content flex-1">{page}</div>
 

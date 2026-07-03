@@ -101,6 +101,14 @@ select {
     bottom: var(--ad-floating-composer-bottom);
   }
 
+  .ad-safe-header {
+    padding-top: calc(1.5rem + var(--ad-safe-top));
+  }
+
+  .ad-safe-header-loose {
+    padding-top: calc(2rem + var(--ad-safe-top));
+  }
+
   .ad-scroll-x {
     overflow-x: auto;
     overscroll-behavior-inline: contain;

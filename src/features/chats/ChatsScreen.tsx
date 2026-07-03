@@ -70,7 +70,7 @@ export function ChatsScreen({ onOpenChat }: ChatsScreenProps) {
           <button
             type="button"
             onClick={() => startThreadId && onOpenChat(startThreadId)}
-            className="shrink-0 rounded-full bg-white px-3 py-1.5 text-xs font-black text-black disabled:opacity-50"
+            className="max-w-[8rem] shrink-0 truncate rounded-full bg-white px-3 py-1.5 text-xs font-black text-black disabled:opacity-50"
             disabled={!startThreadId}
           >
             Open latest
@@ -78,7 +78,7 @@ export function ChatsScreen({ onOpenChat }: ChatsScreenProps) {
         </div>
       </section>
 
-      <div className="mt-4 flex gap-2 overflow-x-auto px-4 [scrollbar-width:none]">
+      <div className="ad-scroll-x mt-4 flex gap-2 px-4">
         {filters.map((filter) => {
           const active = activeFilter === filter.value;
           return (

@@ -104,7 +104,7 @@ export function NotificationsScreen() {
 
       {syncStatus && <p className="mx-4 mt-3 rounded-2xl bg-white/[0.05] px-3 py-2 text-xs leading-5 text-frost/55">{syncStatus}</p>}
 
-      <div className="mt-4 flex gap-2 overflow-x-auto px-4 [scrollbar-width:none]">
+      <div className="ad-scroll-x mt-4 flex gap-2 px-4">
         {filters.map((filter) => {
           const active = activeFilter === filter.value;
           return (
@@ -132,15 +132,15 @@ export function NotificationsScreen() {
           >
             <span className={`mt-1 h-2.5 w-2.5 shrink-0 rounded-full ${item.unread ? 'bg-[#1d9bf0]' : 'bg-white/20'}`} />
             <span className="min-w-0 flex-1">
-              <span className="flex min-w-0 items-center gap-2">
-                <span className="truncate font-bold text-white">{item.title}</span>
+              <span className="flex min-w-0 flex-wrap items-center gap-2">
+                <span className="min-w-0 flex-1 truncate font-bold text-white">{item.title}</span>
                 <span className="shrink-0 rounded-full border border-white/10 px-2 py-0.5 text-[10px] font-bold uppercase tracking-[0.12em] text-zinc-500">
                   {categoryLabels[item.category]}
                 </span>
               </span>
               <span className="mt-1 line-clamp-2 text-sm leading-5 text-frost/55">{item.body}</span>
             </span>
-            <span className="shrink-0 text-xs text-frost/45">{item.time}</span>
+            <span className="max-w-[3.75rem] shrink-0 truncate text-xs text-frost/45">{item.time}</span>
           </button>
         ))}
 

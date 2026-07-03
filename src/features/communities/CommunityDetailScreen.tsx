@@ -17,7 +17,7 @@ export function CommunityDetailScreen({ community, joined, onBack, onToggleJoin 
 
   return (
     <section className="animate-rise pb-8">
-      <header className="sticky top-0 z-20 border-b border-white/10 bg-black/95 px-4 pb-3 pt-6 backdrop-blur-xl">
+      <header className="ad-safe-header sticky top-0 z-20 border-b border-white/10 bg-black/95 px-4 pb-3 backdrop-blur-xl">
         <div className="flex items-center gap-3">
           <button type="button" onClick={onBack} className="grid h-11 w-11 place-items-center rounded-full bg-white/10 text-white" aria-label="Back to communities">
             <ArrowLeft size={20} />
@@ -29,7 +29,7 @@ export function CommunityDetailScreen({ community, joined, onBack, onToggleJoin 
           <button
             type="button"
             onClick={onToggleJoin}
-            className={`flex h-11 shrink-0 items-center gap-1.5 rounded-full px-4 text-sm font-bold transition ${
+            className={`flex h-11 max-w-[6.25rem] shrink-0 items-center gap-1.5 rounded-full px-4 text-sm font-bold transition ${
               joined ? 'border border-white/15 text-white' : 'bg-white text-black'
             }`}
             aria-pressed={joined}
@@ -60,7 +60,7 @@ export function CommunityDetailScreen({ community, joined, onBack, onToggleJoin 
           <h2 className="font-bold text-white">Members</h2>
           <UsersRound className="text-zinc-400" size={18} />
         </div>
-        <div className="flex gap-3 overflow-x-auto [scrollbar-width:none]">
+        <div className="ad-scroll-x flex gap-3">
           {members.map((member) => (
             <div key={member.id} className="w-20 shrink-0 text-center">
               <Avatar label={member.avatar} active />
@@ -93,7 +93,7 @@ export function CommunityDetailScreen({ community, joined, onBack, onToggleJoin 
               <span className="shrink-0 text-xs text-frost/45">{post.time}</span>
             </div>
             <TranslationToggle
-              className="mt-2 text-sm leading-6"
+              className="ad-safe-break mt-2 text-sm leading-6"
               text={post.body}
               translatedText={`Translation preview: ${post.body}`}
             />
