@@ -27,6 +27,10 @@ export function AuthScreen({ onComplete }: AuthScreenProps) {
     onComplete('demo');
   };
 
+  const loginHelpText = mode === 'signup'
+    ? 'Your display name is for your profile. Your email and password are used for login.'
+    : 'Use the same email address and password you signed up with. Username login is not active yet.';
+
   const submitAuth = async () => {
     if (isLoading) {
       return;
@@ -61,7 +65,8 @@ export function AuthScreen({ onComplete }: AuthScreenProps) {
       }
 
       if (result.needsEmailConfirmation) {
-        setStatus('Account created. Check your email to confirm your Ace Domain login.');
+        setStatus('Check your email to confirm your account before logging in.');
+        setCanUseDemoFallback(true);
         return;
       }
 
@@ -92,7 +97,7 @@ export function AuthScreen({ onComplete }: AuthScreenProps) {
           {mode === 'signup' ? 'Create your account.' : 'Log in.'}
         </h1>
         <p className="ad-safe-break mt-3 max-w-sm text-sm leading-6 text-zinc-400">
-          Sign up with a display name and email. Log in with that email and password, or continue locally when live auth is unavailable.
+          Sign up with a display name, email, and password. Log in with email/password only, or continue locally when live auth is unavailable.
         </p>
       </div>
 
@@ -140,7 +145,12 @@ export function AuthScreen({ onComplete }: AuthScreenProps) {
         )}
         {mode === 'login' && (
           <p className="rounded-2xl border border-white/10 bg-zinc-950 px-4 py-3 text-sm leading-6 text-zinc-400">
-            Log in with your email address. Username login is not active yet.
+            {loginHelpText}
+          </p>
+        )}
+        {mode === 'signup' && (
+          <p className="rounded-2xl border border-white/10 bg-zinc-950 px-4 py-3 text-sm leading-6 text-zinc-400">
+            {loginHelpText}
           </p>
         )}
         <input

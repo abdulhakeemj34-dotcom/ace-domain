@@ -115,7 +115,7 @@ function authErrorResult(error: unknown, fallback: string): AuthResult {
       : invalidLogin
       ? 'Email or password is incorrect. Use the email address you signed up with, or continue in demo mode.'
       : emailConfirmation
-      ? 'Please confirm your email before logging in. You can still continue in demo mode for now.'
+      ? 'Check your email to confirm your account before logging in. You can still continue in demo mode for now.'
       : existingAccount
       ? 'An account already exists for this email. Log in with your email and password, or continue in demo mode.'
       : message,
@@ -227,7 +227,12 @@ export async function loginWithEmail({ email, password }: AuthCredentials): Prom
     const session = normalizeSession(payload);
 
     if (!session) {
-      return { error: 'Supabase did not return a session.', session: null, user: null };
+      return {
+        canUseDemoFallback: true,
+        error: 'Login did not return a session. Check your email to confirm your account before logging in.',
+        session: null,
+        user: null
+      };
     }
 
     storeSession(session);
