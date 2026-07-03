@@ -3,17 +3,21 @@ import type { ReactNode } from 'react';
 type ToggleRowProps = {
   checked: boolean;
   description: string;
+  disabled?: boolean;
   icon?: ReactNode;
   label: string;
   onChange: () => void;
 };
 
-export function ToggleRow({ checked, description, icon, label, onChange }: ToggleRowProps) {
+export function ToggleRow({ checked, description, disabled = false, icon, label, onChange }: ToggleRowProps) {
   return (
     <button
       type="button"
-      onClick={onChange}
-      className="flex w-full min-w-0 items-center gap-3 rounded-[20px] border border-white/10 bg-white/[0.055] p-3 text-left transition duration-300 hover:border-white/20"
+      onClick={disabled ? undefined : onChange}
+      disabled={disabled}
+      className={`flex w-full min-w-0 items-center gap-3 rounded-[20px] border border-white/10 bg-white/[0.055] p-3 text-left transition duration-300 ${
+        disabled ? 'cursor-not-allowed opacity-60' : 'hover:border-white/20'
+      }`}
       aria-pressed={checked}
     >
       {icon && (

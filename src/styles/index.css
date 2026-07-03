@@ -126,12 +126,12 @@ select {
   }
 
   .ad-accent-bg {
-    background: #ffffff;
+    background: var(--ad-accent);
     color: var(--ad-accent-contrast);
   }
 
   .ad-accent-ring {
-    box-shadow: none;
+    box-shadow: 0 0 0 1px color-mix(in srgb, var(--ad-accent) 40%, transparent);
   }
 
   .glass-panel {
@@ -145,7 +145,15 @@ select {
     background: #000000;
   }
 
+  .appearance-premium-dark .glass-panel {
+    background: #050505;
+  }
+
   .appearance-dark {
+    background: #000000;
+  }
+
+  .appearance-dark .glass-panel {
     background: #000000;
   }
 
@@ -214,7 +222,13 @@ select {
 
   .compact-mode .glass-panel,
   .compact-cards-mode .glass-panel {
+    border-radius: 18px;
     box-shadow: 0 18px 54px rgba(0, 0, 0, 0.28);
+  }
+
+  .compact-mode .rounded-\[28px\],
+  .compact-cards-mode .rounded-\[28px\] {
+    border-radius: 20px;
   }
 
   .text-first-mode .orbital-grid {

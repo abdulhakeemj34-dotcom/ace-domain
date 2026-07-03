@@ -206,18 +206,57 @@ function OptionButton({ active, description, disabled = false, label, onClick }:
   );
 }
 
-function SmallOptionButton({ active, label, onClick }: Omit<OptionButtonProps, 'description'>) {
+function SmallOptionButton({ active, disabled = false, label, onClick }: Omit<OptionButtonProps, 'description'>) {
   return (
     <button
       type="button"
-      onClick={onClick}
+      onClick={disabled ? undefined : onClick}
+      disabled={disabled}
       className={`rounded-full border px-3 py-2 text-xs font-black transition duration-300 ${
-        active ? 'border-white bg-white text-black' : 'border-white/10 bg-black text-zinc-500'
+        disabled ? 'cursor-not-allowed border-white/10 bg-black text-zinc-600 opacity-60' : active ? 'border-white bg-white text-black' : 'border-white/10 bg-black text-zinc-500'
       }`}
       aria-pressed={active}
     >
       {label}
     </button>
+  );
+}
+
+function ChatPreview({ settings }: { settings: AppSettings }) {
+  const sentToneStyle: CSSProperties = settings.sentBubbleTone === 'theme'
+    ? { background: 'var(--ad-accent)', color: 'var(--ad-accent-contrast)' }
+    : settings.sentBubbleTone === 'gold'
+    ? { background: '#f4c95d', color: '#090909' }
+    : settings.sentBubbleTone === 'silver'
+    ? { background: '#e5e7eb', color: '#090909' }
+    : settings.sentBubbleTone === 'violet'
+    ? { background: '#7c3aed', color: '#ffffff' }
+    : { background: '#1d9bf0', color: '#ffffff' };
+  const bubbleShape = settings.chatBubbleShape === 'sharp' ? 'rounded-lg' : settings.chatBubbleShape === 'soft' ? 'rounded-2xl' : 'rounded-[24px]';
+  const messagePadding = settings.messageDensity === 'compact' ? 'px-3 py-2 text-xs' : 'px-4 py-3 text-sm';
+
+  return (
+    <div className={`chat-wallpaper-${settings.chatWallpaper} overflow-hidden rounded-[24px] border border-white/10 p-4`}>
+      <div className="mb-3 flex items-center justify-between gap-3">
+        <div className="min-w-0">
+          <p className="text-xs font-black uppercase tracking-[0.2em] text-frost/45">Live preview</p>
+          <p className="mt-1 truncate text-sm font-bold text-white">Chat wallpaper and bubbles</p>
+        </div>
+        <span className="shrink-0 rounded-full border border-white/10 px-3 py-1 text-[10px] font-bold text-zinc-400">
+          {wallpaperCopy[settings.chatWallpaper]}
+        </span>
+      </div>
+      <div className="space-y-2">
+        <div className={`w-fit max-w-[82%] ${bubbleShape} ${messagePadding} border border-white/10 bg-zinc-900 text-zinc-100`}>
+          This is how received messages feel.
+        </div>
+        <div className="flex justify-end">
+          <div className={`w-fit max-w-[82%] ${bubbleShape} ${messagePadding}`} style={sentToneStyle}>
+            This is your selected sent tone.
+          </div>
+        </div>
+      </div>
+    </div>
   );
 }
 
@@ -355,6 +394,7 @@ export function SettingsCenterScreen({ onBack, onChange, onOpenGlobalSafety, set
           description="These controls change only chat presentation. Realtime Supabase chat and mock fallback stay intact."
           icon={<MessageCircle size={20} />}
         >
+          <ChatPreview settings={settings} />
           <div>
             <p className="mb-3 text-xs font-black uppercase tracking-[0.22em] text-frost/40">Sent message tone</p>
             <div className="grid grid-cols-2 gap-3">
@@ -454,15 +494,15 @@ export function SettingsCenterScreen({ onBack, onChange, onOpenGlobalSafety, set
         </SettingsSection>
 
         <SettingsSection eyebrow="Alerts" title="Notifications" description="Local preferences only. No push notification SDKs or backend workers." icon={<Bell size={20} />}>
-          <ToggleRow checked={settings.messageNotifications} description="Show message alerts in the local notification experience." icon={<MessageCircle size={18} />} label="Messages" onChange={() => update({ messageNotifications: !settings.messageNotifications })} />
-          <ToggleRow checked={settings.friendRequestNotifications} description="Surface new friend request activity." icon={<UserPlus size={18} />} label="Friend requests" onChange={() => update({ friendRequestNotifications: !settings.friendRequestNotifications })} />
-          <ToggleRow checked={settings.globalMatchNotifications} description="Notify when Global Match activity is ready." icon={<Globe2 size={18} />} label="Global Match" onChange={() => update({ globalMatchNotifications: !settings.globalMatchNotifications })} />
-          <ToggleRow checked={settings.communityUpdateNotifications} description="Keep community updates visible." icon={<UsersRound size={18} />} label="Community updates" onChange={() => update({ communityUpdateNotifications: !settings.communityUpdateNotifications })} />
-          <ToggleRow checked={settings.eventReminderNotifications} description="Show local event reminder preference for calendar-ready flows." icon={<CalendarDays size={18} />} label="Event reminders" onChange={() => update({ eventReminderNotifications: !settings.eventReminderNotifications })} />
-          <ToggleRow checked={settings.mentionNotifications} description="Surface mentions and replies in social surfaces." icon={<AtSign size={18} />} label="Mentions" onChange={() => update({ mentionNotifications: !settings.mentionNotifications })} />
-          <ToggleRow checked={settings.likesCommentsNotifications} description="Show local preference for likes and comment activity." icon={<Heart size={18} />} label="Likes/comments" onChange={() => update({ likesCommentsNotifications: !settings.likesCommentsNotifications })} />
-          <ToggleRow checked={settings.safetyAlertNotifications} description="Keep safety alerts enabled for global social flows." icon={<ShieldCheck size={18} />} label="Safety alerts" onChange={() => update({ safetyAlertNotifications: !settings.safetyAlertNotifications })} />
-          <ToggleRow checked={settings.notificationPreview} description="Allow richer preview text in the local notification UI." icon={<Bell size={18} />} label="Notification previews" onChange={() => update({ notificationPreview: !settings.notificationPreview })} />
+          <ToggleRow checked={false} disabled description="Coming soon. Device push and live notification delivery are not active yet." icon={<MessageCircle size={18} />} label="Messages / Coming soon" onChange={() => update({ messageNotifications: !settings.messageNotifications })} />
+          <ToggleRow checked={false} disabled description="Coming soon. Friend request alerts need live social graph events." icon={<UserPlus size={18} />} label="Friend requests / Coming soon" onChange={() => update({ friendRequestNotifications: !settings.friendRequestNotifications })} />
+          <ToggleRow checked={false} disabled description="Coming soon. Global Match alerts need live match events." icon={<Globe2 size={18} />} label="Global Match / Coming soon" onChange={() => update({ globalMatchNotifications: !settings.globalMatchNotifications })} />
+          <ToggleRow checked={false} disabled description="Coming soon. Community push alerts need live notification workers." icon={<UsersRound size={18} />} label="Community updates / Coming soon" onChange={() => update({ communityUpdateNotifications: !settings.communityUpdateNotifications })} />
+          <ToggleRow checked={false} disabled description="Coming soon. Event reminder delivery needs the mobile notification layer." icon={<CalendarDays size={18} />} label="Event reminders / Coming soon" onChange={() => update({ eventReminderNotifications: !settings.eventReminderNotifications })} />
+          <ToggleRow checked={false} disabled description="Coming soon. Mention alerts need live post/comment events." icon={<AtSign size={18} />} label="Mentions / Coming soon" onChange={() => update({ mentionNotifications: !settings.mentionNotifications })} />
+          <ToggleRow checked={false} disabled description="Coming soon. Like and comment alerts need live feed activity." icon={<Heart size={18} />} label="Likes/comments / Coming soon" onChange={() => update({ likesCommentsNotifications: !settings.likesCommentsNotifications })} />
+          <ToggleRow checked={false} disabled description="Coming soon. Safety alert delivery needs moderation infrastructure." icon={<ShieldCheck size={18} />} label="Safety alerts / Coming soon" onChange={() => update({ safetyAlertNotifications: !settings.safetyAlertNotifications })} />
+          <ToggleRow checked={false} disabled description="Coming soon. Rich notification previews need real notification payloads." icon={<Bell size={18} />} label="Notification previews / Coming soon" onChange={() => update({ notificationPreview: !settings.notificationPreview })} />
         </SettingsSection>
 
         <SettingsSection
@@ -566,9 +606,9 @@ export function SettingsCenterScreen({ onBack, onChange, onOpenGlobalSafety, set
               <OptionButton key={format} active={settings.regionalFormat === format} label={regionalCopy[format]} onClick={() => update({ regionalFormat: format })} />
             ))}
           </div>
-          <ToggleRow checked={settings.translationPreview} description="Keep local translation preview affordances visible." icon={<Languages size={18} />} label="Translation preview" onChange={() => update({ translationPreview: !settings.translationPreview })} />
-          <ToggleRow checked={settings.autoTranslate} description="Preview automatic translation controls for future multilingual conversations." icon={<Sparkles size={18} />} label="Auto-translate" onChange={() => update({ autoTranslate: !settings.autoTranslate })} />
-          <ToggleRow checked={settings.showOriginalLanguage} description="Show original-language controls when translation previews are active." icon={<Globe2 size={18} />} label="Show original language" onChange={() => update({ showOriginalLanguage: !settings.showOriginalLanguage })} />
+          <ToggleRow checked={settings.translationPreview} description="Shows translation preview controls on supported feed/profile text." icon={<Languages size={18} />} label="Translation preview" onChange={() => update({ translationPreview: !settings.translationPreview })} />
+          <ToggleRow checked={false} disabled description="Coming soon. Automatic translation needs a real translation service." icon={<Sparkles size={18} />} label="Auto-translate / Coming soon" onChange={() => update({ autoTranslate: !settings.autoTranslate })} />
+          <ToggleRow checked={false} disabled description="Coming soon. Original-language display needs full translation support." icon={<Globe2 size={18} />} label="Show original language / Coming soon" onChange={() => update({ showOriginalLanguage: !settings.showOriginalLanguage })} />
         </SettingsSection>
 
         <SettingsSection
