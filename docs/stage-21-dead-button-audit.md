@@ -6,7 +6,7 @@ Stage 21A reviewed visible controls across the Ace Domain mobile app without rep
 
 - None found during source-level control review.
 
-## High Priority Issues To Fix In Stage 21B
+## High Priority Issues Found In Stage 21A
 
 - **Chats header new-chat button**: The plus button is labeled as starting a new chat, but it opens an existing/latest thread. It should be disabled or labeled as a future new-chat composer.
 - **Home reply preview**: Reply preview looks like a tappable reply thread, but it only increments the local comment count. It should become a static preview or a clearly local interaction.
@@ -14,6 +14,17 @@ Stage 21A reviewed visible controls across the Ace Domain mobile app without rep
 - **Calendar reminder action**: Reminder is local-only, while the label could imply device/push reminders. It should be labeled as local until native reminders exist.
 - **Settings privacy controls**: Some message permission and community invite controls are saved as local preferences but are not enforced by live backend rules yet. They need clearer "Coming soon" or local-only wording.
 - **Global safety message controls**: "Who can message me" and stranger request settings are local preferences only and need clearer backend-enforcement messaging.
+
+## Stage 21 Resolution Status
+
+- Chats header new-chat action is disabled and labeled for the future composer.
+- Home reply preview is now static instead of pretending to open replies.
+- Profile "Settings and privacy" now opens Settings Center, and non-action profile rows no longer show chevrons.
+- Calendar reminders are labeled as local reminders.
+- Settings message permissions, community invites, profile spotlight, and unavailable accessibility helpers are disabled or marked clearly.
+- Global Safety message permission controls are disabled with backend-enforcement copy.
+- Calendar back behavior now returns to the screen that opened Calendar.
+- User-facing sync, empty, and Ace AI unavailable messages were shortened and polished.
 
 ## Medium Priority Issues
 
