@@ -124,10 +124,10 @@ export function CalendarScreen({ onBack }: CalendarScreenProps) {
                     type="button"
                     onClick={() => updateEvent(event.id, (current) => ({ ...current, reminder: !current.reminder }))}
                     className={`flex items-center justify-center gap-1 rounded-full px-3 py-3 text-xs font-bold ${state.reminder ? 'bg-white text-black' : 'border border-white/10 text-zinc-500'}`}
-                    aria-label={`${state.reminder ? 'Remove reminder for' : 'Add reminder for'} ${event.title}`}
+                    aria-label={`${state.reminder ? 'Remove local reminder for' : 'Add local reminder for'} ${event.title}`}
                   >
                     <BellPlus size={13} />
-                    Reminder
+                    Local reminder
                   </button>
                 </div>
               </article>

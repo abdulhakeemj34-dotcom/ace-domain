@@ -11,17 +11,21 @@ type GlobalSettingsScreenProps = {
 type ToggleRowProps = {
   checked: boolean;
   description: string;
+  disabled?: boolean;
   icon?: typeof ShieldCheck;
   label: string;
   onChange: () => void;
 };
 
-function ToggleRow({ checked, description, icon: Icon = ShieldCheck, label, onChange }: ToggleRowProps) {
+function ToggleRow({ checked, description, disabled = false, icon: Icon = ShieldCheck, label, onChange }: ToggleRowProps) {
   return (
     <button
       type="button"
-      onClick={onChange}
-      className="flex w-full min-w-0 items-center gap-3 rounded-2xl border border-white/10 bg-black p-4 text-left"
+      onClick={disabled ? undefined : onChange}
+      disabled={disabled}
+      className={`flex w-full min-w-0 items-center gap-3 rounded-2xl border border-white/10 bg-black p-4 text-left ${
+        disabled ? 'cursor-not-allowed opacity-60' : ''
+      }`}
       aria-pressed={checked}
     >
       <div className={`grid h-11 w-11 shrink-0 place-items-center rounded-full border border-white/10 ${checked ? 'bg-white text-black' : 'text-zinc-500'}`}>
@@ -76,11 +80,13 @@ export function GlobalSettingsScreen({ onBack, onChange, settings }: GlobalSetti
 
         <div className="rounded-2xl border border-white/10 bg-black p-4">
           <h2 className="font-bold text-white">Who can message me</h2>
+          <p className="mt-1 text-sm leading-5 text-zinc-500">Coming soon. Live message permissions need backend enforcement.</p>
           <select
             value={settings.whoCanMessage}
             onChange={(event) => update({ whoCanMessage: event.target.value as GlobalSafetySettings['whoCanMessage'] })}
-            className="mt-3 w-full rounded-2xl border border-white/10 bg-zinc-950 px-4 py-3 text-sm text-white outline-none"
+            className="mt-3 w-full cursor-not-allowed rounded-2xl border border-white/10 bg-zinc-950 px-4 py-3 text-sm text-zinc-500 outline-none"
             aria-label="Choose who can message me"
+            disabled
           >
             <option>Everyone</option>
             <option>Friends of friends</option>
@@ -90,10 +96,11 @@ export function GlobalSettingsScreen({ onBack, onChange, settings }: GlobalSetti
 
         <div className="grid gap-3">
           <ToggleRow
-            checked={settings.messageRequests}
-            description="Strangers start in a request state before full chat access."
+            checked={false}
+            description="Coming soon. Request routing needs live message permissions."
+            disabled
             icon={MessageCircle}
-            label="Message requests from strangers"
+            label="Message requests / Coming soon"
             onChange={() => update({ messageRequests: !settings.messageRequests })}
           />
           <ToggleRow
@@ -186,10 +193,11 @@ export function GlobalSettingsScreen({ onBack, onChange, settings }: GlobalSetti
               onChange={() => update({ highContrast: !settings.highContrast })}
             />
             <ToggleRow
-              checked={settings.clearerLabels}
-              description="Keeps direct labels visible on key global controls."
+              checked={false}
+              description="Coming soon. Key labels stay readable by default in this build."
+              disabled
               icon={Type}
-              label="Clearer labels"
+              label="Clearer labels / Coming soon"
               onChange={() => update({ clearerLabels: !settings.clearerLabels })}
             />
           </div>

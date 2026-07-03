@@ -324,15 +324,10 @@ export function HomeScreen({ globalProfile, globalSettings, onOpenAiChat, onOpen
                   <p className="truncate text-xs text-zinc-500">{post.context ? `${post.context} / ${post.region}` : post.region}</p>
                   <TranslationToggle className="ad-safe-break mt-2 text-[15px] leading-6" text={post.body} translatedText={`Translation preview: ${post.body}`} />
                   {post.replyPreview && (
-                    <button
-                      type="button"
-                      onClick={() => updatePost(post.id, (current) => ({ ...current, comments: current.comments + 1 }))}
-                      className="mt-3 flex w-full items-start gap-2 rounded-2xl border border-white/10 px-3 py-2 text-left"
-                      aria-label={`View replies to ${post.author}'s post`}
-                    >
+                    <div className="mt-3 flex w-full items-start gap-2 rounded-2xl border border-white/10 px-3 py-2 text-left">
                       <MessageCircle size={15} className="mt-0.5 shrink-0 text-zinc-500" />
                       <span className="line-clamp-2 text-sm leading-5 text-zinc-400">{post.replyPreview}</span>
-                    </button>
+                    </div>
                   )}
                   <div className="mt-3 flex flex-wrap gap-2">
                     {post.interests.map((interest) => (

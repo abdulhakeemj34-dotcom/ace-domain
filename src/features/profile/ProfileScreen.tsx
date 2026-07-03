@@ -161,6 +161,7 @@ type ProfileRowProps = {
   children?: ReactNode;
   description: string;
   icon: ReactNode;
+  onClick?: () => void;
   title: string;
 };
 
@@ -180,16 +181,31 @@ function profileVisualStyle(settings: AppSettings) {
   } as CSSProperties;
 }
 
-function ProfileRow({ children, description, icon, title }: ProfileRowProps) {
-  return (
-    <div className="flex min-w-0 items-center gap-3 px-3 py-3.5">
+function ProfileRow({ children, description, icon, onClick, title }: ProfileRowProps) {
+  const className = 'flex w-full min-w-0 items-center gap-3 px-3 py-3.5 text-left';
+  const content = (
+    <>
       <div className="grid h-10 w-10 shrink-0 place-items-center rounded-full border border-white/10 text-zinc-400">{icon}</div>
       <div className="min-w-0 flex-1">
         <p className="truncate font-bold text-white">{title}</p>
         <p className="mt-0.5 line-clamp-2 text-sm leading-5 text-zinc-500">{description}</p>
         {children}
       </div>
-      <ChevronRight size={18} className="shrink-0 text-frost/25" />
+      {onClick && <ChevronRight size={18} className="shrink-0 text-frost/25" />}
+    </>
+  );
+
+  if (onClick) {
+    return (
+      <button type="button" onClick={onClick} className={`${className} transition hover:bg-white/[0.04]`}>
+        {content}
+      </button>
+    );
+  }
+
+  return (
+    <div className={className}>
+      {content}
     </div>
   );
 }
@@ -473,6 +489,7 @@ export function ProfileScreen({ appSettings, canSyncProfile, globalProfile, glob
             icon={<Settings size={19} />}
             title="Settings and privacy"
             description="Personalization, safety, notifications, language, and account controls."
+            onClick={onOpenSettingsCenter}
           />
         </div>
       </div>

@@ -50,10 +50,9 @@ export function ChatsScreen({ onOpenChat }: ChatsScreenProps) {
         action={
           <button
             type="button"
-            onClick={() => startThreadId && onOpenChat(startThreadId)}
-            className="grid h-11 w-11 place-items-center rounded-full bg-white text-black disabled:opacity-50"
-            aria-label="Start new chat"
-            disabled={!startThreadId}
+            className="grid h-11 w-11 cursor-not-allowed place-items-center rounded-full border border-white/10 bg-white/10 text-zinc-500 opacity-70"
+            aria-label="New chat composer coming soon"
+            disabled
           >
             <Plus size={20} />
           </button>

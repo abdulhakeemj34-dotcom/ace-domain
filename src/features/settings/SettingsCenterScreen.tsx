@@ -490,7 +490,7 @@ export function SettingsCenterScreen({ onBack, onChange, onOpenGlobalSafety, set
               ))}
             </div>
           </div>
-          <ToggleRow checked={settings.profileSpotlight} description="Keep premium spotlight styling ready for profile branding surfaces." icon={<UserRound size={18} />} label="Profile spotlight" onChange={() => update({ profileSpotlight: !settings.profileSpotlight })} />
+          <ToggleRow checked={false} disabled description="Coming soon. Spotlight needs more public profile surfaces before it becomes active." icon={<UserRound size={18} />} label="Profile spotlight / Coming soon" onChange={() => update({ profileSpotlight: !settings.profileSpotlight })} />
         </SettingsSection>
 
         <SettingsSection eyebrow="Alerts" title="Notifications" description="Local preferences only. No push notification SDKs or backend workers." icon={<Bell size={20} />}>
@@ -515,7 +515,7 @@ export function SettingsCenterScreen({ onBack, onChange, onOpenGlobalSafety, set
             <p className="mb-3 text-xs font-black uppercase tracking-[0.22em] text-frost/40">Who can message me</p>
             <div className="grid grid-cols-1 gap-2 min-[360px]:grid-cols-2">
               {messagePrivacyOptions.map((privacy) => (
-                <OptionButton key={privacy} active={settings.messagePrivacy === privacy} label={messagePrivacyCopy[privacy]} onClick={() => update({ messagePrivacy: privacy })} />
+                <OptionButton key={privacy} active={false} disabled label={messagePrivacyCopy[privacy]} description="Coming soon. Live message permissions need backend enforcement." onClick={() => update({ messagePrivacy: privacy })} />
               ))}
             </div>
           </div>
@@ -524,7 +524,7 @@ export function SettingsCenterScreen({ onBack, onChange, onOpenGlobalSafety, set
           <ToggleRow checked={settings.showLocalTime} description="Show local time hints on global identity surfaces." icon={<Globe2 size={18} />} label="Show local time" onChange={() => update({ showLocalTime: !settings.showLocalTime })} />
           <ToggleRow checked={settings.showLanguages} description="Show languages spoken and learning." icon={<Languages size={18} />} label="Show languages" onChange={() => update({ showLanguages: !settings.showLanguages })} />
           <ToggleRow checked={settings.showProfileInGlobalMatch} description="Let your profile appear in Global Match discovery." icon={<Globe2 size={18} />} label="Show profile in Global Match" onChange={() => update({ showProfileInGlobalMatch: !settings.showProfileInGlobalMatch })} />
-          <ToggleRow checked={settings.allowCommunityInvites} description="Allow local UI for community invite prompts." icon={<UsersRound size={18} />} label="Allow community invites" onChange={() => update({ allowCommunityInvites: !settings.allowCommunityInvites })} />
+          <ToggleRow checked={false} disabled description="Coming soon. Community invites need live member and moderation rules." icon={<UsersRound size={18} />} label="Community invites / Coming soon" onChange={() => update({ allowCommunityInvites: !settings.allowCommunityInvites })} />
           <ToggleRow checked={settings.safetyReminders} description="Show local reminders around safer global conversations." icon={<ShieldCheck size={18} />} label="Safety reminders" onChange={() => update({ safetyReminders: !settings.safetyReminders })} />
           <div className="rounded-[24px] border border-white/10 bg-white/[0.055] p-4">
             <p className="font-bold text-white">Safety reminder</p>
@@ -622,7 +622,7 @@ export function SettingsCenterScreen({ onBack, onChange, onOpenGlobalSafety, set
           <ToggleRow checked={settings.highContrast} description="Boost panel contrast for readability across dark and light shells." icon={<ShieldCheck size={18} />} label="High contrast" onChange={() => update({ highContrast: !settings.highContrast })} />
           <ToggleRow checked={settings.buttonLabels} description="Keep helpful labels visible on key controls." icon={<Type size={18} />} label="Button labels" onChange={() => update({ buttonLabels: !settings.buttonLabels })} />
           <ToggleRow checked={settings.compactMode} description="Tightens some local spacing on dense mobile screens." icon={<MonitorSmartphone size={18} />} label="Compact mode" onChange={() => update({ compactMode: !settings.compactMode })} />
-          <ToggleRow checked={settings.screenReaderLabels} description="Keep explicit accessible labels on key controls." icon={<Lock size={18} />} label="Screen-reader friendly labels" onChange={() => update({ screenReaderLabels: !settings.screenReaderLabels })} />
+          <ToggleRow checked description="Accessible labels stay on for key controls in this build." icon={<Lock size={18} />} label="Screen-reader labels / Always on" disabled onChange={() => update({ screenReaderLabels: !settings.screenReaderLabels })} />
           <div>
             <p className="mb-3 text-xs font-black uppercase tracking-[0.22em] text-frost/40">Animation intensity</p>
             <div className="grid grid-cols-1 gap-2 min-[360px]:grid-cols-3">
