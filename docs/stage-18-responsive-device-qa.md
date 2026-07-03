@@ -91,6 +91,41 @@ Ace Domain is in a black-first compact mobile layout. Stage 18 keeps that direct
 | Short screens | 320px to 390px width with short height | Welcome/auth actions, chat composer, modals |
 | Tablet/foldable-ish | 600px to 768px width | App max width, centered shell, no stretched cards |
 
+## Exact manual viewport checklist
+
+Run the same route and interaction pass at each viewport below. Browser devtools are acceptable for a first pass, but a real phone or emulator is preferred before release.
+
+| Viewport | What it represents | Must verify |
+| --- | --- | --- |
+| 320 x 568 | Very small iPhone style | Auth actions reachable, no settings grid squeeze, chat composer usable |
+| 360 x 640 | Small Android | Bottom nav tap targets, chat input, feed rows, search fields |
+| 375 x 667 | Normal compact iPhone | Signup/login, home feed, communities, profile tabs |
+| 390 x 844 | Modern iPhone style | Sticky headers, bottom nav, story viewer, settings persistence |
+| 393 x 873 | Tall Android style | Long-scroll screens, notifications, global discovery filters |
+| 412 x 915 | Large Android | Chat room, community detail, Ace AI, profile header |
+| 414 x 896 | Large iPhone style | Feed density, settings sections, fixed composer spacing |
+| 430 x 932 | Pro Max / large Samsung style | Centered shell, card width, bottom nav, no stretched surfaces |
+| 600 x 960 | Foldable-ish / small tablet | App shell remains centered and mobile-first |
+| 768 x 1024 | Tablet portrait | Max-width shell holds, no oversized dashboard feel returns |
+
+For every viewport, test:
+
+1. Auth signup and login forms.
+2. Refresh and session restore after login.
+3. Settings change, refresh, and persistence.
+4. Theme, wallpaper, and supported settings controls.
+5. Home feed, stories, trending row, and post interactions.
+6. Communities tabs, search, join/leave, and community detail.
+7. Chats inbox, chat room, message input, and fallback behavior.
+8. Notifications filters and read/unread toggles.
+9. Profile header, edit profile modal, profile tabs, and settings link.
+10. Ace AI unavailable/runtime behavior.
+11. Global Discovery, Country Detail, and Calendar screens.
+12. Bottom navigation active states and tap reliability.
+13. Keyboard opening in auth, chat, Ace AI, and edit profile inputs.
+14. No horizontal page scroll.
+15. No fixed button, composer, or bottom nav overlap.
+
 ## Stage 18B targets
 
 - Add dynamic viewport and safe-area CSS helpers.
@@ -115,3 +150,13 @@ For each device size, pass requires:
 - Buttons stay tappable and do not overlap.
 - Long names, messages, labels, and settings text remain inside their containers.
 - Demo/local fallback remains visible and understandable.
+
+## Capture notes for failures
+
+When a failure appears, capture:
+
+- The viewport size or physical device model.
+- The screen name and action that caused the issue.
+- A screenshot showing the overlap, overflow, or unreadable text.
+- Whether keyboard was open.
+- Whether the user was in live Supabase mode or demo/local fallback.
