@@ -1,4 +1,8 @@
 const SUPABASE_SESSION_KEY = 'ace-domain.supabase.session';
+type AuthChangeEvent = 'SIGNED_IN' | 'SIGNED_OUT' | 'TOKEN_REFRESHED';
+type AuthChangeListener = (event: AuthChangeEvent, session: SupabaseSession | null) => void;
+
+const authListeners = new Set<AuthChangeListener>();
 
 const envUrl = import.meta.env.VITE_SUPABASE_URL?.trim() ?? '';
 const envAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY?.trim() ?? '';
@@ -46,6 +50,12 @@ export type SupabaseSession = {
   token_type?: string;
   user: SupabaseUser;
 };
+
+function notifyAuthListeners(event: AuthChangeEvent, session: SupabaseSession | null) {
+  authListeners.forEach((listener) => {
+    listener(event, session);
+  });
+}
 
 export class SupabaseConfigError extends Error {
   constructor() {
@@ -128,25 +138,37 @@ export function getStoredSession(): SupabaseSession | null {
   }
 }
 
-export function storeSession(session: SupabaseSession | null) {
+export function storeSession(session: SupabaseSession | null, event: AuthChangeEvent = session ? 'SIGNED_IN' : 'SIGNED_OUT') {
   if (!hasStorage()) {
+    notifyAuthListeners(event, session);
     return;
   }
 
   if (!session) {
     window.localStorage.removeItem(SUPABASE_SESSION_KEY);
+    notifyAuthListeners(event, null);
     return;
   }
 
   try {
     window.localStorage.setItem(SUPABASE_SESSION_KEY, JSON.stringify(session));
+    notifyAuthListeners(event, session);
   } catch {
     // Storage can be unavailable on some locked-down webviews; auth will fall back safely.
+    notifyAuthListeners(event, session);
   }
 }
 
 export function clearStoredSession() {
   storeSession(null);
+}
+
+export function subscribeToAuthChanges(listener: AuthChangeListener) {
+  authListeners.add(listener);
+
+  return () => {
+    authListeners.delete(listener);
+  };
 }
 
 export function normalizeSession(value: unknown): SupabaseSession | null {
@@ -289,6 +311,7 @@ export const supabase = {
   auth: {
     clearSession: clearStoredSession,
     getStoredSession,
+    onAuthStateChange: subscribeToAuthChanges,
     storeSession
   },
   config: supabaseConfig,

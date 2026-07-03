@@ -5,7 +5,7 @@ import { supabaseConfig, supabaseSetupMessage } from '../../lib/supabase';
 import { loginWithEmail, signUpWithEmail } from '../../services/authService';
 
 type AuthScreenProps = {
-  onComplete: () => void;
+  onComplete: (mode: 'demo' | 'live') => void;
 };
 
 export function AuthScreen({ onComplete }: AuthScreenProps) {
@@ -24,7 +24,7 @@ export function AuthScreen({ onComplete }: AuthScreenProps) {
     setCanUseDemoFallback(false);
     setError('');
     setStatus('Opening Ace Domain in demo mode.');
-    onComplete();
+    onComplete('demo');
   };
 
   const submitAuth = async () => {
@@ -66,7 +66,7 @@ export function AuthScreen({ onComplete }: AuthScreenProps) {
       }
 
       setStatus(result.profileWarning || (mode === 'signup' ? 'Account created.' : 'Welcome back.'));
-      onComplete();
+      onComplete('live');
     } catch {
       setError('Live authentication could not finish. You can continue in demo mode without creating a live account.');
       setStatus('Demo mode is still available.');

@@ -17,6 +17,7 @@ import { SettingsCenterScreen } from '../features/settings/SettingsCenterScreen'
 import { themePresets } from '../features/settings/defaultSettings';
 import { readAppSettings, readAppSettingsSavedAt, writeAppSettings } from '../features/settings/settingsStorage';
 import { WelcomeScreen } from '../features/welcome/WelcomeScreen';
+import { subscribeToAuthChanges } from '../lib/supabase';
 import { BottomNavigation } from '../navigation/BottomNavigation';
 import { getCurrentSession, logout } from '../services/authService';
 import { loadCurrentUserSettings, upsertCurrentUserSettings } from '../services/settingsService';
@@ -27,6 +28,7 @@ import type { GlobalOnboardingProfile, GlobalSafetySettings } from '../types/glo
 const GLOBAL_PROFILE_KEY = 'ace-domain.global-profile';
 const GLOBAL_ONBOARDING_KEY = 'ace-domain.global-onboarding-complete';
 const GLOBAL_SETTINGS_KEY = 'ace-domain.global-settings';
+type AuthMode = 'demo' | 'live' | 'signed-out';
 
 function readStorageItem(key: string) {
   try {
@@ -124,7 +126,8 @@ function readGlobalSettings() {
 
 export default function App() {
   const [screen, setScreen] = useState<AppScreen>('welcome');
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [authMode, setAuthMode] = useState<AuthMode>('signed-out');
+  const [isAuthRestoring, setIsAuthRestoring] = useState(true);
   const [showSplash, setShowSplash] = useState(true);
   const [activeChatId, setActiveChatId] = useState('c1');
   const [appSettings, setAppSettings] = useState<AppSettings>(readAppSettings);
@@ -133,6 +136,7 @@ export default function App() {
   const [globalSettings, setGlobalSettings] = useState<GlobalSafetySettings>(readGlobalSettings);
   const [showGlobalOnboarding, setShowGlobalOnboarding] = useState(() => !hasStoredFlag(GLOBAL_ONBOARDING_KEY));
 
+  const isAuthenticated = authMode !== 'signed-out';
   const showNav = isAuthenticated && !['welcome', 'auth'].includes(screen);
 
   const syncRemoteAppSettings = useCallback(async () => {
@@ -175,17 +179,41 @@ export default function App() {
     let isMounted = true;
 
     getCurrentSession().then((session) => {
-      if (!isMounted || !session) {
+      if (!isMounted) {
         return;
       }
 
-      setIsAuthenticated(true);
-      setScreen('home');
-      void syncRemoteAppSettings();
+      if (session) {
+        setAuthMode('live');
+        setScreen((current) => (['welcome', 'auth'].includes(current) ? 'home' : current));
+        void syncRemoteAppSettings();
+      }
+    }).finally(() => {
+      if (isMounted) {
+        setIsAuthRestoring(false);
+      }
+    });
+
+    const unsubscribe = subscribeToAuthChanges((event, session) => {
+      if (!isMounted) {
+        return;
+      }
+
+      if ((event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED') && session) {
+        setAuthMode('live');
+        setScreen((current) => (['welcome', 'auth'].includes(current) ? 'home' : current));
+        void syncRemoteAppSettings();
+      }
+
+      if (event === 'SIGNED_OUT') {
+        setAuthMode('signed-out');
+        setScreen((current) => (current === 'auth' ? current : 'welcome'));
+      }
     });
 
     return () => {
       isMounted = false;
+      unsubscribe();
     };
   }, [syncRemoteAppSettings]);
 
@@ -205,7 +233,7 @@ export default function App() {
           <WelcomeScreen
             onStart={() => setScreen('auth')}
             onExploreDemo={() => {
-              setIsAuthenticated(true);
+              setAuthMode('demo');
               setScreen('home');
             }}
           />
@@ -213,10 +241,14 @@ export default function App() {
       case 'auth':
         return (
           <AuthScreen
-            onComplete={() => {
-              setIsAuthenticated(true);
+            onComplete={(mode) => {
+              setAuthMode(mode);
               setScreen('home');
-              void syncRemoteAppSettings();
+              if (mode === 'live') {
+                void syncRemoteAppSettings();
+              } else {
+                setSettingsSyncStatus('Saved locally');
+              }
             }}
           />
         );
@@ -280,7 +312,7 @@ export default function App() {
             onOpenSettingsCenter={() => setScreen('settingsCenter')}
             onLogout={() => {
               logout().then(() => {
-                setIsAuthenticated(false);
+                setAuthMode('signed-out');
                 setScreen('welcome');
               });
             }}
@@ -349,6 +381,11 @@ export default function App() {
         )}
 
       </div>
+      {!isAuthenticated && isAuthRestoring && !showSplash && (
+        <div className="fixed bottom-[calc(1rem+env(safe-area-inset-bottom))] left-1/2 z-40 -translate-x-1/2 rounded-full border border-white/10 bg-black px-4 py-2 text-xs font-bold text-zinc-400">
+          Restoring session...
+        </div>
+      )}
       {isAuthenticated && showGlobalOnboarding && !showSplash && (
         <GlobalOnboarding
           onComplete={(profile) => {

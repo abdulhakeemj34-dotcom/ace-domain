@@ -154,7 +154,7 @@ async function refreshStoredSession(session: SupabaseSession) {
       return null;
     }
 
-    storeSession(refreshedSession);
+    storeSession(refreshedSession, 'TOKEN_REFRESHED');
     return refreshedSession;
   } catch {
     return null;
