@@ -92,7 +92,7 @@ export function AuthScreen({ onComplete }: AuthScreenProps) {
           {mode === 'signup' ? 'Create your account.' : 'Log in.'}
         </h1>
         <p className="mt-3 max-w-sm text-sm leading-6 text-zinc-400">
-          Use live auth when available, or continue locally without breaking the app.
+          Sign up with a display name and email. Log in with that email and password, or continue locally when live auth is unavailable.
         </p>
       </div>
 
@@ -135,8 +135,13 @@ export function AuthScreen({ onComplete }: AuthScreenProps) {
             value={displayName}
             onChange={(event) => setDisplayName(event.target.value)}
             className="min-h-14 w-full rounded-2xl border border-white/10 bg-zinc-950 px-4 text-white outline-none placeholder:text-zinc-600"
-            placeholder="Display name"
+            placeholder="Display name shown on profile"
           />
+        )}
+        {mode === 'login' && (
+          <p className="rounded-2xl border border-white/10 bg-zinc-950 px-4 py-3 text-sm leading-6 text-zinc-400">
+            Log in with your email address. Username login is not active yet.
+          </p>
         )}
         <input
           required={backendReady}
@@ -144,7 +149,7 @@ export function AuthScreen({ onComplete }: AuthScreenProps) {
           value={email}
           onChange={(event) => setEmail(event.target.value)}
           className="min-h-14 w-full rounded-2xl border border-white/10 bg-zinc-950 px-4 text-white outline-none placeholder:text-zinc-600"
-          placeholder="Email address"
+          placeholder={mode === 'signup' ? 'Email address used for login' : 'Email address'}
         />
         <input
           required={backendReady}
@@ -164,7 +169,7 @@ export function AuthScreen({ onComplete }: AuthScreenProps) {
           className="mt-2 flex min-h-14 items-center justify-center gap-2 rounded-full bg-white px-5 text-base font-black text-black disabled:opacity-60"
           disabled={isLoading}
         >
-          {isLoading ? 'Connecting...' : backendReady ? mode === 'signup' ? 'Create account' : 'Login' : 'Continue in demo mode'}
+          {isLoading ? 'Connecting...' : backendReady ? mode === 'signup' ? 'Create account' : 'Log in with email' : 'Continue in demo mode'}
           {!isLoading && <ArrowRight size={18} />}
         </button>
 
