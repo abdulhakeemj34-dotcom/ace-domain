@@ -35,11 +35,14 @@ Safe error response:
 
 ## Vercel Project Settings
 
-Suggested project settings:
+The repository includes `vercel.json` with:
 
 - Framework preset: Vite
 - Build command: `npm run build`
 - Output directory: `dist`
+
+Suggested dashboard settings:
+
 - Install command: default npm install
 - Production branch: `master`, unless the branch strategy changes later
 
@@ -89,7 +92,7 @@ This is safe because it is only a public endpoint URL. It is not an API key.
 ## Manual Deployment Steps
 
 1. Import the GitHub repo into Vercel.
-2. Confirm build settings: Vite, `npm run build`, output `dist`.
+2. Confirm Vercel reads `vercel.json`: Vite, `npm run build`, output `dist`.
 3. Add Supabase public env values.
 4. Add backend-only Bedrock env values.
 5. Deploy.

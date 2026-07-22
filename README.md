@@ -65,6 +65,10 @@ Capacitor is configured with:
 - App ID: `com.acedomain.app`
 - Web directory: `dist`
 
+## Hosted Deployment Prep
+
+The repository includes `vercel.json` for Vercel import with Vite, `npm run build`, and `dist` output. The root `api/ai-chat.ts` file is prepared as the hosted Ace AI backend route.
+
 ## Environment Safety
 
 Use `.env.example` as the template for local configuration. Real `.env` files are ignored and must not be committed.
