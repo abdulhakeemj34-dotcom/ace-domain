@@ -1,6 +1,6 @@
 # Stage 23E Legal And Support Link Audit
 
-This audit checks where Ace Domain can later expose support, privacy, terms, safety, and account deletion links. It does not publish live legal pages and does not implement destructive account deletion.
+This audit checks where Ace Domain can expose support, privacy, terms, safety, and account deletion links. It now has pre-release public page drafts, but it still does not implement destructive account deletion.
 
 ## Areas Checked
 
@@ -15,28 +15,28 @@ This audit checks where Ace Domain can later expose support, privacy, terms, saf
 - Settings Center is the safest current in-app place for support/legal readiness labels.
 - Profile already links to Settings Center.
 - Auth/welcome surfaces should stay focused on account access and demo mode for now.
-- No live support inbox or public privacy URL is confirmed yet.
+- Public pre-release drafts now exist for support, privacy, terms/safety, and account deletion.
+- A live monitored support inbox is still not confirmed yet.
 - In-app account deletion is not implemented yet.
 - Destructive deletion should not be added until backend/RLS policy design is complete.
 
 ## In-App Update Made
 
-The About Ace Domain section now includes non-tappable status rows for:
+The About Ace Domain section now links to public pre-release drafts for:
 
-- Support / Coming soon.
-- Privacy Policy / Draft.
-- Terms & Safety / Draft.
-- Account deletion / Coming soon.
+- Support: `/support/`.
+- Privacy Policy: `/privacy/`.
+- Terms & Safety: `/terms/`.
+- Account deletion: `/account-deletion/`.
 
-These rows avoid dead buttons because they are labels/status surfaces, not actions.
+These links make the Settings rows useful while still labeling the content as pre-release draft material.
 
 ## Future Link Targets Needed
 
-- Public support page or monitored email link.
-- Public privacy policy URL.
-- Public terms/community safety URL.
-- Account deletion request page or in-app deletion flow.
+- Verified monitored support inbox.
+- Final legal review and final public policy copy.
+- Production-ready account deletion request flow or in-app deletion flow.
 
 ## Store Submission Reminder
 
-Before Play Store or App Store submission, Ace Domain needs real public support, privacy, terms/safety, and account deletion instructions. Draft docs are not enough for public release.
+Before Play Store or App Store submission, Ace Domain needs final reviewed public support, privacy, terms/safety, and account deletion instructions. Pre-release draft pages are helpful, but they are not final approval.

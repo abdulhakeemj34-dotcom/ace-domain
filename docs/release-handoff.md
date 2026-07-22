@@ -39,6 +39,7 @@ Current source checkpoint:
 - Supabase `user_settings` sync foundation with localStorage as the immediate source of truth.
 - Backend-only Ace AI endpoint with Amazon Bedrock or OpenAI provider support.
 - Capacitor Android and iOS native project structure.
+- Pre-release public page drafts for support, privacy, terms/safety, and account deletion.
 
 ## Tech Stack
 
@@ -120,7 +121,7 @@ cd android
 - Local Vite middleware supports `/api/ai-chat` during development only. Production native builds need a real deployed backend endpoint.
 - Android debug build has been verified locally, but a full physical Android phone pass is still recommended.
 - iOS native builds require macOS, Xcode, and Apple signing setup.
-- Public store release still needs final app icon/splash PNG exports, store screenshots, signing, privacy/support/account deletion URLs, and final device QA.
+- Public store release still needs final app icon/splash PNG exports, store screenshots, signing, final legal/support review, a verified monitored support inbox, and final device QA.
 
 ## Recommended Next Steps
 
@@ -128,6 +129,6 @@ cd android
 2. Run Ace Domain on a physical Android phone when available.
 3. Retest live Supabase signup after any email rate-limit cooldown clears.
 4. Confirm Ace AI through the deployed backend path before native production release.
-5. Prepare final public privacy/support/account deletion URLs.
+5. Review and finalize the public privacy/support/account deletion/terms page drafts.
 6. Prepare final store assets and screenshots from a real device build.
 7. Keep `.env` untracked and `.env.example` placeholder-only.

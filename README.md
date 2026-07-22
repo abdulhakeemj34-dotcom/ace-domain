@@ -56,6 +56,7 @@ Future product modules are intentionally registered as planned architecture only
 - Stage 10 visual identity planning is documented in [docs/visual-identity-plan.md](docs/visual-identity-plan.md).
 - Native icon and splash export notes are documented in [docs/native-brand-assets.md](docs/native-brand-assets.md).
 - Supabase setup requirements are documented in [docs/supabase-project-setup.md](docs/supabase-project-setup.md).
+- Pre-release public support, privacy, terms, and account deletion page drafts are available at `/support/`, `/privacy/`, `/terms/`, and `/account-deletion/` after running or building the app.
 
 ## Capacitor Mobile Setup
 
@@ -87,7 +88,7 @@ The app stays demo-safe when Supabase or AI provider configuration is missing.
 - Ace AI requires a backend/serverless runtime with either Amazon Bedrock or OpenAI configured and available quota/access.
 - Android debug builds have been verified locally, but a full physical Android phone pass is still recommended.
 - iOS native builds require macOS and Xcode.
-- Public store release still needs signing, final store assets, public privacy/support/account deletion URLs, and final device QA.
+- Public store release still needs signing, final store assets, final legal/support review, a verified monitored support inbox, and final device QA.
 
 ## Quick Start
 

@@ -2,6 +2,8 @@
 
 Draft status: this is a preparation draft for Ace Domain. It is not final legal advice, not legal approval, and not app store approval. A final privacy policy must be reviewed and published before public store submission.
 
+Public pre-release page draft: `/privacy/`.
+
 ## Operator
 
 Ace Domain is operated by **R.D.ACE / Ragnar D Ace Company** as a placeholder operator name until final business/legal details are confirmed.

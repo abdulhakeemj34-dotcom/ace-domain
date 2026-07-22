@@ -2,6 +2,8 @@
 
 Draft status: this is a readiness draft for Ace Domain. It is not final legal advice, not legal approval, and not app store approval. Final terms and safety policies must be reviewed before public release.
 
+Public pre-release page draft: `/terms/`.
+
 ## Purpose
 
 Ace Domain is a social app for global chats, communities, culture discovery, profile expression, and Ace AI support. The public version needs clear rules so users understand acceptable behavior and safety expectations.

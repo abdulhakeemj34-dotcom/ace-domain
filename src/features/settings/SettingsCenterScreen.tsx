@@ -6,6 +6,7 @@ import {
   Bell,
   CalendarDays,
   Eye,
+  ExternalLink,
   Gamepad2,
   Gauge,
   Globe2,
@@ -219,6 +220,19 @@ function SmallOptionButton({ active, disabled = false, label, onClick }: Omit<Op
     >
       {label}
     </button>
+  );
+}
+
+function PublicPageLink({ href, label }: { href: string; label: string }) {
+  return (
+    <a
+      aria-label={label}
+      className="inline-flex min-h-11 items-center gap-1.5 rounded-full border border-white/10 bg-white/[0.04] px-3 text-xs font-black text-frost/75 transition hover:border-[color:var(--ad-accent)] hover:text-white"
+      href={href}
+    >
+      Open draft
+      <ExternalLink size={13} aria-hidden="true" />
+    </a>
   );
 }
 
@@ -642,22 +656,22 @@ export function SettingsCenterScreen({ onBack, onChange, onOpenGlobalSafety, set
           <ToggleRow checked={settings.reduceAutoRefresh} description="Reduce live-style refresh motion cues where safe." icon={<Gauge size={18} />} label="Reduce live effects" onChange={() => update({ reduceAutoRefresh: !settings.reduceAutoRefresh })} />
         </SettingsSection>
 
-        <SettingsSection eyebrow="Product" title="About Ace Domain" description="Ace Domain is still local-first for settings and ready for future modules later." icon={<Info size={20} />}>
+        <SettingsSection eyebrow="Product" title="About Ace Domain" description="Ace Domain is still local-first for settings and now includes public pre-release support and policy pages." icon={<Info size={20} />}>
           <SettingsRow label="App name" description="Ace Domain" />
           <SettingsRow label="Tagline" description="Meet the World" />
           <SettingsRow label="Mission" description="Ace Domain is a global social app for chatting, culture, gaming, discovery, and connection." />
           <SettingsRow label="Version" description="Mobile foundation" />
-          <SettingsRow label="Support" description="Coming soon. A monitored support inbox is required before store submission.">
-            <span className="rounded-full border border-white/10 px-3 py-1 text-xs font-black text-zinc-500">Coming soon</span>
+          <SettingsRow label="Support" description="Pre-release support guidance. The support inbox must be verified before store submission.">
+            <PublicPageLink href="/support/" label="Open Ace Domain support draft" />
           </SettingsRow>
-          <SettingsRow label="Privacy Policy" description="Draft ready in docs. Public policy URL is not live yet.">
-            <span className="rounded-full border border-white/10 px-3 py-1 text-xs font-black text-zinc-500">Draft</span>
+          <SettingsRow label="Privacy Policy" description="Public draft for review before final legal approval and store submission.">
+            <PublicPageLink href="/privacy/" label="Open Ace Domain privacy policy draft" />
           </SettingsRow>
-          <SettingsRow label="Terms & Safety" description="Draft community safety terms are prepared for final legal review.">
-            <span className="rounded-full border border-white/10 px-3 py-1 text-xs font-black text-zinc-500">Draft</span>
+          <SettingsRow label="Terms & Safety" description="Public draft covering community rules, safety expectations, and Ace AI limits.">
+            <PublicPageLink href="/terms/" label="Open Ace Domain terms and safety draft" />
           </SettingsRow>
-          <SettingsRow label="Account deletion" description="Coming soon. Until a safe backend flow exists, deletion must be handled through verified support.">
-            <span className="rounded-full border border-white/10 px-3 py-1 text-xs font-black text-zinc-500">Coming soon</span>
+          <SettingsRow label="Account deletion" description="Pre-release request instructions. Destructive deletion backend is not active yet.">
+            <PublicPageLink href="/account-deletion/" label="Open Ace Domain account deletion draft" />
           </SettingsRow>
           <div>
             <p className="mb-3 text-xs font-black uppercase tracking-[0.22em] text-frost/40">Coming later</p>

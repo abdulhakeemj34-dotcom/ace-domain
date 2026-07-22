@@ -5,6 +5,7 @@ This document prepares Ace Domain for future account deletion requirements. It d
 ## Current Account Deletion Status
 
 - In-app account deletion is not implemented yet.
+- Public pre-release account deletion instructions exist at `/account-deletion/`.
 - Manual support-based deletion will be needed before store submission if in-app deletion is not ready.
 - A real monitored support email is not confirmed yet.
 - Supabase SQL has been applied, but deletion workflows and data retention rules still need careful backend design.
