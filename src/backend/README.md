@@ -8,6 +8,7 @@ Copy `.env.example` to `.env` and set:
 
 - `VITE_SUPABASE_URL`
 - `VITE_SUPABASE_ANON_KEY`
+- Optional `VITE_ACE_AI_API_URL`
 - `OPENAI_API_KEY`
 - Optional `AI_PROVIDER`
 - Optional `AWS_BEARER_TOKEN_BEDROCK`
@@ -15,6 +16,8 @@ Copy `.env.example` to `.env` and set:
 - Optional `BEDROCK_MODEL_ID`
 
 Only the public anon key belongs in the frontend. Do not commit real `.env` files or service-role secrets.
+
+`VITE_ACE_AI_API_URL` is safe public frontend config because it is only the deployed `/api/ai-chat` endpoint URL. It is useful for packaged Capacitor builds, where relative `/api/ai-chat` may not point to a hosted backend.
 
 `OPENAI_API_KEY` is backend-only. It must be read from `process.env.OPENAI_API_KEY` inside serverless/backend code and must never be exposed as `VITE_OPENAI_API_KEY`.
 
@@ -66,6 +69,7 @@ Thread membership writes are restricted: clients cannot self-join arbitrary thre
 The backend-only AI foundation lives at `api/ai-chat.ts`.
 
 - Method: `POST`
+- Route: `/api/ai-chat`
 - Default OpenAI model: `gpt-4o-mini`
 - Default Amazon Bedrock model: `amazon.nova-lite-v1:0`
 - OpenAI secret source: `process.env.OPENAI_API_KEY`
@@ -75,6 +79,8 @@ The backend-only AI foundation lives at `api/ai-chat.ts`.
 Ace AI is separate from Supabase user-to-user chat. AI provider keys must stay backend-only, and user chat should continue through the Supabase chat service.
 
 Set `AI_PROVIDER=bedrock` to force Amazon Bedrock, or `AI_PROVIDER=openai` to force OpenAI. If `AI_PROVIDER` is omitted, the endpoint prefers Bedrock when `AWS_BEARER_TOKEN_BEDROCK` is available, then falls back to OpenAI when `OPENAI_API_KEY` is available.
+
+For production/native deployment steps, see [`../../docs/production-backend-deployment-prep.md`](../../docs/production-backend-deployment-prep.md).
 
 Accepted request bodies:
 

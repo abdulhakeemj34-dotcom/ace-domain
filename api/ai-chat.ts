@@ -286,6 +286,6 @@ export default async function handler(request: RequestWithBody, response: Server
 
     sendJson(response, 200, { reply: result.reply });
   } catch {
-    sendJson(response, 502, { error: 'OpenAI request failed. Please try again later.' });
+    sendJson(response, 502, { error: 'AI provider request failed. Please try again later.' });
   }
 }

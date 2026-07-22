@@ -52,6 +52,7 @@ Future product modules are intentionally registered as planned architecture only
 
 - Current final completion status is documented in [docs/final-completion-checkpoint.md](docs/final-completion-checkpoint.md).
 - Final release handoff notes are documented in [docs/release-handoff.md](docs/release-handoff.md).
+- Production backend deployment prep is documented in [docs/production-backend-deployment-prep.md](docs/production-backend-deployment-prep.md).
 - Stage 10 visual identity planning is documented in [docs/visual-identity-plan.md](docs/visual-identity-plan.md).
 - Native icon and splash export notes are documented in [docs/native-brand-assets.md](docs/native-brand-assets.md).
 - Supabase setup requirements are documented in [docs/supabase-project-setup.md](docs/supabase-project-setup.md).
@@ -69,6 +70,7 @@ Capacitor is configured with:
 Use `.env.example` as the template for local configuration. Real `.env` files are ignored and must not be committed.
 
 - `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY` are public frontend Supabase config.
+- `VITE_ACE_AI_API_URL` is an optional public endpoint URL for deployed/native Ace AI calls.
 - `OPENAI_API_KEY` is backend-only and must never be exposed as `VITE_OPENAI_API_KEY`.
 - `AWS_BEARER_TOKEN_BEDROCK` is backend-only and must never be exposed as a `VITE_` variable.
 - `AI_PROVIDER` can be set to `bedrock` or `openai` for the Ace AI backend endpoint.

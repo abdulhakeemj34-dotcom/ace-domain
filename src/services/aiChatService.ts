@@ -15,6 +15,8 @@ type AiChatResponseBody = {
   reply?: unknown;
 };
 
+const aiChatApiUrl = import.meta.env.VITE_ACE_AI_API_URL?.trim() || '/api/ai-chat';
+
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === 'object' && value !== null && !Array.isArray(value);
 }
@@ -65,7 +67,7 @@ export async function sendAiChatMessage(message: string): Promise<AiChatResult> 
   }
 
   try {
-    const response = await fetch('/api/ai-chat', {
+    const response = await fetch(aiChatApiUrl, {
       body: JSON.stringify({ message: trimmedMessage }),
       headers: { 'Content-Type': 'application/json' },
       method: 'POST'
