@@ -4,10 +4,12 @@ Ace Domain is a mobile-first global social app for chats, posts, communities, di
 
 ## Current Status
 
-- Stage 8, Stage 9, Stage 10, and Stage 11 GitHub readiness work are complete.
-- The app has passed lint, TypeScript, and production build checks.
+- Stage 8 through Stage 24 readiness work is complete.
+- The app has passed lint, TypeScript, production build, and Capacitor sync checks.
+- The Android debug build path has been verified locally after the Gradle wrapper timeout fix.
 - The project is configured for web plus Capacitor Android/iOS handoff.
-- Demo/local fallback remains available when Supabase or OpenAI services are unavailable.
+- Demo/local fallback remains available when Supabase or AI provider services are unavailable.
+- Ace AI supports backend-only Amazon Bedrock or OpenAI provider configuration.
 - Real secrets are intentionally excluded from Git.
 
 ## Tech Stack
@@ -18,7 +20,7 @@ Ace Domain is a mobile-first global social app for chats, posts, communities, di
 - Tailwind CSS
 - Capacitor
 - Supabase foundation
-- Backend/serverless OpenAI endpoint foundation
+- Backend/serverless Ace AI endpoint foundation with Bedrock/OpenAI support
 
 ## Requirements
 
@@ -37,7 +39,7 @@ Ace Domain is a mobile-first global social app for chats, posts, communities, di
 - Notifications
 - Profile, settings, personalization, accessibility, and local-first settings persistence
 - Supabase-ready auth, profiles, posts, communities, chat, notifications, and settings sync
-- Backend-only OpenAI chat endpoint for Ace AI
+- Backend-only Ace AI endpoint with Amazon Bedrock or OpenAI provider support
 - Native Android and iOS project setup through Capacitor
 
 ## Architecture
@@ -48,8 +50,9 @@ Future product modules are intentionally registered as planned architecture only
 
 ## Professional Handoff
 
-- Stage 10 visual identity planning is documented in `docs/visual-identity-plan.md`.
-- Final release handoff notes are documented in `docs/release-handoff.md`.
+- Current final completion status is documented in [docs/final-completion-checkpoint.md](docs/final-completion-checkpoint.md).
+- Final release handoff notes are documented in [docs/release-handoff.md](docs/release-handoff.md).
+- Stage 10 visual identity planning is documented in [docs/visual-identity-plan.md](docs/visual-identity-plan.md).
 - Native icon and splash export notes are documented in [docs/native-brand-assets.md](docs/native-brand-assets.md).
 - Supabase setup requirements are documented in [docs/supabase-project-setup.md](docs/supabase-project-setup.md).
 
@@ -70,13 +73,15 @@ Use `.env.example` as the template for local configuration. Real `.env` files ar
 - `AWS_BEARER_TOKEN_BEDROCK` is backend-only and must never be exposed as a `VITE_` variable.
 - `AI_PROVIDER` can be set to `bedrock` or `openai` for the Ace AI backend endpoint.
 
-The app stays demo-safe when Supabase or OpenAI configuration is missing.
+The app stays demo-safe when Supabase or AI provider configuration is missing.
 
 ## Known Limitations
 
 - Supabase email signup can temporarily rate-limit test accounts; the app shows a friendly fallback message and keeps demo mode available.
 - Ace AI requires a backend/serverless runtime with either Amazon Bedrock or OpenAI configured and available quota/access.
-- A final real phone or emulator pass is recommended before public release builds.
+- Android debug builds have been verified locally, but a full physical Android phone pass is still recommended.
+- iOS native builds require macOS and Xcode.
+- Public store release still needs signing, final store assets, public privacy/support/account deletion URLs, and final device QA.
 
 ## Quick Start
 

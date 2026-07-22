@@ -83,7 +83,7 @@ Use this checklist after Stage 17B, 17C, 17D, and 17E are built locally.
 1. Open Ace AI from Home.
 2. Confirm it is separate from user-to-user chat.
 3. Send a prompt if the local/backend endpoint is available.
-4. If OpenAI quota/backend is unavailable, confirm the error is readable and does not expose keys.
+4. If the AI provider/backend is unavailable, confirm the error is readable and does not expose keys.
 
 ## Global Discovery and Calendar
 
@@ -99,7 +99,7 @@ Use this checklist after Stage 17B, 17C, 17D, and 17E are built locally.
 1. Confirm `.env` is not tracked.
 2. Confirm `dist` is not tracked.
 3. Confirm no service-role key appears in frontend code.
-4. Confirm no Supabase/OpenAI secrets appear in UI, docs, or logs.
+4. Confirm no Supabase/OpenAI/Bedrock secrets appear in UI, docs, or logs.
 5. Run final checks:
    ```bash
    npm run lint

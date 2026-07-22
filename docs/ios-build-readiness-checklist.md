@@ -52,7 +52,7 @@ This checklist prepares Ace Domain for a future iOS build and App Store/TestFlig
 ## Network / Backend Configuration
 
 - Supabase frontend config uses public `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY`.
-- OpenAI key must remain backend-only.
+- OpenAI and Bedrock keys must remain backend-only.
 - Ace AI needs a deployed backend/serverless endpoint for production native builds.
 - Local Vite dev middleware is not a production native backend.
 - Phone auth retest remains pending after Supabase email cooldown/rate-limit.
@@ -63,6 +63,7 @@ This checklist prepares Ace Domain for a future iOS build and App Store/TestFlig
 - Do not print real env values.
 - Do not add service-role keys to frontend.
 - Do not add `VITE_OPENAI_API_KEY`.
+- Do not add `VITE_BEDROCK_API_KEY`.
 - Confirm Vite build-time env values are present before syncing native builds.
 
 ## Debug / Simulator Build Checklist

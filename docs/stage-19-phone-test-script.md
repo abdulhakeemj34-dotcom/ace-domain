@@ -107,9 +107,9 @@ Do not paste or share local `.env` values during testing.
 
 - Open Ace AI from Home.
 - Try a suggested prompt.
-- If the backend/OpenAI quota is unavailable, the error should be clear and safe.
+- If the AI provider/backend is unavailable, the error should be clear and safe.
 - Confirm Ace AI remains separate from user-to-user chat.
-- Confirm no OpenAI key appears in the UI or logs.
+- Confirm no OpenAI or Bedrock key appears in the UI or logs.
 
 ### 13. Rotation and zoom
 

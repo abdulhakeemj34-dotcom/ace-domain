@@ -10,7 +10,7 @@ This audit checks whether Ace Domain is structurally ready for Play Store and Ap
 - Native shell: Capacitor Android and iOS folders are present
 - Layout direction: black-first compact social mobile app
 - Backend: Supabase foundation with demo/local fallback
-- AI: backend-only Ace AI endpoint foundation; OpenAI key must stay server-side
+- AI: backend-only Ace AI endpoint foundation; OpenAI and Bedrock keys must stay server-side
 - Current known phone blocker: Supabase email signup/login retest is pending because of provider rate-limit cooldown
 
 ## Ready Now
@@ -19,10 +19,10 @@ This audit checks whether Ace Domain is structurally ready for Play Store and Ap
 - Capacitor config uses the correct app name, app ID, and `dist` web directory.
 - Android and iOS native project folders exist.
 - README documents setup, scripts, environment safety, and release checks.
-- `.env.example` uses placeholders and marks `OPENAI_API_KEY` as backend-only.
+- `.env.example` uses placeholders and marks backend AI provider keys as backend-only.
 - `.gitignore` protects `.env`, `.env.*`, `dist`, node modules, local cache, and TypeScript build info.
 - Stage 18 responsive work, Stage 20 auth/session/settings fixes, and Stage 21 dead-button polish are preserved.
-- Demo/local fallback remains available when Supabase or OpenAI is unavailable.
+- Demo/local fallback remains available when Supabase or AI provider services are unavailable.
 
 ## Needs Phone Test
 
@@ -72,7 +72,7 @@ This audit checks whether Ace Domain is structurally ready for Play Store and Ap
 - Chat realtime verification against live Supabase tables.
 - Notification delivery is not production-live yet.
 - Moderation/report/block workflows are not production-live yet.
-- Ace AI requires a deployed backend/runtime and valid OpenAI quota.
+- Ace AI requires a deployed backend/runtime and valid Bedrock/OpenAI access or quota.
 
 ## Not Needed Yet
 
@@ -92,6 +92,7 @@ This audit checks whether Ace Domain is structurally ready for Play Store and Ap
 - Store screenshots and native app icon PNG exports are not final.
 - Android signing and iOS signing are not complete.
 - Live backend readiness has not been fully verified on device.
+- Production Ace AI backend routing has not been verified in a native release build.
 - Account deletion/support flow needs final public instructions.
 
 ## Stage 22 Recommendation

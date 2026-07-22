@@ -39,14 +39,15 @@ This audit checks Ace Domain's structure for future Android and iOS native build
 - Public privacy policy URL.
 - Public support/account deletion links.
 - Real phone auth retest after Supabase rate-limit cooldown.
-- Verified native Android device/emulator build.
+- Verified local Android debug build path.
+- Full physical Android phone walkthrough.
 - Verified native iOS simulator/device build on macOS/Xcode.
 
 ## Partial
 
 - Native asset catalogs/resources exist, but they still need final approved Ace Domain icon/splash exports.
 - iOS project exists, but iOS builds require macOS/Xcode and Apple signing.
-- Android project exists, but release builds require Android Studio/SDK/JDK and signing.
+- Android debug build path has been verified locally. Release builds still require signing.
 - Backend readiness exists at foundation level, but real-device auth/settings/chat/Ace AI behavior still needs verification.
 
 ## Needs Manual Install / Tooling
@@ -54,6 +55,7 @@ This audit checks Ace Domain's structure for future Android and iOS native build
 - Node.js and npm.
 - Android Studio with Android SDK.
 - Java/JDK compatible with the Android Gradle setup.
+- Android SDK path should stay local in ignored `android/local.properties`.
 - macOS with Xcode for iOS.
 - CocoaPods if required by the final Capacitor/iOS setup.
 - Physical device or emulator/simulator testing.
@@ -79,7 +81,7 @@ This audit checks Ace Domain's structure for future Android and iOS native build
 
 ## Blockers Before Real Native Release
 
-- Phone auth retest is still pending.
+- Full Android phone walkthrough and phone auth retest are still pending.
 - Final native assets are not exported/applied.
 - Public privacy/support/account deletion links are not live.
 - Android signing is not configured for release.
@@ -88,4 +90,4 @@ This audit checks Ace Domain's structure for future Android and iOS native build
 
 ## Recommendation
 
-Ace Domain is structurally ready for native build preparation, but not ready for real Android/iOS release builds or store submission. Continue with Android/iOS readiness checklists, asset path audit, environment/backend native safety audit, and real-device testing later.
+Ace Domain is structurally ready for native build preparation and has passed a local Android debug build. It is not ready for real Android/iOS release builds or store submission until signing, final assets, public policy/support links, production backend routing, and real-device testing are complete.

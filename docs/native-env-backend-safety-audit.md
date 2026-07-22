@@ -18,10 +18,13 @@ These are public Supabase browser/mobile configuration values. They are still st
 - Missing/placeholder Supabase config keeps demo/local fallback available.
 - No service-role key is required or used in frontend.
 
-## OpenAI / Ace AI Key Handling
+## Ace AI Key Handling
 
 - `OPENAI_API_KEY` is read only from `process.env.OPENAI_API_KEY` in backend/serverless code.
+- `AWS_BEARER_TOKEN_BEDROCK` is read only from `process.env.AWS_BEARER_TOKEN_BEDROCK` in backend/serverless code.
+- `AI_PROVIDER` may be set to `bedrock` or `openai` to choose the backend provider.
 - The app does not use `VITE_OPENAI_API_KEY`.
+- The app does not use `VITE_BEDROCK_API_KEY`.
 - Frontend Ace AI calls `/api/ai-chat`.
 - Local Vite dev mounts `/api/ai-chat` through a dev-only middleware.
 - Native production builds need a real deployed backend/serverless route for `/api/ai-chat`; the Vite dev middleware is not a production native backend.
@@ -45,7 +48,7 @@ Current local dev notes include `http://127.0.0.1:5173/api/ai-chat` for manual t
 Before native release testing, confirm:
 
 - The production web/native build has the correct Supabase env values.
-- Ace AI has a real backend URL or is clearly unavailable.
+- Ace AI has a real backend URL/provider runtime or is clearly unavailable.
 - No app feature depends on the local Vite server.
 
 ## Production Build Environment Notes
@@ -53,7 +56,7 @@ Before native release testing, confirm:
 Before `npm run build` for a native candidate:
 
 - Provide real `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY` locally or in the build environment.
-- Keep `OPENAI_API_KEY` out of frontend build variables.
+- Keep `OPENAI_API_KEY` and `AWS_BEARER_TOKEN_BEDROCK` out of frontend build variables.
 - Keep `.env` untracked.
 - Confirm build output is synced with `npm run cap:sync`.
 
@@ -78,6 +81,7 @@ Ace Domain currently uses email/password auth and stored session restore. If ema
 - Do not commit `.env`.
 - Do not add service-role keys to frontend.
 - Do not add `VITE_OPENAI_API_KEY`.
+- Do not add `VITE_BEDROCK_API_KEY`.
 - Do not assume local Vite middleware exists in production native builds.
 - Do not repeatedly test signup/login while Supabase email rate-limit is active.
 - Verify Supabase auth/session/settings behavior on a real phone later.
@@ -85,7 +89,7 @@ Ace Domain currently uses email/password auth and stored session restore. If ema
 ## Current Risk Summary
 
 - Supabase frontend config path is safe.
-- OpenAI key path is backend-only.
+- OpenAI and Bedrock key paths are backend-only.
 - Demo/local fallback remains important for missing network/backend cases.
 - Ace AI production native runtime needs a deployed backend endpoint.
 - Auth callback/deep-link behavior needs future review if the auth flow expands beyond email/password.
