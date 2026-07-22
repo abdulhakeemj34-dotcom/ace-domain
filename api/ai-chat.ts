@@ -42,6 +42,45 @@ const MAX_MESSAGE_LENGTH = 4000;
 const ACE_AI_SYSTEM_PROMPT = 'You are Ace Domain AI for ACE DOMAIN - MEET THE WORLD. Reply clearly, safely, and helpfully for a global social app.';
 const allowedRoles = new Set<ChatRole>(['assistant', 'system', 'user']);
 
+function getHeaderValue(value: string | string[] | undefined) {
+  return Array.isArray(value) ? value[0] : value;
+}
+
+function getAllowedCorsOrigins() {
+  return (process.env.ACE_AI_ALLOWED_ORIGINS ?? '')
+    .split(',')
+    .map((origin) => origin.trim())
+    .filter(Boolean);
+}
+
+function applyCorsHeaders(request: IncomingMessage, response: ServerResponse) {
+  const requestOrigin = getHeaderValue(request.headers.origin);
+
+  response.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
+  response.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+  response.setHeader('Access-Control-Max-Age', '86400');
+
+  if (!requestOrigin) {
+    return true;
+  }
+
+  const allowedOrigins = getAllowedCorsOrigins();
+  const allowsAnyOrigin = allowedOrigins.includes('*');
+  const isAllowed = allowsAnyOrigin || allowedOrigins.includes(requestOrigin);
+
+  if (!isAllowed) {
+    return false;
+  }
+
+  response.setHeader('Access-Control-Allow-Origin', allowsAnyOrigin ? '*' : requestOrigin);
+
+  if (!allowsAnyOrigin) {
+    response.setHeader('Vary', 'Origin');
+  }
+
+  return true;
+}
+
 function sendJson(response: ServerResponse, statusCode: number, payload: ApiResponse) {
   response.statusCode = statusCode;
   response.setHeader('Content-Type', 'application/json; charset=utf-8');
@@ -251,6 +290,19 @@ async function requestBedrock(messages: ClientMessage[], apiKey: string) {
 }
 
 export default async function handler(request: RequestWithBody, response: ServerResponse) {
+  const corsAllowed = applyCorsHeaders(request, response);
+
+  if (request.method === 'OPTIONS') {
+    response.statusCode = corsAllowed ? 204 : 403;
+    response.end();
+    return;
+  }
+
+  if (!corsAllowed) {
+    sendJson(response, 403, { error: 'Origin is not allowed for Ace AI.' });
+    return;
+  }
+
   if (request.method !== 'POST') {
     sendJson(response, 405, { error: 'Invalid request method. Use POST.' });
     return;

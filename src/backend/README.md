@@ -14,6 +14,7 @@ Copy `.env.example` to `.env` and set:
 - Optional `AWS_BEARER_TOKEN_BEDROCK`
 - Optional `BEDROCK_REGION`
 - Optional `BEDROCK_MODEL_ID`
+- Optional `ACE_AI_ALLOWED_ORIGINS`
 
 Only the public anon key belongs in the frontend. Do not commit real `.env` files or service-role secrets.
 
@@ -22,6 +23,8 @@ Only the public anon key belongs in the frontend. Do not commit real `.env` file
 `OPENAI_API_KEY` is backend-only. It must be read from `process.env.OPENAI_API_KEY` inside serverless/backend code and must never be exposed as `VITE_OPENAI_API_KEY`.
 
 `AWS_BEARER_TOKEN_BEDROCK` is backend-only. It must be read from `process.env.AWS_BEARER_TOKEN_BEDROCK` inside serverless/backend code and must never be exposed as a `VITE_` variable.
+
+`ACE_AI_ALLOWED_ORIGINS` is a comma-separated CORS allow-list for hosted/native Ace AI calls. Include the deployed web origin and Capacitor origins such as `capacitor://localhost` and `https://localhost` when needed.
 
 ## Database Setup
 

@@ -60,6 +60,7 @@ Backend-only variables:
 - `AWS_BEARER_TOKEN_BEDROCK`
 - `BEDROCK_REGION`
 - `BEDROCK_MODEL_ID`
+- `ACE_AI_ALLOWED_ORIGINS`
 - Optional `OPENAI_API_KEY`
 - Optional `OPENAI_MODEL`
 
@@ -72,6 +73,14 @@ BEDROCK_MODEL_ID=amazon.nova-lite-v1:0
 ```
 
 Set `AWS_BEARER_TOKEN_BEDROCK` in the deployment platform dashboard only. Do not commit it.
+
+Recommended hosted/native CORS allow-list:
+
+```env
+ACE_AI_ALLOWED_ORIGINS=https://your-production-domain.example,capacitor://localhost,https://localhost,http://localhost
+```
+
+Use the real deployed web origin in place of `https://your-production-domain.example`. This value is not a secret, but it should still be configured carefully to reduce unwanted browser-based calls to the hosted AI endpoint.
 
 ## Native App URL Requirement
 
@@ -95,10 +104,11 @@ This is safe because it is only a public endpoint URL. It is not an API key.
 2. Confirm Vercel reads `vercel.json`: Vite, `npm run build`, output `dist`.
 3. Add Supabase public env values.
 4. Add backend-only Bedrock env values.
-5. Deploy.
-6. Open the deployed app.
-7. Test Ace AI with a short prompt.
-8. If using native builds, set `VITE_ACE_AI_API_URL` to the deployed `/api/ai-chat` URL before `npm run build` and `npm run cap:sync`.
+5. Add `ACE_AI_ALLOWED_ORIGINS` with the deployed web origin and Capacitor local origins.
+6. Deploy.
+7. Open the deployed app.
+8. Test Ace AI with a short prompt.
+9. If using native builds, set `VITE_ACE_AI_API_URL` to the deployed `/api/ai-chat` URL before `npm run build` and `npm run cap:sync`.
 
 ## Safe Endpoint Test
 
@@ -132,6 +142,7 @@ check provider env values, model access, region, and deployment logs. Do not pri
 - Do not use Supabase service-role keys in frontend code.
 - Keep Ace AI separate from user-to-user chat.
 - Keep demo/local fallback available.
+- Keep `ACE_AI_ALLOWED_ORIGINS` limited to the deployed web origin and native app origins.
 
 ## Remaining Production Work
 
