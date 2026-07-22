@@ -67,13 +67,15 @@ Use `.env.example` as the template for local configuration. Real `.env` files ar
 
 - `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY` are public frontend Supabase config.
 - `OPENAI_API_KEY` is backend-only and must never be exposed as `VITE_OPENAI_API_KEY`.
+- `AWS_BEARER_TOKEN_BEDROCK` is backend-only and must never be exposed as a `VITE_` variable.
+- `AI_PROVIDER` can be set to `bedrock` or `openai` for the Ace AI backend endpoint.
 
 The app stays demo-safe when Supabase or OpenAI configuration is missing.
 
 ## Known Limitations
 
 - Supabase email signup can temporarily rate-limit test accounts; the app shows a friendly fallback message and keeps demo mode available.
-- Ace AI requires a backend/serverless runtime with `OPENAI_API_KEY` configured and valid OpenAI quota.
+- Ace AI requires a backend/serverless runtime with either Amazon Bedrock or OpenAI configured and available quota/access.
 - A final real phone or emulator pass is recommended before public release builds.
 
 ## Quick Start
@@ -86,7 +88,7 @@ npm run dev
 
 On macOS or Linux, use `cp .env.example .env` instead of `copy`.
 
-The app can run in demo mode with placeholder env values. Add real Supabase values to enable live auth/data flows, and add `OPENAI_API_KEY` only for the backend AI endpoint.
+The app can run in demo mode with placeholder env values. Add real Supabase values to enable live auth/data flows, and add backend-only AI provider values only for the backend AI endpoint.
 
 For a production web build:
 

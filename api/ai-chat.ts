@@ -24,9 +24,22 @@ type OpenAIChatResponse = {
   }>;
 };
 
+type BedrockConverseResponse = {
+  output?: {
+    message?: {
+      content?: Array<{
+        text?: string;
+      }>;
+    };
+  };
+};
+
 const OPENAI_CHAT_COMPLETIONS_URL = 'https://api.openai.com/v1/chat/completions';
+const DEFAULT_BEDROCK_MODEL_ID = 'amazon.nova-lite-v1:0';
+const DEFAULT_BEDROCK_REGION = 'us-east-1';
 const MAX_MESSAGES = 20;
 const MAX_MESSAGE_LENGTH = 4000;
+const ACE_AI_SYSTEM_PROMPT = 'You are Ace Domain AI for ACE DOMAIN - MEET THE WORLD. Reply clearly, safely, and helpfully for a global social app.';
 const allowedRoles = new Set<ChatRole>(['assistant', 'system', 'user']);
 
 function sendJson(response: ServerResponse, statusCode: number, payload: ApiResponse) {
@@ -119,17 +132,53 @@ function normalizeMessages(body: unknown): { error?: string; messages?: ClientMe
   return { messages: [{ content: message, role: 'user' }] };
 }
 
+function resolveAiProvider() {
+  const requestedProvider = process.env.AI_PROVIDER?.trim().toLowerCase();
+  const hasBedrockKey = Boolean(process.env.AWS_BEARER_TOKEN_BEDROCK?.trim());
+  const hasOpenAIKey = Boolean(process.env.OPENAI_API_KEY?.trim());
+
+  if (requestedProvider && !['bedrock', 'openai'].includes(requestedProvider)) {
+    return {
+      error: 'AI_PROVIDER must be set to bedrock or openai.'
+    };
+  }
+
+  if (requestedProvider === 'bedrock') {
+    return hasBedrockKey
+      ? { provider: 'bedrock' as const }
+      : { error: 'AWS_BEARER_TOKEN_BEDROCK is missing from the backend environment.' };
+  }
+
+  if (requestedProvider === 'openai') {
+    return hasOpenAIKey
+      ? { provider: 'openai' as const }
+      : { error: 'OPENAI_API_KEY is missing from the backend environment.' };
+  }
+
+  if (hasBedrockKey) {
+    return { provider: 'bedrock' as const };
+  }
+
+  if (hasOpenAIKey) {
+    return { provider: 'openai' as const };
+  }
+
+  return {
+    error: 'No backend AI provider is configured. Add AWS_BEARER_TOKEN_BEDROCK or OPENAI_API_KEY.'
+  };
+}
+
 async function requestOpenAI(messages: ClientMessage[], apiKey: string) {
   const openAIResponse = await fetch(OPENAI_CHAT_COMPLETIONS_URL, {
     body: JSON.stringify({
       messages: [
         {
-          content: 'You are Ace Domain AI for ACE DOMAIN - MEET THE WORLD. Reply clearly, safely, and helpfully for a global social app.',
+          content: ACE_AI_SYSTEM_PROMPT,
           role: 'system'
         },
         ...messages
       ],
-      model: 'gpt-4o-mini',
+      model: process.env.OPENAI_MODEL?.trim() || 'gpt-4o-mini',
       temperature: 0.7
     }),
     headers: {
@@ -153,16 +202,64 @@ async function requestOpenAI(messages: ClientMessage[], apiKey: string) {
   return { reply };
 }
 
+async function requestBedrock(messages: ClientMessage[], apiKey: string) {
+  const region = process.env.BEDROCK_REGION?.trim() || process.env.AWS_REGION?.trim() || DEFAULT_BEDROCK_REGION;
+  const modelId = process.env.BEDROCK_MODEL_ID?.trim() || DEFAULT_BEDROCK_MODEL_ID;
+  const url = `https://bedrock-runtime.${region}.amazonaws.com/model/${encodeURIComponent(modelId)}/converse`;
+  const systemMessages = messages
+    .filter((message) => message.role === 'system')
+    .map((message) => ({ text: message.content }));
+  const conversationMessages = messages
+    .filter((message) => message.role !== 'system')
+    .map((message) => ({
+      content: [{ text: message.content }],
+      role: message.role
+    }));
+
+  const bedrockResponse = await fetch(url, {
+    body: JSON.stringify({
+      inferenceConfig: {
+        maxTokens: 900,
+        temperature: 0.7
+      },
+      messages: conversationMessages,
+      system: [{ text: ACE_AI_SYSTEM_PROMPT }, ...systemMessages]
+    }),
+    headers: {
+      Authorization: `Bearer ${apiKey}`,
+      'Content-Type': 'application/json'
+    },
+    method: 'POST'
+  });
+
+  if (!bedrockResponse.ok) {
+    return { error: 'Amazon Bedrock request failed. Please try again later.' };
+  }
+
+  const data = await bedrockResponse.json() as BedrockConverseResponse;
+  const reply = data.output?.message?.content
+    ?.map((item) => item.text?.trim())
+    .filter((text): text is string => Boolean(text))
+    .join('\n')
+    .trim();
+
+  if (!reply) {
+    return { error: 'Amazon Bedrock response did not include a reply.' };
+  }
+
+  return { reply };
+}
+
 export default async function handler(request: RequestWithBody, response: ServerResponse) {
   if (request.method !== 'POST') {
     sendJson(response, 405, { error: 'Invalid request method. Use POST.' });
     return;
   }
 
-  const apiKey = process.env.OPENAI_API_KEY;
+  const provider = resolveAiProvider();
 
-  if (!apiKey) {
-    sendJson(response, 500, { error: 'OPENAI_API_KEY is missing from the backend environment.' });
+  if (provider.error || !provider.provider) {
+    sendJson(response, 500, { error: provider.error ?? 'Ace AI is not configured.' });
     return;
   }
 
@@ -175,10 +272,15 @@ export default async function handler(request: RequestWithBody, response: Server
   }
 
   try {
-    const result = await requestOpenAI(normalized.messages, apiKey);
+    const apiKey = provider.provider === 'bedrock'
+      ? process.env.AWS_BEARER_TOKEN_BEDROCK
+      : process.env.OPENAI_API_KEY;
+    const result = provider.provider === 'bedrock'
+      ? await requestBedrock(normalized.messages, apiKey ?? '')
+      : await requestOpenAI(normalized.messages, apiKey ?? '');
 
     if (result.error || !result.reply) {
-      sendJson(response, 502, { error: result.error ?? 'OpenAI request failed. Please try again later.' });
+      sendJson(response, 502, { error: result.error ?? 'AI provider request failed. Please try again later.' });
       return;
     }
 

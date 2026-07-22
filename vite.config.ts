@@ -2,15 +2,27 @@ import react from '@vitejs/plugin-react';
 import { defineConfig, loadEnv, type Plugin } from 'vite';
 import aiChatHandler from './api/ai-chat.ts';
 
+const backendEnvKeys = [
+  'AI_PROVIDER',
+  'AWS_BEARER_TOKEN_BEDROCK',
+  'AWS_REGION',
+  'BEDROCK_MODEL_ID',
+  'BEDROCK_REGION',
+  'OPENAI_API_KEY',
+  'OPENAI_MODEL'
+];
+
 function aceAiDevApi(mode: string): Plugin {
   return {
     name: 'ace-ai-dev-api',
     configureServer(server) {
       const env = loadEnv(mode, process.cwd(), '');
 
-      if (!process.env.OPENAI_API_KEY && env.OPENAI_API_KEY) {
-        process.env.OPENAI_API_KEY = env.OPENAI_API_KEY;
-      }
+      backendEnvKeys.forEach((key) => {
+        if (!process.env[key] && env[key]) {
+          process.env[key] = env[key];
+        }
+      });
 
       server.middlewares.use(async (request, response, next) => {
         const pathname = request.url?.split('?')[0];

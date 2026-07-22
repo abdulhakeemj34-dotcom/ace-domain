@@ -9,10 +9,16 @@ Copy `.env.example` to `.env` and set:
 - `VITE_SUPABASE_URL`
 - `VITE_SUPABASE_ANON_KEY`
 - `OPENAI_API_KEY`
+- Optional `AI_PROVIDER`
+- Optional `AWS_BEARER_TOKEN_BEDROCK`
+- Optional `BEDROCK_REGION`
+- Optional `BEDROCK_MODEL_ID`
 
 Only the public anon key belongs in the frontend. Do not commit real `.env` files or service-role secrets.
 
 `OPENAI_API_KEY` is backend-only. It must be read from `process.env.OPENAI_API_KEY` inside serverless/backend code and must never be exposed as `VITE_OPENAI_API_KEY`.
+
+`AWS_BEARER_TOKEN_BEDROCK` is backend-only. It must be read from `process.env.AWS_BEARER_TOKEN_BEDROCK` inside serverless/backend code and must never be exposed as a `VITE_` variable.
 
 ## Database Setup
 
@@ -60,11 +66,15 @@ Thread membership writes are restricted: clients cannot self-join arbitrary thre
 The backend-only AI foundation lives at `api/ai-chat.ts`.
 
 - Method: `POST`
-- Model: `gpt-4o-mini`
-- Secret source: `process.env.OPENAI_API_KEY`
+- Default OpenAI model: `gpt-4o-mini`
+- Default Amazon Bedrock model: `amazon.nova-lite-v1:0`
+- OpenAI secret source: `process.env.OPENAI_API_KEY`
+- Bedrock secret source: `process.env.AWS_BEARER_TOKEN_BEDROCK`
 - Frontend integration: the Ace AI screen calls `/api/ai-chat`
 
-Ace AI is separate from Supabase user-to-user chat. The OpenAI key must stay backend-only, and user chat should continue through the Supabase chat service.
+Ace AI is separate from Supabase user-to-user chat. AI provider keys must stay backend-only, and user chat should continue through the Supabase chat service.
+
+Set `AI_PROVIDER=bedrock` to force Amazon Bedrock, or `AI_PROVIDER=openai` to force OpenAI. If `AI_PROVIDER` is omitted, the endpoint prefers Bedrock when `AWS_BEARER_TOKEN_BEDROCK` is available, then falls back to OpenAI when `OPENAI_API_KEY` is available.
 
 Accepted request bodies:
 
@@ -102,13 +112,13 @@ curl -X POST https://your-domain.example/api/ai-chat \
   -d "{\"message\":\"Hello Ace Domain\"}"
 ```
 
-The endpoint does not hardcode or return API keys. If `OPENAI_API_KEY` is missing, it returns a safe backend configuration error.
+The endpoint does not hardcode or return API keys. If no backend AI provider key is configured, it returns a safe backend configuration error.
 
 ## Local Dev AI Endpoint
 
-During `npm run dev`, `vite.config.ts` mounts a local-only middleware for `POST /api/ai-chat`. The middleware reuses `api/ai-chat.ts` and loads `OPENAI_API_KEY` from the root `.env` into the Vite dev server process only.
+During `npm run dev`, `vite.config.ts` mounts a local-only middleware for `POST /api/ai-chat`. The middleware reuses `api/ai-chat.ts` and loads backend-only AI environment variables from the root `.env` into the Vite dev server process only.
 
-This does not expose `OPENAI_API_KEY` to frontend code and does not create `VITE_OPENAI_API_KEY`.
+This does not expose AI keys to frontend code and does not create `VITE_OPENAI_API_KEY` or `VITE_BEDROCK_API_KEY`.
 
 Local test:
 
