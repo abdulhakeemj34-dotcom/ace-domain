@@ -48,12 +48,13 @@ This audit checks Ace Domain against high-risk Apple App Store and Google Play r
 - Complete Google Play Data safety answers to match final behavior.
 - Complete Apple App Privacy details to match final behavior.
 - Confirm whether an iOS privacy manifest is required after generating an Xcode archive/privacy report.
-- Prepare final app icons, splash assets, screenshots, signing keys, and release builds.
+- Prepare final splash assets, screenshots, signing keys, and release builds.
+- Verify generated app icon and Play feature graphic previews in App Store Connect/Play Console.
 - Perform a final physical Android test and an iOS test on macOS/Xcode before submission.
 - Implement backend moderation and destructive account deletion completion before large public launch.
 
 ## Current Store Readiness Result
 
-Ace Domain is more acceptable structurally after this pass: public policy surfaces exist, in-app privacy links exist, report/block controls are no longer dead, account deletion can be initiated, and Android target API is current.
+Ace Domain is more acceptable structurally after this pass: public policy surfaces exist, in-app privacy links exist, report/block controls are no longer dead, account deletion can be initiated, Android target API is current, app icons no longer use Capacitor placeholders, and store graphic source assets exist.
 
 The project is still not ready to submit until external store-console items, hosted policy URLs, support inbox verification, signed release builds, and device QA are complete.

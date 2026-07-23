@@ -121,7 +121,7 @@ cd android
 - Local Vite middleware supports `/api/ai-chat` during development only. Production native builds need a real deployed backend endpoint.
 - Android debug build has been verified locally, but a full physical Android phone pass is still recommended.
 - iOS native builds require macOS, Xcode, and Apple signing setup.
-- Public store release still needs final app icon/splash PNG exports, store screenshots, signing, final legal/support review, verified hosted policy URLs, a monitored support inbox, and final device QA.
+- Public store release now has generated icon and Play feature graphic assets. It still needs screenshots from real builds, signing, final splash exports, final legal/support review, verified hosted policy URLs, a monitored support inbox, and final device QA.
 
 ## Recommended Next Steps
 

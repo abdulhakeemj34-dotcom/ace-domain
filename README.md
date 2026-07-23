@@ -55,6 +55,7 @@ Future product modules are intentionally registered as planned architecture only
 - Production backend deployment prep is documented in [docs/production-backend-deployment-prep.md](docs/production-backend-deployment-prep.md).
 - Stage 10 visual identity planning is documented in [docs/visual-identity-plan.md](docs/visual-identity-plan.md).
 - Native icon and splash export notes are documented in [docs/native-brand-assets.md](docs/native-brand-assets.md).
+- Store submission pack status is documented in [docs/store-submission-pack.md](docs/store-submission-pack.md).
 - Supabase setup requirements are documented in [docs/supabase-project-setup.md](docs/supabase-project-setup.md).
 - Public support, privacy, terms, and account deletion pages are available at `/support/`, `/privacy/`, `/terms/`, and `/account-deletion/` after running or building the app.
 
@@ -88,7 +89,7 @@ The app stays demo-safe when Supabase or AI provider configuration is missing.
 - Ace AI requires a backend/serverless runtime with either Amazon Bedrock or OpenAI configured and available quota/access.
 - Android debug builds have been verified locally, but a full physical Android phone pass is still recommended.
 - iOS native builds require macOS and Xcode.
-- Public store release still needs signing, final store assets, final legal/support review, verified hosted policy URLs, a monitored support inbox, and final device QA.
+- Public store release still needs signed release builds, screenshots from real device builds, final legal/support review, verified hosted policy URLs, a monitored support inbox, and final device QA.
 
 ## Quick Start
 
@@ -149,3 +150,4 @@ Before pushing future changes:
 | `npm run cap:sync` | Build the web app and sync `dist` into Android and iOS Capacitor projects. |
 | `npm run cap:android` | Build and open the Android project. |
 | `npm run cap:ios` | Build and open the iOS project. |
+| `npm run store:assets` | Regenerate Ace Domain store/native icon exports on Windows. |

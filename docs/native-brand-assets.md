@@ -1,6 +1,6 @@
 # Native Brand Asset Export Readiness
 
-Stage 10D prepares source-ready Ace Domain brand files for future native Android and iOS icon/splash exports. It does not overwrite platform assets yet.
+Stage 10D prepared source-ready Ace Domain brand files. The store-readiness pass now generates app icon exports and applies safer native launcher icon resources. Splash assets remain source-ready pending final phone/emulator review.
 
 ## Source Files
 
@@ -12,15 +12,27 @@ Stage 10D prepares source-ready Ace Domain brand files for future native Android
 
 ## Export Targets
 
-- App icon master: export a 1024x1024 PNG from `ace-domain-app-icon-master.svg`.
-- Android adaptive icon: export foreground and background from the two adaptive SVG layers, then map them into `android/app/src/main/res/` using Android Studio or a verified asset generator.
-- iOS app icon: export the required PNG sizes into `ios/App/App/Assets.xcassets/AppIcon.appiconset/`.
+- App icon master: generated through `npm run store:assets`.
+- Android adaptive icon: foreground/background are mapped into `android/app/src/main/res/`.
+- iOS app icon: generated into `ios/App/App/Assets.xcassets/AppIcon.appiconset/`.
 - Splash source: export optimized portrait and landscape splash images only after final device review.
+
+## Generated Store Assets
+
+- `public/store-assets/ace-domain-play-icon-512.png`
+- `public/store-assets/ace-domain-ios-icon-1024.png`
+- `public/store-assets/ace-domain-feature-graphic-1024x500.jpg`
+
+Regenerate on Windows with:
+
+```bash
+npm run store:assets
+```
 
 ## Safety Notes
 
 - Keep source SVGs under `src/assets/brand/` as the single editable source set.
-- Do not commit large generated PNG sets until the final native icon/splash pass is approved.
-- Do not overwrite Android or iOS asset catalogs without a device/emulator verification pass.
+- Keep generated store assets small and intentional.
+- Do not overwrite splash resources without a device/emulator verification pass.
 - Do not commit real `.env` secrets, API keys, `dist`, or other generated build output.
 - Keep the app name as `Ace Domain` and the tagline direction as `Meet the World`.

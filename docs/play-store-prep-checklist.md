@@ -36,9 +36,9 @@ The current app is prepared with demo-safe fallback behavior while Supabase-powe
 
 ## Visual Assets Needed
 
-- Final 512x512 Play Store app icon PNG.
-- Android adaptive icon foreground/background exports.
-- Feature graphic: 1024x500.
+- Final 512x512 Play Store app icon PNG is generated at `public/store-assets/ace-domain-play-icon-512.png`.
+- Android launcher/adaptive icon resources now use Ace Domain artwork.
+- Feature graphic 1024x500 is generated at `public/store-assets/ace-domain-feature-graphic-1024x500.jpg`.
 - Phone screenshots from a tested Android build.
 - Optional tablet screenshots after tablet QA.
 - Optional promo video only after the product is fully stable.

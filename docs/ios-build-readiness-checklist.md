@@ -34,8 +34,8 @@ This checklist prepares Ace Domain for a future iOS build and App Store/TestFlig
 ## App Icon
 
 - iOS asset catalog exists.
-- Current app icon set includes a basic icon file.
-- Final approved Ace Domain 1024x1024 icon and required iOS icon sizes are not confirmed as exported/applied.
+- The iOS app icon asset catalog now contains the Ace Domain 1024x1024 icon source.
+- Store-ready source export also exists at `public/store-assets/ace-domain-ios-icon-1024.png`.
 - Source-ready brand assets live in `src/assets/brand/`.
 
 ## Splash Screen
@@ -93,7 +93,7 @@ This checklist prepares Ace Domain for a future iOS build and App Store/TestFlig
 ## TestFlight Checklist
 
 1. Complete phone auth retest.
-2. Apply final app icon/splash assets.
+2. Confirm final app icon in Xcode/App Store Connect; native splash assets still need final review.
 3. Prepare privacy/support/account deletion public links.
 4. Build a signed archive in Xcode.
 5. Upload to App Store Connect.
@@ -103,7 +103,7 @@ This checklist prepares Ace Domain for a future iOS build and App Store/TestFlig
 ## App Store Submission Blockers
 
 - Phone auth retest.
-- Final app icon/splash assets.
+- Final native splash assets.
 - Screenshots.
 - Privacy policy URL.
 - Support/account deletion public links.

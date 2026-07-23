@@ -56,8 +56,8 @@ Recommended sizes to prepare later:
 
 ## Visual Assets Needed
 
-- Final 1024x1024 app icon PNG with no transparency.
-- iOS app icon set exported into Xcode asset catalog.
+- Final 1024x1024 app icon PNG with no transparency is generated at `public/store-assets/ace-domain-ios-icon-1024.png`.
+- iOS app icon asset catalog now contains the Ace Domain 1024x1024 icon source.
 - Native launch/splash assets if required by final iOS presentation.
 - Optional preview video only after the app is fully testable and stable.
 

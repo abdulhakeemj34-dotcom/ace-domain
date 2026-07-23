@@ -20,19 +20,27 @@ Supporting documentation:
 
 ## App Icon
 
-- Needed: final app icon PNG export.
+- Ready source/export: final app icon PNG exports are generated from the Ace Domain source artwork.
 - Play Store target: 512x512 PNG.
 - App Store target: 1024x1024 PNG with no transparency.
 - Source available: `src/assets/brand/ace-domain-app-icon-master.svg`.
-- Status: source ready, final PNG exports missing.
+- Generated exports:
+  - `public/store-assets/ace-domain-play-icon-512.png`
+  - `public/store-assets/ace-domain-ios-icon-1024.png`
+  - `ios/App/App/Assets.xcassets/AppIcon.appiconset/AppIcon-512@2x.png`
+- Status: generated and committed; final visual check in Play Console/App Store Connect still required.
 
 ## Android Adaptive Icon
 
-- Needed: adaptive foreground and background assets mapped into Android resource folders.
+- Ready source/export: adaptive foreground/background resources are mapped into Android resource folders.
 - Source available:
   - `src/assets/brand/android-adaptive-foreground.svg`
   - `src/assets/brand/android-adaptive-background.svg`
-- Status: source ready, final Android resource export not applied.
+- Native resources:
+  - `android/app/src/main/res/drawable/ic_launcher_foreground.xml`
+  - `android/app/src/main/res/values/ic_launcher_background.xml`
+  - Android mipmap launcher PNGs regenerated from Ace Domain artwork.
+- Status: applied for build readiness; final emulator/phone launcher visual check still required.
 
 ## Splash Screen / Launch Image
 
@@ -49,8 +57,8 @@ Supporting documentation:
 ## Play Store Feature Graphic
 
 - Needed: 1024x500 feature graphic.
-- Source available: no final store graphic yet.
-- Status: missing.
+- Generated export: `public/store-assets/ace-domain-feature-graphic-1024x500.jpg`.
+- Status: generated and committed; final Play Console preview check still required.
 
 ## Screenshots Needed
 
@@ -108,11 +116,7 @@ Status: drafts ready, final public copy pending.
 
 ## Missing Before Real Store Submission
 
-- Final icon PNG exports.
-- Final Android adaptive icon resources.
-- Final iOS app icon set.
 - Final native splash/launch assets.
-- Play Store feature graphic.
 - Real device screenshots.
 - Public support email.
 - Public privacy policy URL.

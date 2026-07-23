@@ -38,9 +38,9 @@ This checklist prepares Ace Domain for a future Android build and Play Store tra
 ## App Icon / Adaptive Icon
 
 - Current Android icon resource files exist.
-- Final approved Ace Domain PNG/adaptive exports are not confirmed as applied.
+- Ace Domain launcher PNGs and adaptive icon foreground/background resources are applied.
 - Source-ready brand assets exist in `src/assets/brand/`.
-- Final Android adaptive foreground/background should be exported and applied later.
+- Run `npm run store:assets` to regenerate icon exports after brand changes.
 
 ## Splash Screen
 
@@ -86,7 +86,7 @@ This checklist prepares Ace Domain for a future Android build and Play Store tra
 ## Release Build Checklist
 
 1. Complete phone auth retest.
-2. Apply final app icon/adaptive icon/splash assets.
+2. Confirm final app icon/adaptive icon on emulator or phone; native splash assets still need final review.
 3. Confirm privacy/support/account deletion public links.
 4. Verify live backend behavior on Android.
 5. Configure release signing outside Git.
@@ -114,11 +114,11 @@ Use Play Store internal testing only after:
 ## Blockers Before Real Android Release
 
 - Phone auth retest.
-- Final app icon/splash assets.
+- Final native splash assets.
 - Privacy policy URL.
 - Support/account deletion public links.
 - Signed release build.
 - Live backend verification.
 - Production Ace AI backend route.
-- Store screenshots and feature graphic.
+- Store screenshots.
 - Play Store data safety answers.
