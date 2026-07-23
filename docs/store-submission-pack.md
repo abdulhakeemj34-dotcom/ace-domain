@@ -31,6 +31,13 @@ npm run store:assets
 
 - Play Store copy draft: `docs/play-store-prep-checklist.md`
 - App Store copy draft: `docs/app-store-prep-checklist.md`
+- Consolidated store kit: `docs/store-console-submission-kit.md`
+- Google Play Data safety draft: `docs/google-play-data-safety-draft.md`
+- Apple App Privacy draft: `docs/apple-app-privacy-draft.md`
+- Reviewer notes draft: `docs/reviewer-notes.md`
+- Screenshot capture plan: `docs/screenshot-capture-plan.md`
+- Hosted policy URL map: `docs/hosted-policy-url-map.md`
+- Backend production status: `docs/backend-production-status.md`
 - Release handoff: `docs/release-handoff.md`
 - Store policy readiness audit: `docs/store-submission-readiness-audit.md`
 

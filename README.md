@@ -56,6 +56,7 @@ Future product modules are intentionally registered as planned architecture only
 - Stage 10 visual identity planning is documented in [docs/visual-identity-plan.md](docs/visual-identity-plan.md).
 - Native icon and splash export notes are documented in [docs/native-brand-assets.md](docs/native-brand-assets.md).
 - Store submission pack status is documented in [docs/store-submission-pack.md](docs/store-submission-pack.md).
+- Store console copy, reviewer notes, privacy form drafts, and URL map are documented in [docs/store-console-submission-kit.md](docs/store-console-submission-kit.md).
 - Supabase setup requirements are documented in [docs/supabase-project-setup.md](docs/supabase-project-setup.md).
 - Public support, privacy, terms, and account deletion pages are available at `/support/`, `/privacy/`, `/terms/`, and `/account-deletion/` after running or building the app.
 
@@ -151,3 +152,4 @@ Before pushing future changes:
 | `npm run cap:android` | Build and open the Android project. |
 | `npm run cap:ios` | Build and open the iOS project. |
 | `npm run store:assets` | Regenerate Ace Domain store/native icon exports on Windows. |
+| `npm run android:bundle:release` | Build a signed Android App Bundle after local signing env vars are set. |

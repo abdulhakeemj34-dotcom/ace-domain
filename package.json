@@ -11,7 +11,8 @@
     "cap:sync": "npm run build && cap sync",
     "cap:android": "npm run build && cap open android",
     "cap:ios": "npm run build && cap open ios",
-    "store:assets": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/generate-store-assets.ps1"
+    "store:assets": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/generate-store-assets.ps1",
+    "android:bundle:release": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/build-android-release-aab.ps1"
   },
   "dependencies": {
     "@capacitor/android": "^8.4.1",

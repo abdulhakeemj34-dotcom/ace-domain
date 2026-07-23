@@ -89,8 +89,12 @@ This checklist prepares Ace Domain for a future Android build and Play Store tra
 2. Confirm final app icon/adaptive icon on emulator or phone; native splash assets still need final review.
 3. Confirm privacy/support/account deletion public links.
 4. Verify live backend behavior on Android.
-5. Configure release signing outside Git.
-6. Build signed Android App Bundle (`.aab`).
+5. Configure release signing outside Git using local environment variables:
+   - `ACE_DOMAIN_ANDROID_KEYSTORE_PATH`
+   - `ACE_DOMAIN_ANDROID_KEYSTORE_PASSWORD`
+   - `ACE_DOMAIN_ANDROID_KEY_ALIAS`
+   - `ACE_DOMAIN_ANDROID_KEY_PASSWORD`
+6. Build signed Android App Bundle (`.aab`) with `npm run android:bundle:release`.
 7. Test signed release build on a real phone.
 8. Keep keystore files, passwords, signing configs, local `.env`, and generated outputs out of Git.
 
