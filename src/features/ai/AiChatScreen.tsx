@@ -202,6 +202,19 @@ export function AiChatScreen({ onBack }: AiChatScreenProps) {
             <p className="mt-1">{error}</p>
           </div>
         )}
+
+        <div className="rounded-[24px] border border-white/10 p-4">
+          <p className="text-sm font-bold text-white">Ace AI safety</p>
+          <p className="mt-1 text-xs leading-5 text-zinc-500">
+            Ace AI can be wrong. Do not use it for emergency, medical, legal, financial, or safety-critical advice.
+          </p>
+          <a
+            className="mt-3 inline-flex min-h-11 items-center rounded-full border border-white/10 px-4 text-xs font-black text-frost/75"
+            href="mailto:support@acedomain.app?subject=Ace%20AI%20safety%20report&body=Please%20review%20this%20Ace%20AI%20output.%0A%0AWhat%20happened%3A%20"
+          >
+            Report unsafe AI output
+          </a>
+        </div>
       </div>
 
       <form

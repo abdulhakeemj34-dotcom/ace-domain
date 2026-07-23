@@ -67,8 +67,9 @@ Ace Domain needs a public support contact that can handle:
 
 ## Ready Now
 
-- Pre-release public support page draft exists at `/support/`.
-- Settings Center links to the support draft.
+- Public support page exists at `/support/`.
+- Settings Center links to the support page.
+- Global Safety includes local report/block controls and support escalation.
 - Store prep docs identify the need for support contact and account deletion instructions.
 - The app has safe demo/local fallback messaging.
 - Auth error messaging is user-friendly and avoids exposing provider internals.
@@ -76,12 +77,12 @@ Ace Domain needs a public support contact that can handle:
 
 ## Missing
 
-- Real monitored support email.
-- Final public support/help page approval.
+- Verified monitored support email.
+- Hosted public support/help page URL.
 - Final privacy policy approval.
 - Final account deletion instructions approval.
-- In-app account deletion request path.
-- Live moderation/report handling workflow.
+- Backend account deletion completion workflow.
+- Live moderation/report handling workflow beyond local report history.
 - Support response process and ownership.
 
 ## Before Store Submission
@@ -95,4 +96,4 @@ Ace Domain needs a public support contact that can handle:
 
 ## Current Recommendation
 
-Keep support and account deletion pages labeled as pre-release drafts until a real support inbox and final process exist. Do not present support or account deletion as fully live if no monitored process exists yet.
+Before submitting to stores, verify the support inbox works and that account deletion requests are processed by a real human/backend workflow. Do not submit with an unmonitored inbox.

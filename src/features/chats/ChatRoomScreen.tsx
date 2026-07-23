@@ -1,5 +1,5 @@
 import { useState, type CSSProperties, type FormEvent } from 'react';
-import { ArrowLeft, Gamepad2, Mic, Send, ShieldCheck, UsersRound } from 'lucide-react';
+import { ArrowLeft, Send, ShieldCheck, UsersRound } from 'lucide-react';
 import { chats as mockChats } from '../../app/data';
 import type { Chat } from '../../app/types';
 import { Avatar } from '../../components/Avatar';
@@ -253,23 +253,6 @@ export function ChatRoomScreen({ chatId, chatSettings, onBack }: ChatRoomScreenP
         className="ad-floating-composer fixed left-1/2 z-20 flex w-[calc(100%-1rem)] max-w-md -translate-x-1/2 items-center gap-1.5 rounded-full border border-white/10 bg-black p-1.5"
         onSubmit={sendMessage}
       >
-        <button
-          type="button"
-          className="grid h-11 w-11 cursor-not-allowed place-items-center rounded-full opacity-50"
-          style={{ backgroundColor: 'rgba(255,255,255,0.08)', color: '#ffffff' }}
-          aria-label="Game room tools coming soon"
-          disabled
-        >
-          <Gamepad2 size={19} />
-        </button>
-        <button
-          type="button"
-          className="grid h-11 w-11 cursor-not-allowed place-items-center rounded-full bg-white/10 text-white opacity-50"
-          aria-label="Voice messages coming soon"
-          disabled
-        >
-          <Mic size={19} />
-        </button>
         <input
           className="min-w-0 flex-1 bg-transparent text-sm text-white outline-none placeholder:text-frost/35"
           placeholder={isGroup ? 'Message the room...' : `Message ${chat.name}...`}

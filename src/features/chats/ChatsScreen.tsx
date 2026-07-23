@@ -1,4 +1,4 @@
-import { BellOff, Pin, Plus, Search, UsersRound } from 'lucide-react';
+import { BellOff, Pin, Search, UsersRound } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import { Avatar } from '../../components/Avatar';
 import { ScreenHeader } from '../../components/ScreenHeader';
@@ -47,16 +47,6 @@ export function ChatsScreen({ onOpenChat }: ChatsScreenProps) {
       <ScreenHeader
         eyebrow={usingFallback ? 'Local inbox' : 'Messages'}
         title="Chats"
-        action={
-          <button
-            type="button"
-            className="grid h-11 w-11 cursor-not-allowed place-items-center rounded-full border border-white/10 bg-white/10 text-zinc-500 opacity-70"
-            aria-label="New chat composer coming soon"
-            disabled
-          >
-            <Plus size={20} />
-          </button>
-        }
       />
       <SearchBar placeholder="Search people, groups, or messages..." value={searchQuery} onChange={setSearchQuery} />
 

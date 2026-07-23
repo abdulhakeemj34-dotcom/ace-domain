@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Ace Domain Account Deletion Draft</title>
+    <title>Ace Domain Account Deletion</title>
     <link rel="stylesheet" href="/legal.css" />
   </head>
   <body>
@@ -12,46 +12,49 @@
 
       <header class="hero">
         <p class="eyebrow">Ace Domain - Meet the World</p>
-        <h1>Account Deletion Draft</h1>
+        <h1>Account Deletion</h1>
         <p class="lede">
-          This page prepares the account deletion request path Ace Domain needs before public
-          mobile store submission.
+          Use this page to start an Ace Domain account deletion request and understand what
+          happens next.
         </p>
       </header>
 
       <div class="status">
-        Pre-release status: destructive account deletion is not active yet. This page is a
-        public draft for the future support/deletion process.
+        Account deletion removes the account record and associated personal data that Ace
+        Domain is not legally required to keep.
       </div>
 
       <section class="section">
         <h2>Request Path</h2>
         <p>
-          Planned request email: support@acedomain.app. The inbox must be created and
-          monitored before this process is used publicly.
+          Send deletion requests to support@acedomain.app. Use the email address connected to
+          the Ace Domain account when possible.
         </p>
         <p>
           A deletion request should include the account email and a clear request to delete
-          the Ace Domain account. Users should never send passwords, recovery codes, API keys,
-          or private tokens.
+          the Ace Domain account. Do not send passwords, recovery codes, API keys, or private
+          tokens.
         </p>
+        <a class="action-link" href="mailto:support@acedomain.app?subject=Ace%20Domain%20account%20deletion%20request&body=I%20want%20to%20delete%20my%20Ace%20Domain%20account.%0A%0AAccount%20email%3A%20%0AUsername%20if%20known%3A%20%0AReason%20(optional)%3A%20">
+          Start deletion request <span>Email</span>
+        </a>
       </section>
 
       <section class="section">
         <h2>Identity Verification</h2>
         <p>
-          Ace Domain should verify account ownership without asking for passwords. Verification
-          can use account email confirmation or another secure support workflow once finalized.
+          Ace Domain may verify account ownership without asking for passwords. Verification
+          can use account email confirmation or another secure support workflow.
         </p>
       </section>
 
       <section class="section">
-        <h2>Data Review Needed</h2>
+        <h2>Data Reviewed For Deletion</h2>
         <ul>
           <li>Supabase auth user identity and profile records.</li>
           <li>Remote user settings and local device settings guidance.</li>
-          <li>Posts, comments, community memberships, chat messages, and notifications if live.</li>
-          <li>Ace AI request logs only if stored by the hosted backend later.</li>
+          <li>Posts, comments, community memberships, chat messages, and notifications when live.</li>
+          <li>Ace AI request logs if stored by the hosted backend.</li>
           <li>Safety, fraud, moderation, or legal records that may require retention or anonymization.</li>
         </ul>
       </section>
@@ -60,23 +63,22 @@
         <h2>Important Limits</h2>
         <p>
           Freezing, hiding, or logging out of an account is not the same as account deletion.
-          The final workflow must clearly explain what is deleted, retained, anonymized, and
-          how long the request may take.
+          Ace Domain explains what is deleted, retained, anonymized, and how long the request
+          may take when processing the request.
         </p>
       </section>
 
       <section class="section">
         <h2>Related Pages</h2>
         <div class="quick-links">
-          <a href="/privacy/">Privacy Policy Draft <span>Open</span></a>
-          <a href="/support/">Support Draft <span>Open</span></a>
-          <a href="/terms/">Terms And Safety Draft <span>Open</span></a>
+          <a href="/privacy/">Privacy Policy <span>Open</span></a>
+          <a href="/support/">Support <span>Open</span></a>
+          <a href="/terms/">Terms And Safety <span>Open</span></a>
         </div>
       </section>
 
       <footer class="footer">
-        Last updated: July 22, 2026. Final backend deletion tooling, legal review, and store
-        policy review are required before public release.
+        Last updated: July 23, 2026.
       </footer>
     </main>
   </body>

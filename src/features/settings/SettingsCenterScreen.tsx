@@ -1,16 +1,13 @@
 import { type CSSProperties } from 'react';
 import {
   ArrowLeft,
-  AtSign,
   BadgeCheck,
   Bell,
-  CalendarDays,
   Eye,
   ExternalLink,
   Gamepad2,
   Gauge,
   Globe2,
-  Heart,
   Info,
   Languages,
   Lock,
@@ -22,9 +19,7 @@ import {
   ShieldCheck,
   Sparkles,
   Type,
-  UserPlus,
-  UserRound,
-  UsersRound
+  UserRound
 } from 'lucide-react';
 import { SettingsRow } from '../../components/settings/SettingsRow';
 import { SettingsSection } from '../../components/settings/SettingsSection';
@@ -40,7 +35,6 @@ import {
   countryRegionOptions,
   languageOptions,
   messageDensityOptions,
-  messagePrivacyOptions,
   profileAccentOptions,
   profileAccentColors,
   profileBadgeStyleOptions,
@@ -61,7 +55,6 @@ import type {
   ChatWallpaper,
   LanguageName,
   MessageDensity,
-  MessagePrivacy,
   ProfileBadgeStyle,
   ProfileBannerPreset,
   ProfileDisplayLayout,
@@ -170,20 +163,12 @@ const displayLayoutCopy: Record<ProfileDisplayLayout, string> = {
   minimal: 'Minimal'
 };
 
-const messagePrivacyCopy: Record<MessagePrivacy, string> = {
-  everyone: 'Everyone',
-  'friends-only': 'Friends only',
-  'message-requests': 'Message requests only',
-  nobody: 'Nobody'
-};
-
 const animationIntensityCopy: Record<AnimationIntensity, string> = {
   minimal: 'Minimal',
   normal: 'Normal',
   reduced: 'Reduced'
 };
 
-const comingLater = ['Marketplace', 'Food', 'Rides', 'Flights', 'Wallet', 'Creator tools'];
 const activeAppearanceModes = new Set<AppearanceMode>(['premium-dark', 'dark']);
 
 function OptionButton({ active, description, disabled = false, label, onClick }: OptionButtonProps) {
@@ -230,7 +215,7 @@ function PublicPageLink({ href, label }: { href: string; label: string }) {
       className="inline-flex min-h-11 items-center gap-1.5 rounded-full border border-white/10 bg-white/[0.04] px-3 text-xs font-black text-frost/75 transition hover:border-[color:var(--ad-accent)] hover:text-white"
       href={href}
     >
-      Open draft
+      Open
       <ExternalLink size={13} aria-hidden="true" />
     </a>
   );
@@ -375,15 +360,13 @@ export function SettingsCenterScreen({ onBack, onChange, onOpenGlobalSafety, set
           icon={<Palette size={20} />}
         >
           <div className="grid grid-cols-1 gap-3 min-[360px]:grid-cols-2">
-            {appearanceModes.map((mode) => {
-              const isAvailable = activeAppearanceModes.has(mode);
+            {appearanceModes.filter((mode) => activeAppearanceModes.has(mode)).map((mode) => {
               return (
                 <OptionButton
                   key={mode}
                   active={settings.appearanceMode === mode}
-                  disabled={!isAvailable}
                   label={appearanceCopy[mode].label}
-                  description={isAvailable ? appearanceCopy[mode].description : 'Coming soon. Ace Domain is black-first in this build.'}
+                  description={appearanceCopy[mode].description}
                   onClick={() => update({ appearanceMode: mode })}
                 />
               );
@@ -504,19 +487,11 @@ export function SettingsCenterScreen({ onBack, onChange, onOpenGlobalSafety, set
               ))}
             </div>
           </div>
-          <ToggleRow checked={false} disabled description="Coming soon. Spotlight needs more public profile surfaces before it becomes active." icon={<UserRound size={18} />} label="Profile spotlight / Coming soon" onChange={() => update({ profileSpotlight: !settings.profileSpotlight })} />
         </SettingsSection>
 
         <SettingsSection eyebrow="Alerts" title="Notifications" description="Local preferences only. No push notification SDKs or backend workers." icon={<Bell size={20} />}>
-          <ToggleRow checked={false} disabled description="Coming soon. Device push and live notification delivery are not active yet." icon={<MessageCircle size={18} />} label="Messages / Coming soon" onChange={() => update({ messageNotifications: !settings.messageNotifications })} />
-          <ToggleRow checked={false} disabled description="Coming soon. Friend request alerts need live social graph events." icon={<UserPlus size={18} />} label="Friend requests / Coming soon" onChange={() => update({ friendRequestNotifications: !settings.friendRequestNotifications })} />
-          <ToggleRow checked={false} disabled description="Coming soon. Global Match alerts need live match events." icon={<Globe2 size={18} />} label="Global Match / Coming soon" onChange={() => update({ globalMatchNotifications: !settings.globalMatchNotifications })} />
-          <ToggleRow checked={false} disabled description="Coming soon. Community push alerts need live notification workers." icon={<UsersRound size={18} />} label="Community updates / Coming soon" onChange={() => update({ communityUpdateNotifications: !settings.communityUpdateNotifications })} />
-          <ToggleRow checked={false} disabled description="Coming soon. Event reminder delivery needs the mobile notification layer." icon={<CalendarDays size={18} />} label="Event reminders / Coming soon" onChange={() => update({ eventReminderNotifications: !settings.eventReminderNotifications })} />
-          <ToggleRow checked={false} disabled description="Coming soon. Mention alerts need live post/comment events." icon={<AtSign size={18} />} label="Mentions / Coming soon" onChange={() => update({ mentionNotifications: !settings.mentionNotifications })} />
-          <ToggleRow checked={false} disabled description="Coming soon. Like and comment alerts need live feed activity." icon={<Heart size={18} />} label="Likes/comments / Coming soon" onChange={() => update({ likesCommentsNotifications: !settings.likesCommentsNotifications })} />
-          <ToggleRow checked={false} disabled description="Coming soon. Safety alert delivery needs moderation infrastructure." icon={<ShieldCheck size={18} />} label="Safety alerts / Coming soon" onChange={() => update({ safetyAlertNotifications: !settings.safetyAlertNotifications })} />
-          <ToggleRow checked={false} disabled description="Coming soon. Rich notification previews need real notification payloads." icon={<Bell size={18} />} label="Notification previews / Coming soon" onChange={() => update({ notificationPreview: !settings.notificationPreview })} />
+          <SettingsRow label="In-app notification inbox" description="Activity categories are available in the Notifications tab without requesting device push permission." />
+          <SettingsRow label="Safety reminders" description="Conversation safety reminders stay available inside Global Safety and chat surfaces." />
         </SettingsSection>
 
         <SettingsSection
@@ -525,20 +500,11 @@ export function SettingsCenterScreen({ onBack, onChange, onOpenGlobalSafety, set
           description="Local safety controls for privacy, discovery, and safer global conversations."
           icon={<ShieldCheck size={20} />}
         >
-          <div>
-            <p className="mb-3 text-xs font-black uppercase tracking-[0.22em] text-frost/40">Who can message me</p>
-            <div className="grid grid-cols-1 gap-2 min-[360px]:grid-cols-2">
-              {messagePrivacyOptions.map((privacy) => (
-                <OptionButton key={privacy} active={false} disabled label={messagePrivacyCopy[privacy]} description="Coming soon. Live message permissions need backend enforcement." onClick={() => update({ messagePrivacy: privacy })} />
-              ))}
-            </div>
-          </div>
           <ToggleRow checked={settings.showOnlineStatus} description="Show whether you are online in social surfaces." icon={<Eye size={18} />} label="Show online status" onChange={() => update({ showOnlineStatus: !settings.showOnlineStatus })} />
           <ToggleRow checked={settings.showCountry} description="Show your country or region badge." icon={<MapPin size={18} />} label="Show country" onChange={() => update({ showCountry: !settings.showCountry })} />
           <ToggleRow checked={settings.showLocalTime} description="Show local time hints on global identity surfaces." icon={<Globe2 size={18} />} label="Show local time" onChange={() => update({ showLocalTime: !settings.showLocalTime })} />
           <ToggleRow checked={settings.showLanguages} description="Show languages spoken and learning." icon={<Languages size={18} />} label="Show languages" onChange={() => update({ showLanguages: !settings.showLanguages })} />
           <ToggleRow checked={settings.showProfileInGlobalMatch} description="Let your profile appear in Global Match discovery." icon={<Globe2 size={18} />} label="Show profile in Global Match" onChange={() => update({ showProfileInGlobalMatch: !settings.showProfileInGlobalMatch })} />
-          <ToggleRow checked={false} disabled description="Coming soon. Community invites need live member and moderation rules." icon={<UsersRound size={18} />} label="Community invites / Coming soon" onChange={() => update({ allowCommunityInvites: !settings.allowCommunityInvites })} />
           <ToggleRow checked={settings.safetyReminders} description="Show local reminders around safer global conversations." icon={<ShieldCheck size={18} />} label="Safety reminders" onChange={() => update({ safetyReminders: !settings.safetyReminders })} />
           <div className="rounded-[24px] border border-white/10 bg-white/[0.055] p-4">
             <p className="font-bold text-white">Safety reminder</p>
@@ -547,22 +513,22 @@ export function SettingsCenterScreen({ onBack, onChange, onOpenGlobalSafety, set
           <div className="grid grid-cols-1 gap-3 min-[360px]:grid-cols-2">
             <button
               type="button"
-              disabled
-              className="cursor-not-allowed rounded-full border border-white/10 px-4 py-3 text-sm font-bold text-zinc-500"
+              onClick={onOpenGlobalSafety}
+              className="rounded-full border border-white/10 px-4 py-3 text-sm font-bold text-frost/75 transition hover:border-white/25 hover:text-white"
               aria-label="Blocked users"
             >
-              Blocked users / Coming soon
+              Blocked users
             </button>
             <button
               type="button"
-              disabled
-              className="cursor-not-allowed rounded-full border border-white/10 px-4 py-3 text-sm font-bold text-zinc-500"
+              onClick={onOpenGlobalSafety}
+              className="rounded-full border border-white/10 px-4 py-3 text-sm font-bold text-frost/75 transition hover:border-white/25 hover:text-white"
               aria-label="Report history"
             >
-              Report history / Coming soon
+              Report history
             </button>
           </div>
-          <SettingsRow label="Global safety page" description="Open the existing privacy, stranger messaging, and accessibility controls.">
+          <SettingsRow label="Safety & moderation" description="Open privacy controls, local block list, report form, and report history.">
             <button type="button" onClick={onOpenGlobalSafety} className="rounded-full bg-white px-3 py-2 text-xs font-black text-black">
               Open
             </button>
@@ -621,8 +587,6 @@ export function SettingsCenterScreen({ onBack, onChange, onOpenGlobalSafety, set
             ))}
           </div>
           <ToggleRow checked={settings.translationPreview} description="Shows translation preview controls on supported feed/profile text." icon={<Languages size={18} />} label="Translation preview" onChange={() => update({ translationPreview: !settings.translationPreview })} />
-          <ToggleRow checked={false} disabled description="Coming soon. Automatic translation needs a real translation service." icon={<Sparkles size={18} />} label="Auto-translate / Coming soon" onChange={() => update({ autoTranslate: !settings.autoTranslate })} />
-          <ToggleRow checked={false} disabled description="Coming soon. Original-language display needs full translation support." icon={<Globe2 size={18} />} label="Show original language / Coming soon" onChange={() => update({ showOriginalLanguage: !settings.showOriginalLanguage })} />
         </SettingsSection>
 
         <SettingsSection
@@ -656,33 +620,23 @@ export function SettingsCenterScreen({ onBack, onChange, onOpenGlobalSafety, set
           <ToggleRow checked={settings.reduceAutoRefresh} description="Reduce live-style refresh motion cues where safe." icon={<Gauge size={18} />} label="Reduce live effects" onChange={() => update({ reduceAutoRefresh: !settings.reduceAutoRefresh })} />
         </SettingsSection>
 
-        <SettingsSection eyebrow="Product" title="About Ace Domain" description="Ace Domain is still local-first for settings and now includes public pre-release support and policy pages." icon={<Info size={20} />}>
+        <SettingsSection eyebrow="Product" title="About Ace Domain" description="Ace Domain includes accessible support, privacy, terms, safety, and account deletion pages." icon={<Info size={20} />}>
           <SettingsRow label="App name" description="Ace Domain" />
           <SettingsRow label="Tagline" description="Meet the World" />
           <SettingsRow label="Mission" description="Ace Domain is a global social app for chatting, culture, gaming, discovery, and connection." />
           <SettingsRow label="Version" description="Mobile foundation" />
-          <SettingsRow label="Support" description="Pre-release support guidance. The support inbox must be verified before store submission.">
-            <PublicPageLink href="/support/" label="Open Ace Domain support draft" />
+          <SettingsRow label="Support" description="Get help with accounts, safety, data, Ace AI, chats, and communities.">
+            <PublicPageLink href="/support/" label="Open Ace Domain support" />
           </SettingsRow>
-          <SettingsRow label="Privacy Policy" description="Public draft for review before final legal approval and store submission.">
-            <PublicPageLink href="/privacy/" label="Open Ace Domain privacy policy draft" />
+          <SettingsRow label="Privacy Policy" description="Review data use, storage, third-party services, retention, and deletion rights.">
+            <PublicPageLink href="/privacy/" label="Open Ace Domain privacy policy" />
           </SettingsRow>
-          <SettingsRow label="Terms & Safety" description="Public draft covering community rules, safety expectations, and Ace AI limits.">
-            <PublicPageLink href="/terms/" label="Open Ace Domain terms and safety draft" />
+          <SettingsRow label="Terms & Safety" description="Review community rules, prohibited behavior, reporting, blocking, and Ace AI limits.">
+            <PublicPageLink href="/terms/" label="Open Ace Domain terms and safety" />
           </SettingsRow>
-          <SettingsRow label="Account deletion" description="Pre-release request instructions. Destructive deletion backend is not active yet.">
-            <PublicPageLink href="/account-deletion/" label="Open Ace Domain account deletion draft" />
+          <SettingsRow label="Account deletion" description="Start an account deletion request and review retention/verification steps.">
+            <PublicPageLink href="/account-deletion/" label="Open Ace Domain account deletion instructions" />
           </SettingsRow>
-          <div>
-            <p className="mb-3 text-xs font-black uppercase tracking-[0.22em] text-frost/40">Coming later</p>
-            <div className="flex flex-wrap gap-2">
-              {comingLater.map((item) => (
-                <span key={item} className="rounded-full bg-white/10 px-3 py-1 text-xs font-bold text-frost/65">
-                  {item}
-                </span>
-              ))}
-            </div>
-          </div>
           <div className="rounded-[24px] border border-white/10 bg-white/[0.055] p-4">
             <div className="flex items-center gap-3">
               <Gamepad2 size={18} className="text-[color:var(--ad-accent)]" />
