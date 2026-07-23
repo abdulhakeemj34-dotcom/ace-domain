@@ -126,6 +126,8 @@ npx tsc -b --pretty false
 npm run build
 ```
 
+GitHub Actions also runs these checks automatically on pushes and pull requests to `master`.
+
 ## Repository Safety
 
 Before pushing future changes:
